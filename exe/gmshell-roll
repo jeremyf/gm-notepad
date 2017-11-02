@@ -15,6 +15,7 @@ OptionParser.new do |options|
   options.set_banner "Usage: #{command_name} [options] [files]\n" \
     "Roll dice based on common dice notation.\n\n" \
     "Examples:\n" \
+    "\t$ #{command_name}\n" \
     "\t$ #{command_name} rolls.txt\n" \
     "\t$ #{command_name} rolls.txt | more\n" \
     "\t$ #{command_name} rolls.txt > output.txt\n" \
