@@ -1,0 +1,65 @@
+#!/usr/bin/env ruby
+
+gem 'dice_parser'
+require 'dice'
+require 'optparse'
+config = {
+  include_requested_roll: false,
+  with_format: nil
+}
+
+command_name = File.basename(__FILE__)
+
+OptionParser.new do |options|
+  # This banner is the first line of your help documentation.
+  options.set_banner "Usage: #{command_name} [options] [files]\n" \
+    "Roll dice based on common dice notation.\n\n" \
+    "Examples:\n" \
+    "\t$ #{command_name} rolls.txt\n" \
+    "\t$ #{command_name} rolls.txt | more\n" \
+    "\t$ #{command_name} rolls.txt > output.txt\n" \
+    "\t$ #{command_name} rolls.txt more_roles.txt\n" \
+    "\t$ echo '2d6' | #{command_name}"
+
+  # Separator just adds a new line with the specified text.
+  options.separator ""
+  options.separator "Specific options:"
+
+  options.on("-i", "--include", "Include requested roll in output") do |include_roll|
+    config[:include_requested_roll] = include_roll
+  end
+
+  options.on("-w", "--with FORMAT", String, "With format") do |with_format|
+    config[:with_format] = with_format
+  end
+
+  options.on_tail("-h", "--help", "You're looking at it!") do
+    $stderr.puts options
+    exit 1
+  end
+end.parse!
+
+def roll(line, config)
+  to_roll = line.strip
+  the_roll = Dice.roll(to_roll)
+  result = config.fetch(:include_requested_roll) ? "#{to_roll}\t#{the_roll}" : the_roll
+  $stdout.puts result
+end
+
+if config[:with_format]
+  roll(config[:with_format], config)
+  exit 0
+end
+
+# Keep reading lines of input as long as they're coming.
+while input = ARGF.gets
+  input.each_line do |line|
+    begin
+      roll(line, config)
+    rescue Errno::EPIPE
+      # sysexits(3) specifies that exit code 74 represent an IO error,
+      # which is the likely situation
+      exit(74)
+    end
+  end
+end
