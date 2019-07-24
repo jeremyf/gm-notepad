@@ -3,7 +3,8 @@ require File.expand_path('../../lib/gmshell/journal_entry', __FILE__)
 require 'optparse'
 config = {
   timestamp: false,
-  io: $stdout
+  io: $stdout,
+  logger: $stderr
 }
 
 command_name = File.basename(__FILE__)
@@ -31,14 +32,14 @@ OptionParser.new do |options|
   end
 end.parse!
 
-@journal_entry = Gmshell::JournalEntry.new(config)
+@journal_entry = Gmshell::JournalEntry.new(**config)
 
 begin
   # Keep reading lines of input as long as they're coming.
   while input = ARGF.gets
     input.each_line do |line|
       begin
-        @journal_entry.add(line: line.strip)
+        @journal_entry.write(line: line)
       rescue Errno::EPIPE
         # sysexits(3) specifies that exit code 74 represent an IO error,
         # which is the likely situation
