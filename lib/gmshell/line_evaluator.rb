@@ -11,7 +11,7 @@ module Gmshell
       end
       while match = line.match(DICE_REGEXP)
         if parsed_dice = Dice.parse(match[:dice])
-          evaluated_dice = parsed_dice.evaluate.to_s
+          evaluated_dice = "#{parsed_dice.evaluate} (#{match[:dice]})"
         else
           evaluated_dice = "(#{match[:dice]})"
         end

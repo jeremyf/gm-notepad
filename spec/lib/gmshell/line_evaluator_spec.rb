@@ -12,7 +12,7 @@ module Gmshell
         ["{hello} {world}", "(hello:1) (world:2)"],
         ["{hello{world}}", "(hello(world:1):2)"],
         ["{hello} {hello}", "(hello:1) (hello:2)"],
-        ["[1d1]", "1"],
+        ["[1d1]", "1 (1d1)"],
         ["[taco]", "(taco)"],
         ["[taco]{hello}", "(taco)(hello:1)"]
       ].each do |given, expected|

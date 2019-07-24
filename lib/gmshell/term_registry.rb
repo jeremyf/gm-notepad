@@ -35,6 +35,8 @@ module Gmshell
     def lookup(term:, **kwargs)
       term_table = @registry.fetch(term)
       term_table.lookup(**kwargs)
+    rescue KeyError
+      "(undefined #{term})"
     end
 
     def evaluate(line:)
