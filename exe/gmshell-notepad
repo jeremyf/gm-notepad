@@ -37,14 +37,22 @@ OptionParser.new do |options|
     config[:paths] << path
   end
 
+  options.on("-l", "--list_terms", "List terms loaded (Default: #{config[:list_terms].inspect})") do |list_terms|
+    config[:list_terms] = list_terms
+  end
+
   options.on_tail("-h", "--help", "You're looking at it!") do
     $stderr.puts options
     exit 1
   end
 end.parse!
 
-term_registry = Gmshell::TermRegistry.load_for(paths: config.fetch(:paths))
-@journal_entry = Gmshell::JournalEntry.new(**config, term_registry: term_registry)
+@journal_entry = Gmshell::JournalEntry.new(**config)
+
+if config[:list_terms]
+  @journal_entry.process(line: "?term")
+  exit(74)
+end
 
 begin
   # Keep reading lines of input as long as they're coming.

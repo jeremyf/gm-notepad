@@ -2,12 +2,13 @@ require 'time'
 module Gmshell
   # Responsible for recording entries and then dumping them accordingly.
   class JournalEntry
-    def initialize(term_registry: default_term_registry, **config)
+    attr_reader :config
+    def initialize(**config)
       self.config = config
       self.timestamp = config.fetch(:timestamp) { true }
       self.io = config.fetch(:io) { default_io }
       self.logger = config.fetch(:logger) { default_logger }
-      self.term_registry = term_registry
+      self.term_registry = config.fetch(:term_registry) { default_term_registry }
       @lines = []
     end
 
@@ -51,13 +52,14 @@ module Gmshell
 
     private
 
-    attr_accessor :io, :logger, :timestamp, :term_registry, :config
+    attr_accessor :io, :logger, :timestamp, :term_registry
+    attr_writer :config
 
     alias timestamp? timestamp
 
     def default_term_registry
       require_relative "term_registry"
-      TermRegistry.new
+      TermRegistry.load_for(paths: config.fetch(:paths, []))
     end
 
     def default_io
