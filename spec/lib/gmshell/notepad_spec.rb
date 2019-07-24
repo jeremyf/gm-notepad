@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'gmshell/journal_entry'
+require 'gmshell/notepad'
 module Gmshell
-  RSpec.describe JournalEntry do
+  RSpec.describe Notepad do
     its(:default_term_registry) { is_expected.to respond_to(:evaluate) }
     its(:default_io) { is_expected.to respond_to(:puts) }
     its(:default_logger) { is_expected.to respond_to(:puts) }
@@ -13,7 +13,7 @@ module Gmshell
     let(:first_line) { "this line is my line" }
     let(:second_line) { "this line is your line" }
 
-    let(:journal_entry) do
+    let(:notepad) do
       described_class.new(timestamp: timestamp, io: io, logger: logger, term_registry: term_registry)
     end
 
@@ -25,7 +25,7 @@ module Gmshell
     end
 
     describe '#record' do
-      subject { journal_entry.record(line: first_line, as_of: as_of) }
+      subject { notepad.record(line: first_line, as_of: as_of) }
       let(:as_of) { "right-now" }
 
       context "with timestamp: true" do
@@ -37,7 +37,7 @@ module Gmshell
         it "will prepend the as_of to the line when put to the given :io" do
           subject
           expect(io).to receive(:puts).with("#{as_of}\t#{first_line}")
-          journal_entry.dump!
+          notepad.dump!
         end
       end
 
@@ -50,7 +50,7 @@ module Gmshell
         it "will NOT prepend the as_of to the line when put to the given :io" do
           subject
           expect(io).to receive(:puts).with(first_line)
-          journal_entry.dump!
+          notepad.dump!
         end
       end
     end

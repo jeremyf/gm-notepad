@@ -1,7 +1,7 @@
 require 'time'
 module Gmshell
   # Responsible for recording entries and then dumping them accordingly.
-  class JournalEntry
+  class Notepad
     attr_reader :config
     def initialize(**config)
       self.config = config

@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
-require File.expand_path('../../lib/gmshell/journal_entry', __FILE__)
+require File.expand_path('../../lib/gmshell/notepad', __FILE__)
 require File.expand_path('../../lib/gmshell/term_registry', __FILE__)
 require 'optparse'
 config = {
@@ -47,10 +47,10 @@ OptionParser.new do |options|
   end
 end.parse!
 
-@journal_entry = Gmshell::JournalEntry.new(**config)
+@notepad = Gmshell::Notepad.new(**config)
 
 if config[:list_terms]
-  @journal_entry.process(line: "?term")
+  @notepad.process(line: "?term")
   exit(74)
 end
 
@@ -59,15 +59,15 @@ begin
   while input = ARGF.gets
     input.each_line do |line|
       begin
-        @journal_entry.process(line: line)
+        @notepad.process(line: line)
       rescue Errno::EPIPE
         # sysexits(3) specifies that exit code 74 represent an IO error,
         # which is the likely situation
-        @journal_entry.dump!
+        @notepad.dump!
         exit(74)
       end
     end
   end
 ensure
-  @journal_entry.dump!
+  @notepad.dump!
 end
