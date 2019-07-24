@@ -1,5 +1,8 @@
 require "bundler/setup"
+GEM_ROOT = File.expand_path('../../', __FILE__)
+$LOAD_PATH.unshift File.join(GEM_ROOT, 'lib')
 require "gmshell"
+require 'rspec/its'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

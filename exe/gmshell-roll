@@ -20,6 +20,7 @@ OptionParser.new do |options|
     "\t$ #{command_name} rolls.txt | more\n" \
     "\t$ #{command_name} rolls.txt > output.txt\n" \
     "\t$ #{command_name} rolls.txt more_roles.txt\n" \
+    "\t$ #{command_name} -w \"2d6\"\n" \
     "\t$ echo '2d6' | #{command_name}"
 
   # Separator just adds a new line with the specified text.

@@ -1,0 +1,86 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+require 'time'
+config = {
+  timestamp: false,
+  io: $stdout
+}
+
+command_name = File.basename(__FILE__)
+
+OptionParser.new do |options|
+  # This banner is the first line of your help documentation.
+  options.set_banner "Usage: #{command_name} [options] [files]\n" \
+    "Capture session notes and write to a file on close.\n\n" \
+    "Examples:\n" \
+    "\t$ #{command_name}\n" \
+    "\t$ #{command_name} rolls.txt\n"
+    "\t$ echo '2d6' | #{command_name}"
+
+  # Separator just adds a new line with the specified text.
+  options.separator ""
+  options.separator "Specific options:"
+
+  options.on("-t", "--timestamp", "Append a timestamp to the note") do |timestamp|
+    config[:timestamp] = timestamp
+  end
+
+  options.on_tail("-h", "--help", "You're looking at it!") do
+    $stderr.puts options
+    exit 1
+  end
+end.parse!
+
+class JournalEntry
+  def initialize(config)
+    @config = config
+    @lines = []
+  end
+
+  def add(line:)
+    if config[:timestamp]
+      @lines << "#{Time.now}\t#{line}"
+    else
+      @lines << line
+    end
+  end
+
+  def dump!
+    io.puts @lines
+  end
+
+  private
+
+  attr_reader :config
+
+  def io
+    config.fetch(:io)
+  end
+end
+
+@journal_entry = JournalEntry.new(config)
+
+def process(line, config)
+end
+
+def dump!
+end
+
+begin
+  # Keep reading lines of input as long as they're coming.
+  while input = ARGF.gets
+    input.each_line do |line|
+      begin
+        @journal_entry.add(line: line)
+      rescue Errno::EPIPE
+        # sysexits(3) specifies that exit code 74 represent an IO error,
+        # which is the likely situation
+        @journal_entry.dump!
+        exit(74)
+      end
+    end
+  end
+ensure
+  @journal_entry.dump!
+end
