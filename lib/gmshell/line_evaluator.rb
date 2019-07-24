@@ -1,11 +1,21 @@
+require 'dice'
 module Gmshell
   # Responsible for recording entries and then dumping them accordingly.
   class LineEvaluator
-    TOKEN_REGEXP = %r{(?<term_container>\{(?<term>[^\}]+)\})}
+    TERM_REGEXP = %r{(?<term_container>\{(?<term>[^\}]+)\})}
+    DICE_REGEXP = %r{(?<dice_container>\[(?<dice>[^\]]+)\])}
     def call(line:, term_evaluation_function:)
-      while match = line.match(TOKEN_REGEXP)
+      while match = line.match(TERM_REGEXP)
         evaluated_term = term_evaluation_function.call(term: match[:term].strip)
         line.sub!(match[:term_container], evaluated_term)
+      end
+      while match = line.match(DICE_REGEXP)
+        if parsed_dice = Dice.parse(match[:dice])
+          evaluated_dice = parsed_dice.evaluate.to_s
+        else
+          evaluated_dice = "(#{match[:dice]})"
+        end
+        line.sub!(match[:dice_container], evaluated_dice)
       end
       line
     end

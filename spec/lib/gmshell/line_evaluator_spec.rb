@@ -12,6 +12,9 @@ module Gmshell
         ["{hello} {world}", "(hello:1) (world:2)"],
         ["{hello{world}}", "(hello(world:1):2)"],
         ["{hello} {hello}", "(hello:1) (hello:2)"],
+        ["[1d1]", "1"],
+        ["[taco]", "(taco)"],
+        ["[taco]{hello}", "(taco)(hello:1)"]
       ].each do |given, expected|
         it "evaluates #{given.inspect} as #{expected.inspect}" do
           expect(subject.call(line: given, term_evaluation_function: term_evaluation_function)).to eq(expected)
