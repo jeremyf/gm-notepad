@@ -3,11 +3,17 @@ module Gmshell
   # on the given line.
   class MessageFactory
     NON_EXPANDING_CHARATER = '!'.freeze
+    QUERY_PREFIX = '?'.freeze
     def call(line:)
       line = line.strip
       case line[0]
-      when '?'
-        query(line[1..-1])
+      when QUERY_PREFIX
+        returning_value = query(line[1..-1])
+        if returning_value.last.fetch(:term) == ''
+          returning_value.last.delete(:term)
+          returning_value.last.delete(:expand)
+        end
+        returning_value
       when '<'
         write_term(line)
       when NON_EXPANDING_CHARATER
