@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
-
+require File.expand_path('../../lib/gmshell/journal_entry', __FILE__)
 require 'optparse'
-require 'time'
 config = {
   timestamp: false,
   io: $stdout
@@ -32,47 +31,14 @@ OptionParser.new do |options|
   end
 end.parse!
 
-class JournalEntry
-  def initialize(config)
-    @config = config
-    @lines = []
-  end
-
-  def add(line:)
-    if config[:timestamp]
-      @lines << "#{Time.now}\t#{line}"
-    else
-      @lines << line
-    end
-  end
-
-  def dump!
-    io.puts @lines
-  end
-
-  private
-
-  attr_reader :config
-
-  def io
-    config.fetch(:io)
-  end
-end
-
-@journal_entry = JournalEntry.new(config)
-
-def process(line, config)
-end
-
-def dump!
-end
+@journal_entry = Gmshell::JournalEntry.new(config)
 
 begin
   # Keep reading lines of input as long as they're coming.
   while input = ARGF.gets
     input.each_line do |line|
       begin
-        @journal_entry.add(line: line)
+        @journal_entry.add(line: line.strip)
       rescue Errno::EPIPE
         # sysexits(3) specifies that exit code 74 represent an IO error,
         # which is the likely situation
