@@ -1,10 +1,13 @@
 #!/usr/bin/env ruby
 require File.expand_path('../../lib/gmshell/journal_entry', __FILE__)
+require File.expand_path('../../lib/gmshell/term_registry', __FILE__)
 require 'optparse'
 config = {
   timestamp: false,
   io: $stdout,
-  logger: $stderr
+  logger: $stderr,
+  paths: ['.'],
+  skip_config_reporting: false
 }
 
 command_name = File.basename(__FILE__)
@@ -12,18 +15,26 @@ command_name = File.basename(__FILE__)
 OptionParser.new do |options|
   # This banner is the first line of your help documentation.
   options.set_banner "Usage: #{command_name} [options] [files]\n" \
-    "Capture session notes and write to a file on close.\n\n" \
+    "Note taking tool with random table expansion.\n\n" \
     "Examples:\n" \
     "\t$ #{command_name}\n" \
-    "\t$ #{command_name} rolls.txt\n"
-    "\t$ echo '2d6' | #{command_name}"
+    "\t$ #{command_name} rolls.txt\n" \
+    "\t$ echo '{name}' | #{command_name}"
 
   # Separator just adds a new line with the specified text.
   options.separator ""
   options.separator "Specific options:"
 
-  options.on("-t", "--timestamp", "Append a timestamp to the note") do |timestamp|
+  options.on("-t", "--timestamp", "Append a timestamp to the note (Default: #{config[:timestamp].inspect})") do |timestamp|
     config[:timestamp] = timestamp
+  end
+
+  options.on("-s", "--skip_config", "Skip dumping configuration data (Default: #{config[:skip_config_reporting].inspect})") do |skip_config_reporting|
+    config[:skip_config_reporting] = skip_config_reporting
+  end
+
+  options.on("-pPATH", "--path=PATH", String, "Path for {term}.txt files (Default: #{config[:paths].inspect})") do |path|
+    config[:paths] << path
   end
 
   options.on_tail("-h", "--help", "You're looking at it!") do
@@ -32,14 +43,15 @@ OptionParser.new do |options|
   end
 end.parse!
 
-@journal_entry = Gmshell::JournalEntry.new(**config)
+term_registry = Gmshell::TermRegistry.load_for(paths: config.fetch(:paths))
+@journal_entry = Gmshell::JournalEntry.new(**config, term_registry: term_registry)
 
 begin
   # Keep reading lines of input as long as they're coming.
   while input = ARGF.gets
     input.each_line do |line|
       begin
-        @journal_entry.write(line: line)
+        @journal_entry.process(line: line)
       rescue Errno::EPIPE
         # sysexits(3) specifies that exit code 74 represent an IO error,
         # which is the likely situation

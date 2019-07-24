@@ -1,26 +1,49 @@
 require 'time'
 module Gmshell
+  # Responsible for recording entries and then dumping them accordingly.
   class JournalEntry
-    def initialize(**config)
+    def initialize(term_registry: default_term_registry, **config)
       self.config = config
-      self.io = config.fetch(:io) { $stdout }
-      self.logger = config.fetch(:logger) { $stderr }
-      self.term_registry = config.fetch(:term_registry) { default_term_registry }
-      self.line_evaluator = config.fetch(:line_evaluator) { default_line_evaluator }
+      self.timestamp = config.fetch(:timestamp) { true }
+      self.io = config.fetch(:io) { default_io }
+      self.logger = config.fetch(:logger) { default_logger }
+      self.term_registry = term_registry
       @lines = []
     end
 
-    def write(line:)
-      evaluated_line = line_evaluator.call(line: line.to_s.strip, term_registry: term_registry)
+    HELP_REGEXP = /\A\?(?<help_with>.*)/
+    def process(line:)
+      line = line.to_s.strip
+      if match = HELP_REGEXP.match(line)
+        case match[:help_with]
+        when "terms", "term"
+          logger.puts("List of terms:")
+          logger.puts("\t#{term_registry.terms.sort.join(", ")}")
+        else
+          logger.puts("Unknown help for #{match[:help_with].inspect}")
+        end
+      else
+        record(line: line)
+      end
+    end
+
+    def record(line:, as_of: Time.now)
+      evaluated_line = term_registry.evaluate(line: line.to_s.strip)
       logger.puts("=>\t#{evaluated_line}")
       if timestamp?
-        @lines << "#{Time.now}\t#{evaluated_line}"
+        @lines << "#{as_of}\t#{evaluated_line}"
       else
         @lines << evaluated_line
       end
     end
 
     def dump!
+      if !config[:skip_config_reporting]
+        @io.puts "# Configuration Parameters:"
+        config.each do |key, value|
+          @io.puts "#   config[#{key.inspect}] = #{value.inspect}"
+        end
+      end
       @lines.each do |line|
         io.puts line
       end
@@ -28,35 +51,21 @@ module Gmshell
 
     private
 
-    attr_accessor :line_evaluator, :config, :term_registry, :io, :logger
+    attr_accessor :io, :logger, :timestamp, :term_registry, :config
 
-    def timestamp?
-      config[:timestamp]
-    end
-
-    def default_line_evaluator
-      LineEvaluator
-    end
+    alias timestamp? timestamp
 
     def default_term_registry
+      require_relative "term_registry"
       TermRegistry.new
     end
-  end
 
-  module LineEvaluator
-    TOKEN_REGEXP = %r{(?<term_container>\{(?<term>[^\}]+)\})}
-    def self.call(line:, term_registry:)
-      while match = line.match(TOKEN_REGEXP)
-        evaluated_term = term_registry.evaluate(term: match[:term])
-        line.sub!(match[:term_container], evaluated_term)
-      end
-      line
+    def default_io
+      $stdout
     end
-  end
 
-  class TermRegistry
-    def evaluate(term:)
-      "'unknown #{term}'"
+    def default_logger
+      $stderr
     end
   end
 end
