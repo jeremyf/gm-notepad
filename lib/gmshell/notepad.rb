@@ -10,12 +10,10 @@ module Gmshell
     attr_reader :config
     def initialize(**config)
       self.config = config
-      self.timestamp = config.fetch(:timestamp) { true }
-      self.io = config.fetch(:io) { default_io }
-      self.logger = config.fetch(:logger) { default_logger }
       self.table_registry = config.fetch(:table_registry) { default_table_registry }
       self.message_factory = config.fetch(:message_factory) { default_message_factory }
-      @lines = []
+      self.renderer = config.fetch(:renderer) { default_renderer }
+      start!
     end
 
     HANDLERS = {
@@ -32,21 +30,14 @@ module Gmshell
       handler.call(notepad: self, **parameters)
     end
 
-    def record(line:, as_of: Time.now, **kwargs)
-      log(line, capture: true, expand: true, as_of: as_of)
+    def record(line:, **kwargs)
+      log(line, capture: true, expand: true)
     end
 
-    def log(lines, expand: true, capture: false, as_of: Time.now)
+    def log(lines, expand: true, capture: false)
       Array(lines).each do |line|
         line = table_registry.evaluate(line: line.to_s.strip) if expand
-        logger.puts("=>\t#{line}")
-        if capture
-          if timestamp?
-            @lines << "#{as_of}\t#{line}"
-          else
-            @lines << line
-          end
-        end
+        renderer.call(line, to_interactive: true, to_output: capture)
       end
     end
 
@@ -59,25 +50,25 @@ module Gmshell
     end
 
     def dump!
-      if !config[:skip_config_reporting]
-        @io.puts "# Configuration Parameters:"
-        config.each do |key, value|
-          @io.puts "#   config[#{key.inspect}] = #{value.inspect}"
-        end
-      end
-      @lines.each do |line|
-        io.puts line
-      end
+      @renderer.dump!
     end
 
     attr_reader :table_registry
 
     private
 
-    attr_accessor :io, :logger, :timestamp, :message_factory
-    attr_writer :config, :table_registry
+    attr_reader :renderer
+    def start!
+      return if config[:skip_config_reporting]
+      renderer.call("# Configuration Parameters:", to_interactive: true, to_output: true)
+      config.each do |key, value|
+        line = "#   config[#{key.inspect}] = #{value.inspect}"
+        renderer.call(line, to_interactive: true, to_output: true)
+      end
+    end
 
-    alias timestamp? timestamp
+    attr_accessor :message_factory, :renderer
+    attr_writer :config, :table_registry
 
     def default_message_factory
       require_relative "message_handler_parameter_factory"
@@ -89,11 +80,21 @@ module Gmshell
       TableRegistry.load_for(paths: config.fetch(:paths, []))
     end
 
-    def default_io
+    def default_renderer
+      require_relative 'line_renderer'
+      @renderer = LineRenderer.new(
+        with_timestamp: config.fetch(:with_timestamp, false),
+        defer_output: config.fetch(:defer_output, false),
+        output_buffer: config.fetch(:output_buffer, default_output_buffer),
+        interactive_buffer: config.fetch(:interactive_buffer, default_interactive_buffer)
+      )
+    end
+
+    def default_output_buffer
       $stdout
     end
 
-    def default_logger
+    def default_interactive_buffer
       $stderr
     end
   end

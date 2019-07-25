@@ -3,9 +3,10 @@ require File.expand_path('../../lib/gmshell/notepad', __FILE__)
 require File.expand_path('../../lib/gmshell/table_registry', __FILE__)
 require 'optparse'
 config = {
-  timestamp: false,
-  io: $stdout,
-  logger: $stderr,
+  with_timestamp: false,
+  defer_output: true,
+  output_buffer: $stdout,
+  interactive_buffer: $stderr,
   paths: ['.'],
   skip_config_reporting: false
 }
@@ -25,12 +26,16 @@ OptionParser.new do |options|
   options.separator ""
   options.separator "Specific options:"
 
-  options.on("-t", "--timestamp", "Append a timestamp to the note (Default: #{config[:timestamp].inspect})") do |timestamp|
-    config[:timestamp] = timestamp
+  options.on("-t", "--timestamp", "Append a timestamp to the note (Default: #{config[:with_timestamp].inspect})") do |timestamp|
+    config[:with_timestamp] = timestamp
   end
 
   options.on("-s", "--skip_config", "Skip dumping configuration data (Default: #{config[:skip_config_reporting].inspect})") do |skip_config_reporting|
     config[:skip_config_reporting] = skip_config_reporting
+  end
+
+  options.on("-d", "--defer_output", "Defer output until system close (Default: #{config[:defer_output].inspect})") do |defer_output|
+    config[:defer_output] = defer_output
   end
 
   options.on("-pPATH", "--path=PATH", String, "Path for {term}.txt files (Default: #{config[:paths].inspect})") do |path|
