@@ -12,7 +12,7 @@ module Gmshell
       its(:to_output) { is_expected.to be_falsey }
       its(:expand_line?) { is_expected.to be_falsey }
 
-      describe '#call' do
+      describe '#lines' do
         [
           [['abc', 'daz', 'bcd', 'def', 'xyz'], 'a\w', ['abc', 'daz']],
           [['abc', 'daz', 'bcd', 'def', 'xyz'], nil, ['abc', 'daz', 'bcd', 'def', 'xyz'].sort],
@@ -27,7 +27,7 @@ module Gmshell
               end
             end
             let(:input) { "+/#{grep}/"}
-            subject { handler.call }
+            subject { handler.lines }
             it { is_expected.to eq(expected) }
           end
         end

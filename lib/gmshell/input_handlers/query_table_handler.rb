@@ -41,10 +41,6 @@ module Gmshell
       attr_accessor :index, :grep, :table_name
 
       def lines(**kwargs)
-        call(**kwargs)
-      end
-
-      def call(**kwargs)
         begin
           table = table_registry.fetch_table(name: table_name)
         rescue KeyError

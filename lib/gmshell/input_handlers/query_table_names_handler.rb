@@ -30,10 +30,6 @@ module Gmshell
       attr_accessor :grep
 
       def lines(**kwargs)
-        call(**kwargs)
-      end
-
-      def call(**kwargs)
         table_names = table_registry.table_names
         return table_names unless grep
         table_names.grep(%r{#{grep}})

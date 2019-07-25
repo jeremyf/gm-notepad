@@ -33,7 +33,6 @@ module Gmshell
           "\t{table_name} - expand_line the given 'table_name'"
         ]
       end
-      alias call lines
     end
   end
 end

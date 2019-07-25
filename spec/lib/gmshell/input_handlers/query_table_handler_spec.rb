@@ -15,7 +15,7 @@ module Gmshell
       its(:to_output) { is_expected.to be_falsey }
       its(:expand_line?) { is_expected.to be_falsey }
 
-      describe '#call' do
+      describe '#lines' do
         context "with a missing table_name" do
           let(:input) { '+o' }
           let(:registry) do
@@ -24,7 +24,7 @@ module Gmshell
             end
           end
           it "will return a message saying its missing and provide a list of matches" do
-            expect(handler.call).to eq(
+            expect(handler.lines).to eq(
               ['Unknown table "o". Did you mean: "other"']
             )
           end
@@ -55,7 +55,7 @@ module Gmshell
               end
             end
             let(:input) { given }
-            subject { handler.call(registry: registry, table_name: table_name) }
+            subject { handler.lines(registry: registry, table_name: table_name) }
             it { is_expected.to eq(expected) }
           end
         end
