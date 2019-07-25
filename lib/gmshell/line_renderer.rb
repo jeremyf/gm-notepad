@@ -11,7 +11,7 @@ module Gmshell
       yield(self) if block_given?
     end
 
-    def call(line, to_output: true, to_interactive: true, as_of: Time.now)
+    def call(line, to_output: false, to_interactive: true, as_of: Time.now)
       render_output(line, defer_output: defer_output, as_of: as_of) if to_output
       render_interactive(line) if to_interactive
     end
