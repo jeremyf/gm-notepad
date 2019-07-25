@@ -1,4 +1,7 @@
 require 'time'
+require_relative 'message_handlers/query_handler'
+require_relative 'message_handlers/query_terms_handler'
+
 module Gmshell
   # Responsible for recording entries and then dumping them accordingly.
   class Notepad
@@ -9,26 +12,23 @@ module Gmshell
       self.io = config.fetch(:io) { default_io }
       self.logger = config.fetch(:logger) { default_logger }
       self.term_registry = config.fetch(:term_registry) { default_term_registry }
+      self.message_factory = config.fetch(:message_factory) { default_message_factory }
       @lines = []
     end
 
+    HANDLERS = {
+      query: Gmshell::MessageHandlers::QueryHandler.method(:handle),
+      query_terms: Gmshell::MessageHandlers::QueryTermsHandler.method(:handle)
+    }
+
     HELP_REGEXP = /\A\?(?<help_with>.*)/
     def process(line:)
-      line = line.to_s.strip
-      if match = HELP_REGEXP.match(line)
-        case match[:help_with]
-        when "terms", "term"
-          logger.puts("List of terms:")
-          logger.puts("\t#{term_registry.terms.sort.join(", ")}")
-        else
-          logger.puts("Unknown help for #{match[:help_with].inspect}")
-        end
-      else
-        record(line: line)
-      end
+      handler_name, parameters = message_factory.call(line: line.to_s.strip)
+      handler = HANDLERS.fetch(handler_name) { method(:record) }
+      handler.call(notepad: self, **parameters)
     end
 
-    def record(line:, as_of: Time.now)
+    def record(line:, as_of: Time.now, **kwargs)
       evaluated_line = term_registry.evaluate(line: line.to_s.strip)
       logger.puts("=>\t#{evaluated_line}")
       if timestamp?
@@ -36,6 +36,18 @@ module Gmshell
       else
         @lines << evaluated_line
       end
+    end
+
+    def log(line)
+      logger.puts(line)
+    end
+
+    def table_for(*args)
+      term_registry.table_for(*args)
+    end
+
+    def terms(*args)
+      term_registry.terms(*args)
     end
 
     def dump!
@@ -50,12 +62,19 @@ module Gmshell
       end
     end
 
+    attr_reader :term_registry
+
     private
 
-    attr_accessor :io, :logger, :timestamp, :term_registry
-    attr_writer :config
+    attr_accessor :io, :logger, :timestamp, :message_factory
+    attr_writer :config, :term_registry
 
     alias timestamp? timestamp
+
+    def default_message_factory
+      require_relative "message_factory"
+      MessageFactory.new
+    end
 
     def default_term_registry
       require_relative "term_registry"

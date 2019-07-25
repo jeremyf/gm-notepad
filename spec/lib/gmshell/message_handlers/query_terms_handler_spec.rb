@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gmshell/message_handlers/query_terms_handler'
 
-module GmShell
+module Gmshell
   module MessageHandlers
     RSpec.describe QueryTermsHandler do
       describe '#call' do

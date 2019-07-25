@@ -3,7 +3,7 @@ require 'gmshell/message_handlers/query_handler'
 require 'gmshell/term_registry'
 require 'gmshell/term_table_entry'
 
-module GmShell
+module Gmshell
   module MessageHandlers
     RSpec.describe QueryHandler do
       let(:term) { 'programming' }
