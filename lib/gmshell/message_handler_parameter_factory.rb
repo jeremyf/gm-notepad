@@ -4,9 +4,12 @@ module Gmshell
   class MessageHandlerParameterFactory
     NON_EXPANDING_CHARATER = '!'.freeze
     QUERY_TABLE_NAMES_PREFIX = '+'.freeze
+    HELP_PREFIX = '?'.freeze
     def call(line:)
       line = line.strip
       case line[0]
+      when HELP_PREFIX
+        help(line[1..-1], expand: false)
       when QUERY_TABLE_NAMES_PREFIX
         if line == QUERY_TABLE_NAMES_PREFIX || line[0..1] == "#{QUERY_TABLE_NAMES_PREFIX}/"
           query_table_names(line[1..-1], expand: false)
@@ -23,6 +26,10 @@ module Gmshell
     end
 
     private
+
+    def help(line, expand:)
+      [:help, { expand: expand }]
+    end
 
     def query_table_names(line, expand:)
       parameters = { expand: expand }

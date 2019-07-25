@@ -2,6 +2,7 @@ require 'time'
 require_relative 'message_handlers/query_table_handler'
 require_relative 'message_handlers/query_table_names_handler'
 require_relative 'message_handlers/write_line_handler'
+require_relative 'message_handlers/help_handler'
 
 module Gmshell
   # Responsible for recording entries and then dumping them accordingly.
@@ -20,7 +21,8 @@ module Gmshell
     HANDLERS = {
       query_table: Gmshell::MessageHandlers::QueryTableHandler.method(:handle),
       query_table_names: Gmshell::MessageHandlers::QueryTableNamesHandler.method(:handle),
-      write_line: Gmshell::MessageHandlers::WriteLineHandler.method(:handle)
+      write_line: Gmshell::MessageHandlers::WriteLineHandler.method(:handle),
+      help: Gmshell::MessageHandlers::HelpHandler
     }
 
     HELP_REGEXP = /\A\?(?<help_with>.*)/
@@ -35,7 +37,7 @@ module Gmshell
     end
 
     def log(lines, expand: true, capture: false, as_of: Time.now)
-      Array(lines).sort.each do |line|
+      Array(lines).each do |line|
         line = table_registry.evaluate(line: line.to_s.strip) if expand
         logger.puts("=>\t#{line}")
         if capture

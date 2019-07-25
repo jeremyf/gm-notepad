@@ -5,6 +5,7 @@ module Gmshell
   RSpec.describe MessageHandlerParameterFactory do
     context "#call" do
       [
+        ["?", [:help, { expand: false }]],
         ["+", [:query_table_names, { expand: false }]],
         ["+/hello/", [:query_table_names, { grep: "hello", expand: false }]],
         ["+NPC", [:query_table, term: 'npc', expand: false]],

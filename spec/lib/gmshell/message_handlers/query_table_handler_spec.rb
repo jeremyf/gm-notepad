@@ -8,6 +8,18 @@ module Gmshell
     RSpec.describe QueryTableHandler do
       let(:term) { 'programming' }
       describe '#call' do
+        context "with a missing table_name" do
+          let(:registry) do
+            Gmshell::TableRegistry.new.tap do |registry|
+              registry.register_by_string(term: "other", string: "1|Other")
+            end
+          end
+          it "will return a message saying its missing and provide a list of matches" do
+            expect(described_class.call(registry: registry, term: "o")).to eq(
+              ['Unknown table "o". Did you mean: "other"']
+            )
+          end
+        end
         [
           [
             ["1|Hello {bork}", "2|World"],

@@ -6,7 +6,13 @@ module Gmshell
         notepad.log(results, expand: false)
       end
       def self.call(registry:, term:, expand: false, index: nil, grep: false)
-        table = registry.fetch_table(name: term)
+        begin
+          table = registry.fetch_table(name: term)
+        rescue KeyError
+          message = "Unknown table #{term.inspect}. Did you mean: "
+          message += registry.table_names.grep(/\A#{term}/).map(&:inspect).join(", ")
+          return [message]
+        end
         if index
           [table.lookup(index: index)]
         elsif grep
