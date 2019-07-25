@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'gmshell/message_handlers/query_tables_handler'
+require 'gmshell/message_handlers/tables_query_handler'
 
 module Gmshell
   module MessageHandlers
-    RSpec.describe QueryTablesHandler do
+    RSpec.describe TablesQueryHandler do
       describe '#call' do
         [
           [['abc', 'daz', 'bcd', 'def', 'xyz'], 'a\w', ['abc', 'daz']],

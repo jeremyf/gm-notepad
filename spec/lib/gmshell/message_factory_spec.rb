@@ -5,8 +5,8 @@ module Gmshell
   RSpec.describe MessageFactory do
     context "#call" do
       [
-        ["?", [:query_terms, {}]],
-        ["?/hello/", [:query_terms, grep: "hello"]],
+        ["?", [:tables_query, {}]],
+        ["?/hello/", [:tables_query, grep: "hello"]],
         ["?NPC", [:query, term: 'npc', expand: false]],
         ["?NPC!", [:query, term: 'npc', expand: false]],
         ["?NPC[1]", [:query, term: 'npc', index: "1", expand: false]],
