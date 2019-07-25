@@ -50,8 +50,8 @@ module Gmshell
       table_registry.terms(*args)
     end
 
-    def dump!
-      @renderer.dump!
+    def close!
+      @renderer.close!
     end
 
     attr_reader :table_registry

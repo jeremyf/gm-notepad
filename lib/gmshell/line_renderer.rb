@@ -15,7 +15,7 @@ module Gmshell
       render_interactive(line) if to_interactive
     end
 
-    def dump!
+    def close!
       if defer_output
         @lines.each do |line|
           output_buffer.puts(line)

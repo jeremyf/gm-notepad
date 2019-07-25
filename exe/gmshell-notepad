@@ -68,11 +68,11 @@ begin
       rescue Errno::EPIPE
         # sysexits(3) specifies that exit code 74 represent an IO error,
         # which is the likely situation
-        @notepad.dump!
+        @notepad.close!
         exit(74)
       end
     end
   end
 ensure
-  @notepad.dump!
+  @notepad.close!
 end
