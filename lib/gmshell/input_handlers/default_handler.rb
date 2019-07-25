@@ -23,10 +23,6 @@ module Gmshell
       def after_initialize!
       end
 
-      def to_params
-        { to_output: false }
-      end
-
       def lines
         []
       end

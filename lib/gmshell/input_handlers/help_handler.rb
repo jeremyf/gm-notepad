@@ -15,10 +15,6 @@ module Gmshell
         self.expand_line = false
       end
 
-      def to_params
-        { expand_line: false }
-      end
-
       def lines(**kwargs)
         [
           "Prefixes:",
