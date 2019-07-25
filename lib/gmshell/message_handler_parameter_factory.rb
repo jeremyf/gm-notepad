@@ -1,3 +1,4 @@
+require_relative "message_context"
 module Gmshell
   # Responsible for extracting the appropriate message to send based
   # on the given line.
@@ -5,6 +6,12 @@ module Gmshell
     NON_EXPANDING_CHARATER = '!'.freeze
     QUERY_TABLE_NAMES_PREFIX = '+'.freeze
     HELP_PREFIX = '?'.freeze
+
+    def extract(input)
+      response = call(line: input.clone)
+      MessageContext.new(input: input, handler: response[0], **response[1])
+    end
+
     def call(line:)
       line = line.strip
       case line[0]
