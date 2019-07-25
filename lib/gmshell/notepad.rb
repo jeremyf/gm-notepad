@@ -13,7 +13,7 @@ module Gmshell
       self.table_registry = config.fetch(:table_registry) { default_table_registry }
       self.message_factory = config.fetch(:message_factory) { default_message_factory }
       self.renderer = config.fetch(:renderer) { default_renderer }
-      self.input_processor_factory = default_input_processor_factory
+      self.input_processor = config.fetch(:input_processor) { default_input_processor }
       start!
     end
 
@@ -26,17 +26,7 @@ module Gmshell
 
     HELP_REGEXP = /\A\?(?<help_with>.*)/
     def process(input:)
-      message_context = message_factory.extract(input.to_s.strip)
-      handler = HANDLERS.fetch(message_context.handler_name)
-      lines = handler.call(registry: table_registry, **message_context.parameters)
-      log(lines, **message_context.parameters.slice(:to_output, :expand_line))
-    end
-
-    def log(lines, expand_line: true, to_output: false, to_interactive: true)
-      Array(lines).each do |line|
-        line = table_registry.evaluate(line: line.to_s.strip) if expand_line
-        renderer.call(line, to_interactive: to_interactive, to_output: to_output)
-      end
+      input_processor.process(input: input)
     end
 
     def fetch_table(*args)
@@ -65,12 +55,12 @@ module Gmshell
       end
     end
 
-    attr_accessor :message_factory, :renderer, :input_processor_factory
+    attr_accessor :message_factory, :renderer, :input_processor
     attr_writer :config, :table_registry
 
-    def default_input_processor_factory
-      require_relative "input_processor_factory"
-      InputProcessorFactory.new(table_registry: table_registry)
+    def default_input_processor
+      require_relative "input_processor"
+      InputProcessorFactory.new(table_registry: table_registry, renderer: renderer)
     end
 
     def default_message_factory

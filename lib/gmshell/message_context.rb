@@ -19,6 +19,14 @@ module Gmshell
       parameters[:expand_line]
     end
 
+    def to_output
+      parameters.fetch(:to_output) { false }
+    end
+
+    def to_interactive
+      parameters.fetch(:to_interactive) { true }
+    end
+
     attr_accessor :input, :handler_name, :parameters
 
     private :input=
