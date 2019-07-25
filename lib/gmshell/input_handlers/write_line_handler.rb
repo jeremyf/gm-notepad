@@ -24,6 +24,11 @@ module Gmshell
           { line: line.strip, expand_line: true, to_output: true }
         end
       end
+
+      def lines(**kwargs)
+        call(**kwargs)
+      end
+
       def call(line:, **kwargs)
         line
       end

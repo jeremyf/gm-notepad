@@ -9,8 +9,8 @@ module Gmshell
       its(:to_interactive) { is_expected.to be_truthy }
       its(:to_output) { is_expected.to be_falsey }
       its(:expand_line?) { is_expected.to be_falsey }
-      context '#call' do
-        subject { handler.call }
+      context '#lines' do
+        subject { handler.lines }
         it "logs an array of helpful messages" do
           is_expected.to be_a(Array)
         end

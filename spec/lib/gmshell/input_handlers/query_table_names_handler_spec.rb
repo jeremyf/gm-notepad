@@ -4,7 +4,8 @@ require 'gmshell/input_handlers/query_table_names_handler'
 module Gmshell
   module InputHandlers
     RSpec.describe QueryTableNamesHandler do
-      let(:handler) { described_class.new(input: nil) }
+      let(:registry) { Gmshell::TableRegistry.new }
+      let(:handler) { described_class.new(input: '', table_registry: registry) }
       subject { handler }
       its(:to_interactive) { is_expected.to be_truthy }
       its(:to_output) { is_expected.to be_falsey }

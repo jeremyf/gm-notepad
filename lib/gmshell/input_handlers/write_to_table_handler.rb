@@ -40,6 +40,10 @@ module Gmshell
         parameters
       end
 
+      def lines(**kwargs)
+        call(**kwargs)
+      end
+
       def call(table_name:, line:, registry:, index: nil, expand_line: false, grep: nil)
         if index
         elsif grep

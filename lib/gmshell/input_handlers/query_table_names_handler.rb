@@ -34,8 +34,12 @@ module Gmshell
         parameters
       end
 
-      def call(grep: false, registry:, **kwargs)
-        table_names = registry.table_names
+      def lines(**kwargs)
+        call(**kwargs)
+      end
+
+      def call(grep: false, **kwargs)
+        table_names = table_registry.table_names
         return table_names unless grep
         table_names.grep(%r{#{grep}})
       end

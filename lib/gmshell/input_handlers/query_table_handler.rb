@@ -41,12 +41,16 @@ module Gmshell
         parameters
       end
 
-      def call(registry:, table_name:, index: nil, grep: false, **kwargs)
+      def lines(**kwargs)
+        call(**kwargs)
+      end
+
+      def call(table_name:, index: nil, grep: false, **kwargs)
         begin
-          table = registry.fetch_table(name: table_name)
+          table = table_registry.fetch_table(name: table_name)
         rescue KeyError
           message = "Unknown table #{table_name.inspect}. Did you mean: "
-          message += registry.table_names.grep(/\A#{table_name}/).map(&:inspect).join(", ")
+          message += table_registry.table_names.grep(/\A#{table_name}/).map(&:inspect).join(", ")
           return [message]
         end
         if index

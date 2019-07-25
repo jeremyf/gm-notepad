@@ -10,11 +10,12 @@ module Gmshell
         true
       end
 
-      def initialize(input:)
+      def initialize(input:, table_registry: nil)
         self.to_interactive = false
         self.to_output = false
         self.expand_line = false
         self.input = input
+        self.table_registry = table_registry
         after_initialize!
       end
       attr_accessor :table_registry, :to_interactive, :to_output, :expand_line, :input
@@ -26,15 +27,14 @@ module Gmshell
         { to_output: false }
       end
 
-      def call
+      def lines
         []
       end
 
       alias expand_line? expand_line
 
       def each_line_with_parameters
-        lines = call(registry: table_registry, **to_params)
-        Array(lines).each do |line|
+        Array(lines(**to_params)).each do |line|
           line = table_registry.evaluate(line: line.to_s.strip) if expand_line?
           yield(line, to_output: to_output, to_interactive: to_interactive)
         end

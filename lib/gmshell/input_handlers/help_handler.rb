@@ -19,7 +19,7 @@ module Gmshell
         { expand_line: false }
       end
 
-      def call(**kwargs)
+      def lines(**kwargs)
         [
           "Prefixes:",
           "\t? - Help (this command)",
@@ -33,6 +33,7 @@ module Gmshell
           "\t{table_name} - expand_line the given 'table_name'"
         ]
       end
+      alias call lines
     end
   end
 end
