@@ -3,7 +3,7 @@ require_relative "table_entry"
 
 module Gmshell
   class Table
-    def initialize(term:, lines:)
+    def initialize(term:, table_name: term, lines:)
       self.term = term
       process(lines: lines)
     end

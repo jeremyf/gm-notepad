@@ -27,20 +27,20 @@ module Gmshell
       @registry.fetch(name)
     end
 
-    def register_by_filename(term:, filename:)
+    def register_by_filename(term:, table_name: term, filename:)
       content = File.read(filename)
-      register(term: term, lines: content.split("\n"))
+      register(term: table_name, lines: content.split("\n"))
     end
 
-    def register_by_string(term:, string:)
-      register(term: term, lines: string.split("\n"))
+    def register_by_string(term:, table_name: term, string:)
+      register(term: table_name, lines: string.split("\n"))
     end
 
-    def lookup(term:, **kwargs)
-      table = @registry.fetch(term)
+    def lookup(term:, table_name: term, **kwargs)
+      table = @registry.fetch(table_name)
       table.lookup(**kwargs)
     rescue KeyError
-      "(undefined #{term})"
+      "(undefined #{table_name})"
     end
 
     def evaluate(line:)
@@ -49,9 +49,9 @@ module Gmshell
 
     private
 
-    def register(term:, lines:)
-      raise DuplicateKeyError.new(term: term, object: self) if @registry.key?(term)
-      @registry[term] = Table.new(term: term, lines: lines)
+    def register(term:, table_name: term, lines:)
+      raise DuplicateKeyError.new(term: table_name, object: self) if @registry.key?(table_name)
+      @registry[table_name] = Table.new(term: table_name, lines: lines)
     end
     attr_accessor :line_evaluator
 

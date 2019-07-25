@@ -1,7 +1,7 @@
 module Gmshell
   class DuplicateKeyError < RuntimeError
-    def initialize(term:, object:)
-      super("Duplicate key for #{term.inspect} in #{object}")
+    def initialize(term:, table_name: term, object:)
+      super("Duplicate key for #{table_name.inspect} in #{object}")
     end
   end
 end
