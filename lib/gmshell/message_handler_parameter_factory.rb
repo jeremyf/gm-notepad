@@ -26,7 +26,7 @@ module Gmshell
     def call(line:)
       line = line.strip
       handler = @input_handler_registry.handler_for(input: line, skip_default: true)
-      handler.to_params(input: line)
+      handler.to_params
     end
   end
 end

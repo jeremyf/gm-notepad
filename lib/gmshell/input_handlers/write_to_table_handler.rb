@@ -1,6 +1,8 @@
+require_relative "default_handler"
+
 module Gmshell
   module InputHandlers
-    module WriteToTableHandler
+    class WriteToTableHandler < DefaultHandler
       def self.handles?(input:)
         return true if input[0] == "<"
       end
@@ -8,7 +10,7 @@ module Gmshell
       WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
       WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
       WITH_WRITE_TARGET_REGEXP = %r{\A<(?<table_name>[^>]+)>(?<line>.*)}
-      def self.to_params(input:)
+      def to_params
         line = input
         parameters = {}
         args = [:write_to_table, parameters]

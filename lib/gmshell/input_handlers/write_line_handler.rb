@@ -1,12 +1,14 @@
+require_relative "default_handler"
+
 module Gmshell
   module InputHandlers
-    module WriteLineHandler
+    class WriteLineHandler < DefaultHandler
       NON_EXPANDING_CHARATER = '!'.freeze
       def self.handles?(input:)
         true
       end
 
-      def self.to_params(input:)
+      def to_params
         line = input
         if line[0] == NON_EXPANDING_CHARATER
           [:write_line, line: line[1..-1].strip, expand_line: false, to_output: true]

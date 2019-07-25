@@ -1,3 +1,4 @@
+require_relative 'input_handlers/default_handler'
 module Gmshell
   class InputHandlerRegistry
     def initialize
@@ -6,33 +7,22 @@ module Gmshell
 
     def handler_for(input:, skip_default: false)
       handler = nil
-      @registry.each do |registered_handler|
-        next unless registered_handler.handles?(input: input)
-        handler = registered_handler
-        break
+      @registry.each do |handler_builder|
+        if handler = handler_builder.build_if_handled(input: input)
+          break
+        end
       end
-      return handler unless handler.nil?
+      return handler if handler
       return nil if skip_default
-      default_handler
+      default_handler_builder.build_if_handled(input: input)
     end
 
     def register(handler:)
       @registry << handler
     end
 
-    def default_handler
-      DefaultHandler
-    end
-
-    private
-
-    module DefaultHandler
-      def self.handles?(input:)
-        true
-      end
-      def self.handle(line:, **kwargs)
-        line.to_s.strip
-      end
+    def default_handler_builder
+      InputHandlers::DefaultHandler
     end
   end
 end

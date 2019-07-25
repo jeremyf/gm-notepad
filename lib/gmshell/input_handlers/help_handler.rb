@@ -1,6 +1,7 @@
+require_relative "default_handler"
 module Gmshell
   module InputHandlers
-    module HelpHandler
+    class HelpHandler < DefaultHandler
       HELP_PREFIX = '?'.freeze
 
       def self.handles?(input:)
@@ -8,8 +9,7 @@ module Gmshell
         true
       end
 
-      # An interstitial method for splicing in changes
-      def self.to_params(*)
+      def to_params(**)
         [:help, { expand_line: false }]
       end
 

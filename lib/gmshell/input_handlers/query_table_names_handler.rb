@@ -1,6 +1,8 @@
+require_relative "default_handler"
+
 module Gmshell
   module InputHandlers
-    module QueryTableNamesHandler
+    class QueryTableNamesHandler < DefaultHandler
       QUERY_TABLE_NAMES_PREFIX = '+'.freeze
       def self.handles?(input:)
         # Does not have the table prefix
@@ -13,7 +15,7 @@ module Gmshell
       end
 
       WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
-      def self.to_params(input:)
+      def to_params
         line = input[1..-1]
         parameters = { expand_line: false }
         args = [:query_table_names, parameters]
