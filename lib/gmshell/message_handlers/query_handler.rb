@@ -6,7 +6,7 @@ module Gmshell
         notepad.log(results, expand: false)
       end
       def self.call(registry:, term:, expand: false, index: nil, grep: false)
-        table = registry.table_for(term: term)
+        table = registry.fetch_table(name: term)
         if index
           [table.lookup(index: index)]
         elsif grep

@@ -6,9 +6,9 @@ module Gmshell
         notepad.log(results)
       end
       def self.call(grep: false, registry:)
-        terms = registry.terms.sort
-        return terms unless grep
-        terms.grep(%r{#{grep}})
+        tables = registry.tables
+        return tables unless grep
+        tables.grep(%r{#{grep}})
       end
     end
   end

@@ -8,7 +8,7 @@ module Gmshell
 
     include Comparable
     def <=>(other)
-      lookup_column <=> other.lookup_column
+      to_str <=> String(other)
     end
 
     def lookup_range

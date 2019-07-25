@@ -19,12 +19,12 @@ module Gmshell
       @registry = {}
     end
 
-    def terms
-      @registry.keys
+    def tables
+      @registry.keys.sort
     end
 
-    def table_for(term:)
-      @registry.fetch(term)
+    def fetch_table(name:)
+      @registry.fetch(name)
     end
 
     def register_by_filename(term:, filename:)

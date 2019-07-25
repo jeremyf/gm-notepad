@@ -24,11 +24,11 @@ module Gmshell
           ],[
             ["1|Hello {bork}", "2|World"],
             { grep: "{bork}", expand: true },
-            ["Hello (undefined bork)"]
+            [Gmshell::TableEntry.new(line: "1|Hello {bork}")]
           ],[
             ["1|Hello {bork}", "2|World"],
             { grep: "o", expand: true },
-            ["Hello (undefined bork)", "World"]
+            [Gmshell::TableEntry.new(line: "1|Hello {bork}"), Gmshell::TableEntry.new(line: "2|World")]
           ]
         ].each_with_index do |(table, given, expected), index|
           context "with #{given.inspect} for table: #{table.inspect} (scenario ##{index})" do

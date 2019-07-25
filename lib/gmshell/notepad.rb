@@ -44,8 +44,8 @@ module Gmshell
       end
     end
 
-    def table_for(*args)
-      table_registry.table_for(*args)
+    def fetch_table(*args)
+      table_registry.fetch_table(*args)
     end
 
     def terms(*args)
