@@ -34,7 +34,7 @@ module Gmshell
       alias expand_line? expand_line
 
       def each_line_with_parameters
-        Array(lines(**to_params)).each do |line|
+        lines.each do |line|
           line = table_registry.evaluate(line: line.to_s.strip) if expand_line?
           yield(line, to_output: to_output, to_interactive: to_interactive)
         end

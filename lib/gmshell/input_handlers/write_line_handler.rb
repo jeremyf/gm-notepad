@@ -26,11 +26,7 @@ module Gmshell
       end
 
       def lines(**kwargs)
-        call(**kwargs)
-      end
-
-      def call(line:, **kwargs)
-        line
+        [input]
       end
     end
   end
