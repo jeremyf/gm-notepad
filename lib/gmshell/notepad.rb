@@ -29,14 +29,6 @@ module Gmshell
       input_processor.process(input: input)
     end
 
-    def fetch_table(*args)
-      table_registry.fetch_table(*args)
-    end
-
-    def table_names(*args)
-      table_registry.table_names(*args)
-    end
-
     def close!
       @renderer.close!
     end
