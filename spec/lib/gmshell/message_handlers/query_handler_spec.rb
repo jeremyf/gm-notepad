@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'gmshell/message_handlers/query_handler'
 require 'gmshell/term_registry'
-require 'gmshell/term_table_entry'
+require 'gmshell/table_entry'
 
 module Gmshell
   module MessageHandlers
@@ -12,15 +12,15 @@ module Gmshell
           [
             ["1|Hello {bork}", "2|World"],
             { index: "1", expand: false },
-            [Gmshell::TermTableEntry.new(line: "1|Hello {bork}")]
+            [Gmshell::TableEntry.new(line: "1|Hello {bork}")]
           ],[
             ["1|Hello {bork}", "2|World"],
             { grep: "world", expand: false },
-            [Gmshell::TermTableEntry.new(line: "2|World")]
+            [Gmshell::TableEntry.new(line: "2|World")]
           ],[
             ["1|Hello {bork}", "2|World"],
             { grep: "{bork}", expand: false },
-            [Gmshell::TermTableEntry.new(line: "1|Hello {bork}")]
+            [Gmshell::TableEntry.new(line: "1|Hello {bork}")]
           ],[
             ["1|Hello {bork}", "2|World"],
             { grep: "{bork}", expand: true },

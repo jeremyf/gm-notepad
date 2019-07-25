@@ -1,9 +1,9 @@
 module Gmshell
-  TERM_TABLE_ENTRY_SEPARATOR = "|".freeze
-  TERM_TABLE_ENTRY_RANGE_MARKER = "-".freeze
-  class TermTableEntry
+  TABLE_ENTRY_SEPARATOR = "|".freeze
+  TABLE_ENTRY_RANGE_MARKER = "-".freeze
+  class TableEntry
     def initialize(line:)
-      self.lookup_column, self.entry_column = line.split(TERM_TABLE_ENTRY_SEPARATOR)
+      self.lookup_column, self.entry_column = line.split(TABLE_ENTRY_SEPARATOR)
     end
 
     include Comparable
@@ -12,7 +12,7 @@ module Gmshell
     end
 
     def lookup_range
-      left, right = lookup_column.split(TERM_TABLE_ENTRY_RANGE_MARKER)
+      left, right = lookup_column.split(TABLE_ENTRY_RANGE_MARKER)
       right = left unless right
       (left.strip.to_i..right.strip.to_i)
     end

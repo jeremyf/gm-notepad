@@ -1,5 +1,5 @@
 require_relative "exceptions"
-require_relative "term_table_entry"
+require_relative "table_entry"
 
 module Gmshell
   class Table
@@ -41,7 +41,7 @@ module Gmshell
     def process(lines:)
       @table = {}
       lines.each do |line|
-        entry = TermTableEntry.new(line: line)
+        entry = TableEntry.new(line: line)
         entry.lookup_range.each do |i|
           key = i.to_s
           raise DuplicateKeyError.new(term: term, object: self) if @table.key?(key)

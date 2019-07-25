@@ -30,7 +30,7 @@ module Gmshell
       end
 
       it "will use a random value (within range) for the index" do
-        expect(subject.lookup).to be_a(TermTableEntry)
+        expect(subject.lookup).to be_a(TableEntry)
       end
     end
   end
