@@ -2,17 +2,18 @@ require_relative "input_processing_context"
 require_relative "input_handler_registry"
 require_relative "input_handlers/help_handler"
 require_relative "input_handlers/query_table_handler"
+require_relative "input_handlers/query_table_names_handler"
 module Gmshell
   # Responsible for extracting the appropriate message to send based
   # on the given line.
   class MessageHandlerParameterFactory
     NON_EXPANDING_CHARATER = '!'.freeze
-    QUERY_TABLE_NAMES_PREFIX = '+'.freeze
 
     def initialize
       @input_handler_registry = InputHandlerRegistry.new
       @input_handler_registry.register(handler: InputHandlers::HelpHandler)
       @input_handler_registry.register(handler: InputHandlers::QueryTableHandler)
+      @input_handler_registry.register(handler: InputHandlers::QueryTableNamesHandler)
     end
 
     def extract(input)
@@ -26,10 +27,6 @@ module Gmshell
         return handler.to_params(input: line)
       end
       case line[0]
-      when QUERY_TABLE_NAMES_PREFIX
-        if line == QUERY_TABLE_NAMES_PREFIX || line[0..1] == "#{QUERY_TABLE_NAMES_PREFIX}/"
-          query_table_names(line[1..-1], expand_line: false)
-        end
       when '<'
         write_to_table(line)
       when NON_EXPANDING_CHARATER
@@ -58,25 +55,6 @@ module Gmshell
 
     WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
     WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
-    def query_table(line, expand_line:)
-      parameters = {expand_line: expand_line}
-      args = [:query_table, parameters]
-      if match = WITH_INDEX_REGEXP.match(line)
-        line = line.sub(match[:declaration], '')
-        index = match[:index]
-        parameters[:index] = index
-      elsif match = WITH_GREP_REGEXP.match(line)
-        line = line.sub(match[:declaration], '')
-        grep = match[:grep]
-        parameters[:grep] = grep
-      end
-      if line[-1] == NON_EXPANDING_CHARATER
-        line = line[0..-2]
-      end
-      parameters[:table_name] = line.downcase
-      args
-    end
-
     WITH_WRITE_TARGET_REGEXP = %r{\A<(?<table_name>[^>]+)>(?<line>.*)}
     def write_to_table(line)
       parameters = {}
