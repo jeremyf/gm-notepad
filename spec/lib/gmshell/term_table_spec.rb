@@ -21,12 +21,12 @@ module Gmshell
 
     context "#lookup" do
       it "allows for lookup by index" do
-        expect(subject.lookup(index: 1).to_s).to eq("Tokyo")
-        expect(subject.lookup(index: 7).to_s).to eq("Mumbai")
+        expect(subject.lookup(index: "1").to_s).to eq("Tokyo")
+        expect(subject.lookup(index: "7").to_s).to eq("Mumbai")
       end
 
       it "raises KeyError for missing index" do
-        expect { subject.lookup(index: 0) }.to raise_error(KeyError)
+        expect { subject.lookup(index: "0") }.to raise_error(KeyError)
       end
 
       it "will use a random value (within range) for the index" do

@@ -8,8 +8,22 @@ module Gmshell
       process(lines: lines)
     end
 
-    def lookup(index: random_index)
-      @table.fetch(index)
+    def lookup(index: false)
+      if index
+        @table.fetch(index)
+      else
+        @table.values[random_index]
+      end
+    end
+
+    def grep(grep)
+      returning_value = []
+      @table.each_value do |entry|
+        if grep.match(entry.entry_column)
+          returning_value << entry
+        end
+      end
+      returning_value
     end
 
     private
@@ -17,7 +31,7 @@ module Gmshell
     attr_accessor :term
 
     def random_index
-      rand(@table.size) + 1
+      rand(@table.size)
     end
 
     def process(lines:)
@@ -25,8 +39,9 @@ module Gmshell
       lines.each do |line|
         entry = TermTableEntry.new(line: line)
         entry.lookup_range.each do |i|
-          raise DuplicateKeyError.new(term: term, object: self) if @table.key?(i)
-          @table[i] = entry
+          key = i.to_s
+          raise DuplicateKeyError.new(term: term, object: self) if @table.key?(key)
+          @table[key] = entry
         end
       end
     end

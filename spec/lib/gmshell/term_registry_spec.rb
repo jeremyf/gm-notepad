@@ -17,7 +17,7 @@ module Gmshell
     end
     context '#lookup' do
       it "will use the term and lookup in the table" do
-        expect(subject.lookup(term: "roman", index: 1).to_s).to eq("I")
+        expect(subject.lookup(term: "roman", index: "1").to_s).to eq("I")
       end
     end
   end

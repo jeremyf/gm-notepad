@@ -6,6 +6,11 @@ module Gmshell
       self.lookup_column, self.entry_column = line.split(TERM_TABLE_ENTRY_SEPARATOR)
     end
 
+    include Comparable
+    def <=>(other)
+      lookup_column <=> other.lookup_column
+    end
+
     def lookup_range
       left, right = lookup_column.split(TERM_TABLE_ENTRY_RANGE_MARKER)
       right = left unless right

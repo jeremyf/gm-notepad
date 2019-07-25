@@ -23,6 +23,10 @@ module Gmshell
       @registry.keys
     end
 
+    def table_for(term:)
+      @registry.fetch(term)
+    end
+
     def register_by_filename(term:, filename:)
       content = File.read(filename)
       register(term: term, lines: content.split("\n"))
