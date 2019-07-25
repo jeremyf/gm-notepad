@@ -14,7 +14,7 @@ module Gmshell
       self.message_factory = config.fetch(:message_factory) { default_message_factory }
       self.renderer = config.fetch(:renderer) { default_renderer }
       self.input_processor = config.fetch(:input_processor) { default_input_processor }
-      start!
+      open!
     end
 
     HANDLERS = {
@@ -46,7 +46,7 @@ module Gmshell
     private
 
     attr_reader :renderer
-    def start!
+    def open!
       return if config[:skip_config_reporting]
       renderer.call("# Configuration Parameters:", to_interactive: true, to_output: true)
       config.each do |key, value|
