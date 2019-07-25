@@ -1,3 +1,4 @@
+require 'time'
 module Gmshell
   # Responsible for rendering lines
   class LineRenderer

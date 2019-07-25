@@ -1,9 +1,3 @@
-require 'time'
-require_relative 'message_handlers/query_table_handler'
-require_relative 'message_handlers/query_table_names_handler'
-require_relative 'message_handlers/write_line_handler'
-require_relative 'message_handlers/help_handler'
-
 module Gmshell
   # Responsible for recording entries and then dumping them accordingly.
   class Notepad
@@ -11,20 +5,11 @@ module Gmshell
     def initialize(**config)
       self.config = config
       self.table_registry = config.fetch(:table_registry) { default_table_registry }
-      self.message_factory = config.fetch(:message_factory) { default_message_factory }
       self.renderer = config.fetch(:renderer) { default_renderer }
       self.input_processor = config.fetch(:input_processor) { default_input_processor }
       open!
     end
 
-    HANDLERS = {
-      query_table: Gmshell::MessageHandlers::QueryTableHandler,
-      query_table_names: Gmshell::MessageHandlers::QueryTableNamesHandler,
-      write_line: Gmshell::MessageHandlers::WriteLineHandler,
-      help: Gmshell::MessageHandlers::HelpHandler
-    }
-
-    HELP_REGEXP = /\A\?(?<help_with>.*)/
     def process(input:)
       input_processor.process(input: input)
     end
@@ -47,17 +32,12 @@ module Gmshell
       end
     end
 
-    attr_accessor :message_factory, :renderer, :input_processor
+    attr_accessor :renderer, :input_processor
     attr_writer :config, :table_registry
 
     def default_input_processor
       require_relative "input_processor"
       InputProcessorFactory.new(table_registry: table_registry, renderer: renderer)
-    end
-
-    def default_message_factory
-      require_relative "message_handler_parameter_factory"
-      MessageHandlerParameterFactory.new
     end
 
     def default_table_registry
