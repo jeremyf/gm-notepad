@@ -3,16 +3,16 @@ module Gmshell
   # on the given line.
   class MessageHandlerParameterFactory
     NON_EXPANDING_CHARATER = '!'.freeze
-    QUERY_PREFIX = '?'.freeze
+    QUERY_TABLE_NAMES_PREFIX = '+'.freeze
     def call(line:)
       line = line.strip
       case line[0]
-      when QUERY_PREFIX
-        returning_value = query(line[1..-1])
-        return returning_value unless returning_value.last.fetch(:term) == ''
-        parameters = {}
-        parameters[:grep] = returning_value.last[:grep] if returning_value.last.key?(:grep)
-        [:query_table_names, parameters]
+      when QUERY_TABLE_NAMES_PREFIX
+        if line == QUERY_TABLE_NAMES_PREFIX || line[0..1] == "#{QUERY_TABLE_NAMES_PREFIX}/"
+          query_table_names(line[1..-1], expand: false)
+        else
+          query_table(line[1..-1], expand: false)
+        end
       when '<'
         write_term(line)
       when NON_EXPANDING_CHARATER
@@ -24,15 +24,26 @@ module Gmshell
 
     private
 
+    def query_table_names(line, expand:)
+      parameters = { expand: expand }
+      args = [:query_table_names, parameters]
+      if match = WITH_GREP_REGEXP.match(line)
+        line = line.sub(match[:declaration], '')
+        grep = match[:grep]
+        parameters[:grep] = grep
+      end
+      args
+    end
+
     def write(line, expand:)
       [:write_line, line: line.strip, expand: expand]
     end
 
     WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
     WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
-    def query(line)
-      parameters = {expand: false}
-      args = [:query, parameters]
+    def query_table(line, expand:)
+      parameters = {expand: expand}
+      args = [:query_table, parameters]
       if match = WITH_INDEX_REGEXP.match(line)
         line = line.sub(match[:declaration], '')
         index = match[:index]

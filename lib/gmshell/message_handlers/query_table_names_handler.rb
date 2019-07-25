@@ -5,7 +5,7 @@ module Gmshell
         results = call(registry: notepad.table_registry, **kwargs)
         notepad.log(results)
       end
-      def self.call(grep: false, registry:)
+      def self.call(grep: false, registry:, **kwargs)
         table_names = registry.table_names
         return table_names unless grep
         table_names.grep(%r{#{grep}})

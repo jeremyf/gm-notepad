@@ -1,11 +1,11 @@
 require 'spec_helper'
-require 'gmshell/message_handlers/query_handler'
+require 'gmshell/message_handlers/query_table_handler'
 require 'gmshell/table_registry'
 require 'gmshell/table_entry'
 
 module Gmshell
   module MessageHandlers
-    RSpec.describe QueryHandler do
+    RSpec.describe QueryTableHandler do
       let(:term) { 'programming' }
       describe '#call' do
         [

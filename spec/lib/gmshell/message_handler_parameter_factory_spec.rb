@@ -5,13 +5,13 @@ module Gmshell
   RSpec.describe MessageHandlerParameterFactory do
     context "#call" do
       [
-        ["?", [:query_table_names, {}]],
-        ["?/hello/", [:query_table_names, grep: "hello"]],
-        ["?NPC", [:query, term: 'npc', expand: false]],
-        ["?NPC!", [:query, term: 'npc', expand: false]],
-        ["?NPC[1]", [:query, term: 'npc', index: "1", expand: false]],
-        ["?NPC[abc]", [:query, term: 'npc', index: "abc", expand: false]],
-        ["?NPC/hello/", [:query, term: 'npc', grep: "hello", expand: false]],
+        ["+", [:query_table_names, { expand: false }]],
+        ["+/hello/", [:query_table_names, { grep: "hello", expand: false }]],
+        ["+NPC", [:query_table, term: 'npc', expand: false]],
+        ["+NPC!", [:query_table, term: 'npc', expand: false]],
+        ["+NPC[1]", [:query_table, term: 'npc', index: "1", expand: false]],
+        ["+NPC[abc]", [:query_table, term: 'npc', index: "abc", expand: false]],
+        ["+NPC/hello/", [:query_table, term: 'npc', grep: "hello", expand: false]],
         ["<NPC>! stuff", [:write_term, term: 'npc', line: "stuff", expand: false]],
         ["<NPC> stuff", [:write_term, term: 'npc', line: "stuff", expand: true]],
         ["<NPC> ! stuff", [:write_term, term: 'npc', line: "stuff", expand: false]],
