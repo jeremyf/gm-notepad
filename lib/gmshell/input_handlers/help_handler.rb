@@ -9,12 +9,18 @@ module Gmshell
         true
       end
 
-      def to_params(**)
-        [:help, { expand_line: false }]
+      def after_initialize!
+        self.to_interactive = true
+        self.to_output = false
+        self.expand_line = false
       end
 
-      def self.call(**kwargs)
-        lines = [
+      def to_params
+        { expand_line: false }
+      end
+
+      def call(**kwargs)
+        [
           "Prefixes:",
           "\t? - Help (this command)",
           "\t+ - Query table names and contents",

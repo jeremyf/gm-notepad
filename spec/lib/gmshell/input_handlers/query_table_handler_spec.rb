@@ -7,6 +7,8 @@ module Gmshell
   module InputHandlers
     RSpec.describe QueryTableHandler do
       let(:table_name) { 'programming' }
+      let(:handler) { described_class.new(input: '') }
+
       describe '#call' do
         context "with a missing table_name" do
           let(:registry) do
@@ -15,7 +17,7 @@ module Gmshell
             end
           end
           it "will return a message saying its missing and provide a list of matches" do
-            expect(described_class.call(registry: registry, table_name: "o")).to eq(
+            expect(handler.call(registry: registry, table_name: "o")).to eq(
               ['Unknown table "o". Did you mean: "other"']
             )
           end
@@ -49,7 +51,7 @@ module Gmshell
                 registry.register_by_string(table_name: table_name, string: table.join("\n"))
               end
             end
-            subject { described_class.call(registry: registry, table_name: table_name, **given) }
+            subject { handler.call(registry: registry, table_name: table_name, **given) }
             it { is_expected.to eq(expected) }
           end
         end

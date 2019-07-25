@@ -37,9 +37,10 @@ module Gmshell
         end
         parameters[:line] = line.strip
         args
+        parameters
       end
 
-      def self.call(table_name:, line:, registry:, index: nil, expand_line: false, grep: nil)
+      def call(table_name:, line:, registry:, index: nil, expand_line: false, grep: nil)
         if index
         elsif grep
         end

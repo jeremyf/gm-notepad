@@ -14,6 +14,12 @@ module Gmshell
         false
       end
 
+      def after_initialize!
+        self.expand_line = false
+        self.to_output = false
+        self.to_interactive = true
+      end
+
       WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
       def to_params
         line = input[1..-1]
@@ -25,9 +31,10 @@ module Gmshell
           parameters[:grep] = grep
         end
         args
+        parameters
       end
 
-      def self.call(grep: false, registry:, **kwargs)
+      def call(grep: false, registry:, **kwargs)
         table_names = registry.table_names
         return table_names unless grep
         table_names.grep(%r{#{grep}})

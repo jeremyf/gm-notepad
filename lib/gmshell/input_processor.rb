@@ -1,14 +1,8 @@
-require_relative 'input_handlers/query_table_handler'
-require_relative 'input_handlers/query_table_names_handler'
-require_relative 'input_handlers/write_line_handler'
-require_relative 'input_handlers/help_handler'
-require_relative 'message_handler_parameter_factory'
-
 module Gmshell
   class InputProcessor
-    def initialize(table_registry:)
+    def initialize(table_registry:, **config)
       self.table_registry = table_registry
-      @parameter_factory = MessageHandlerParameterFactory.new
+      self.input_handler_registry = config.fetch(:input_handler_registry) { default_input_handler_registry }
     end
 
     def process(input:)
@@ -18,38 +12,31 @@ module Gmshell
       end
     end
 
-    attr_accessor :table_registry
-    private :table_registry=
+    attr_accessor :table_registry, :input_handler_registry
+    private :table_registry=, :input_handler_registry
 
     private
 
     def build_for(input:)
       input = input.to_s.strip
-      input_processing_context = @parameter_factory.extract(input)
-      Handler.new(input_processing_context: input_processing_context, table_registry: table_registry)
+      handler = input_handler_registry.handler_for(input: input)
+      handler.table_registry = table_registry
+      handler
     end
 
-    HANDLERS = {
-      query_table: Gmshell::InputHandlers::QueryTableHandler,
-      query_table_names: Gmshell::InputHandlers::QueryTableNamesHandler,
-      write_line: Gmshell::InputHandlers::WriteLineHandler,
-      help: Gmshell::InputHandlers::HelpHandler
-    }
-
-    class Handler
-      attr_reader :input_processing_context, :table_registry, :handler
-      def initialize(input_processing_context:, table_registry:)
-        @input_processing_context = input_processing_context
-        @table_registry = table_registry
-        @handler = HANDLERS.fetch(input_processing_context.handler_name)
-      end
-
-      def each_line_with_parameters
-        lines = handler.call(registry: table_registry, **input_processing_context.parameters)
-        Array(lines).each do |line|
-          line = table_registry.evaluate(line: line.to_s.strip) if input_processing_context.expand_line?
-          yield(line, to_output: input_processing_context.to_output, to_interactive: input_processing_context.to_interactive)
-        end
+    def default_input_handler_registry
+      require_relative "input_handler_registry"
+      require_relative "input_handlers/help_handler"
+      require_relative "input_handlers/query_table_handler"
+      require_relative "input_handlers/query_table_names_handler"
+      require_relative "input_handlers/write_to_table_handler"
+      require_relative "input_handlers/write_line_handler"
+      InputHandlerRegistry.new do |registry|
+        registry.register(handler: InputHandlers::HelpHandler)
+        registry.register(handler: InputHandlers::QueryTableHandler)
+        registry.register(handler: InputHandlers::QueryTableNamesHandler)
+        registry.register(handler: InputHandlers::WriteToTableHandler)
+        registry.register(handler: InputHandlers::WriteLineHandler)
       end
     end
   end

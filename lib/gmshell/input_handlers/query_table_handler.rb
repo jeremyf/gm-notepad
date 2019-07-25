@@ -13,13 +13,18 @@ module Gmshell
         true
       end
 
+      def after_initialize!
+        self.expand_line = false
+        self.to_output = false
+        self.to_interactive = true
+      end
+
       WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
       WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
       NON_EXPANDING_CHARATER = '!'.freeze
       def to_params
         line = input[1..-1]
         parameters = {expand_line: false }
-        args = [:query_table, parameters]
         if match = WITH_INDEX_REGEXP.match(line)
           line = line.sub(match[:declaration], '')
           index = match[:index]
@@ -33,10 +38,10 @@ module Gmshell
           line = line[0..-2]
         end
         parameters[:table_name] = line.downcase
-        args
+        parameters
       end
 
-      def self.call(registry:, table_name:, expand_line: false, index: nil, grep: false)
+      def call(registry:, table_name:, index: nil, grep: false, **kwargs)
         begin
           table = registry.fetch_table(name: table_name)
         rescue KeyError

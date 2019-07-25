@@ -67,4 +67,13 @@ RSpec.describe "basic features" do
     notepad.close!
     expect(output_buffer.lines.count).to eq(0)
   end
+  it "scenario 4" do
+    [
+      %(Hello "{name}" nice to meet you and "{name}")
+    ].each do |input|
+      notepad.process(input: input)
+    end
+    notepad.close!
+    expect(output_buffer.lines.count).to eq(1)
+  end
 end
