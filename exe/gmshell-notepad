@@ -42,8 +42,8 @@ OptionParser.new do |options|
     config[:paths] << path
   end
 
-  options.on("-l", "--list_terms", "List terms loaded (Default: #{config[:list_terms].inspect})") do |list_terms|
-    config[:list_terms] = list_terms
+  options.on("-l", "--list_tables", "List terms loaded (Default: #{config[:list_tables].inspect})") do |list_tables|
+    config[:list_tables] = list_tables
   end
 
   options.on_tail("-h", "--help", "You're looking at it!") do
@@ -52,14 +52,14 @@ OptionParser.new do |options|
   end
 end.parse!
 
-@notepad = Gmshell::Notepad.new(**config)
-
-if config[:list_terms]
-  @notepad.process(input: "?term")
-  exit(74)
+if config[:list_tables]
+  notepad = Gmshell::Notepad.new(config.merge(skip_config_reporting: true))
+  notepad.process(input: "+")
+  exit(1)
 end
 
 begin
+  @notepad = Gmshell::Notepad.new(**config)
   # Keep reading lines of input as long as they're coming.
   while input = ARGF.gets
     input.each_line do |input|
