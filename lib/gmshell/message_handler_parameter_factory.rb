@@ -1,7 +1,7 @@
 module Gmshell
   # Responsible for extracting the appropriate message to send based
   # on the given line.
-  class MessageFactory
+  class MessageHandlerParameterFactory
     NON_EXPANDING_CHARATER = '!'.freeze
     QUERY_PREFIX = '?'.freeze
     def call(line:)

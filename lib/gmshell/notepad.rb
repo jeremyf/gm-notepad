@@ -39,7 +39,7 @@ module Gmshell
         line = table_registry.evaluate(line: line.to_s.strip) if expand
         logger.puts("=>\t#{line}")
         if capture
-          if timestamp
+          if timestamp?
             @lines << "#{as_of}\t#{line}"
           else
             @lines << line
@@ -78,8 +78,8 @@ module Gmshell
     alias timestamp? timestamp
 
     def default_message_factory
-      require_relative "message_factory"
-      MessageFactory.new
+      require_relative "message_handler_parameter_factory"
+      MessageHandlerParameterFactory.new
     end
 
     def default_table_registry

@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'gmshell/message_factory'
+require 'gmshell/message_handler_parameter_factory'
 
 module Gmshell
-  RSpec.describe MessageFactory do
+  RSpec.describe MessageHandlerParameterFactory do
     context "#call" do
       [
         ["?", [:query_table_names, {}]],
