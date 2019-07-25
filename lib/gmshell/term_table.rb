@@ -16,6 +16,10 @@ module Gmshell
       end
     end
 
+    def all
+      @table.values
+    end
+
     def grep(grep)
       returning_value = []
       @table.each_value do |entry|

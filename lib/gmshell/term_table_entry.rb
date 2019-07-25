@@ -18,17 +18,18 @@ module Gmshell
     end
 
     attr_reader :lookup_column, :entry_column
+
     alias to_s entry_column
     alias to_str entry_column
 
     private
 
     def lookup_column=(input)
-      @lookup_column = input.strip
+      @lookup_column = input.strip.freeze
     end
 
     def entry_column=(input)
-      @entry_column = input.strip
+      @entry_column = input.strip.freeze
     end
   end
 end

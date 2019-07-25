@@ -7,7 +7,7 @@ module Gmshell
     def call(line:, term_evaluation_function:)
       while match = line.match(TERM_REGEXP)
         evaluated_term = term_evaluation_function.call(term: match[:term].strip)
-        line.sub!(match[:term_container], evaluated_term)
+        line = line.sub(match[:term_container], evaluated_term)
       end
       while match = line.match(DICE_REGEXP)
         if parsed_dice = Dice.parse(match[:dice])
@@ -15,7 +15,7 @@ module Gmshell
         else
           evaluated_dice = "(#{match[:dice]})"
         end
-        line.sub!(match[:dice_container], evaluated_dice)
+        line = line.sub(match[:dice_container], evaluated_dice)
       end
       line
     end
