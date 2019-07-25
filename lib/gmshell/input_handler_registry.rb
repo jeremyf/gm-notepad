@@ -3,6 +3,7 @@ module Gmshell
   class InputHandlerRegistry
     def initialize
       @registry = []
+      yield(self) if block_given?
     end
 
     def handler_for(input:, skip_default: false)
