@@ -13,7 +13,7 @@ module Gmshell
         [:help, { expand_line: false }]
       end
 
-      def self.handle(**kwargs)
+      def self.call(**kwargs)
         lines = [
           "Prefixes:",
           "\t? - Help (this command)",

@@ -1,7 +1,7 @@
-require_relative 'message_handlers/query_table_handler'
-require_relative 'message_handlers/query_table_names_handler'
-require_relative 'message_handlers/write_line_handler'
-require_relative 'message_handlers/help_handler'
+require_relative 'input_handlers/query_table_handler'
+require_relative 'input_handlers/query_table_names_handler'
+require_relative 'input_handlers/write_line_handler'
+require_relative 'input_handlers/help_handler'
 require_relative 'message_handler_parameter_factory'
 
 module Gmshell
@@ -30,10 +30,10 @@ module Gmshell
     end
 
     HANDLERS = {
-      query_table: Gmshell::MessageHandlers::QueryTableHandler,
-      query_table_names: Gmshell::MessageHandlers::QueryTableNamesHandler,
-      write_line: Gmshell::MessageHandlers::WriteLineHandler,
-      help: Gmshell::MessageHandlers::HelpHandler
+      query_table: Gmshell::InputHandlers::QueryTableHandler,
+      query_table_names: Gmshell::InputHandlers::QueryTableNamesHandler,
+      write_line: Gmshell::InputHandlers::WriteLineHandler,
+      help: Gmshell::InputHandlers::HelpHandler
     }
 
     class Handler

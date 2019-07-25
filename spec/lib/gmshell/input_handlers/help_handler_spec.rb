@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'gmshell/message_handlers/help_handler'
+require 'gmshell/input_handlers/help_handler'
 
 module Gmshell
-  module MessageHandlers
+  module InputHandlers
     RSpec.describe HelpHandler do
       let(:notepad) { double("notepad") }
       context '#call' do

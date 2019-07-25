@@ -35,7 +35,7 @@ module Gmshell
         args
       end
 
-      def self.handle(registry:, table_name:, expand_line: false, index: nil, grep: false)
+      def self.call(registry:, table_name:, expand_line: false, index: nil, grep: false)
         begin
           table = registry.fetch_table(name: table_name)
         rescue KeyError

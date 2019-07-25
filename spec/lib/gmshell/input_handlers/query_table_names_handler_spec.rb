@@ -1,8 +1,8 @@
 require 'spec_helper'
-require 'gmshell/message_handlers/query_table_names_handler'
+require 'gmshell/input_handlers/query_table_names_handler'
 
 module Gmshell
-  module MessageHandlers
+  module InputHandlers
     RSpec.describe QueryTableNamesHandler do
       describe '#call' do
         [
