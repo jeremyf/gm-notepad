@@ -55,16 +55,16 @@ end.parse!
 @notepad = Gmshell::Notepad.new(**config)
 
 if config[:list_terms]
-  @notepad.process(line: "?term")
+  @notepad.process(input: "?term")
   exit(74)
 end
 
 begin
   # Keep reading lines of input as long as they're coming.
   while input = ARGF.gets
-    input.each_line do |line|
+    input.each_line do |input|
       begin
-        @notepad.process(line: line)
+        @notepad.process(input: input)
       rescue Errno::EPIPE
         # sysexits(3) specifies that exit code 74 represent an IO error,
         # which is the likely situation

@@ -24,8 +24,8 @@ module Gmshell
     }
 
     HELP_REGEXP = /\A\?(?<help_with>.*)/
-    def process(line:)
-      handler_name, parameters = message_factory.call(line: line.to_s.strip)
+    def process(input:)
+      handler_name, parameters = message_factory.call(line: input.to_s.strip)
       handler = HANDLERS.fetch(handler_name) { method(:record) }
       handler.call(notepad: self, **parameters)
     end
