@@ -21,13 +21,13 @@ module Gmshell
         ["[1d1]", "[1d1]", false],
         ["[taco]", "[taco]", false],
         ["[taco]{hello}", "[taco]{hello}", false],
-      ].each do |given, expected, expand|
+      ].each do |given, expected, expand_line|
         it "evaluates #{given.inspect} as #{expected.inspect}" do
           expect(
             subject.call(
               line: given,
               table_lookup_function: table_lookup_function,
-              expand: expand
+              expand_line: expand_line
             )
           ).to eq(expected)
         end

@@ -16,30 +16,30 @@ module Gmshell
       line = line.strip
       case line[0]
       when HELP_PREFIX
-        help(line[1..-1], expand: false)
+        help(line[1..-1], expand_line: false)
       when QUERY_TABLE_NAMES_PREFIX
         if line == QUERY_TABLE_NAMES_PREFIX || line[0..1] == "#{QUERY_TABLE_NAMES_PREFIX}/"
-          query_table_names(line[1..-1], expand: false)
+          query_table_names(line[1..-1], expand_line: false)
         else
-          query_table(line[1..-1], expand: false)
+          query_table(line[1..-1], expand_line: false)
         end
       when '<'
         write_to_table(line)
       when NON_EXPANDING_CHARATER
-        write(line[1..-1], expand: false)
+        write(line[1..-1], expand_line: false)
       else ''
-        write(line, expand: true)
+        write(line, expand_line: true)
       end
     end
 
     private
 
-    def help(line, expand:)
-      [:help, { expand: expand }]
+    def help(line, expand_line:)
+      [:help, { expand_line: expand_line }]
     end
 
-    def query_table_names(line, expand:)
-      parameters = { expand: expand }
+    def query_table_names(line, expand_line:)
+      parameters = { expand_line: expand_line }
       args = [:query_table_names, parameters]
       if match = WITH_GREP_REGEXP.match(line)
         line = line.sub(match[:declaration], '')
@@ -49,14 +49,14 @@ module Gmshell
       args
     end
 
-    def write(line, expand:)
-      [:write_line, line: line.strip, expand: expand, to_output: true]
+    def write(line, expand_line:)
+      [:write_line, line: line.strip, expand_line: expand_line, to_output: true]
     end
 
     WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
     WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
-    def query_table(line, expand:)
-      parameters = {expand: expand}
+    def query_table(line, expand_line:)
+      parameters = {expand_line: expand_line}
       args = [:query_table, parameters]
       if match = WITH_INDEX_REGEXP.match(line)
         line = line.sub(match[:declaration], '')
@@ -94,10 +94,10 @@ module Gmshell
         raise "I don't know what to do"
       end
       if line[0] == NON_EXPANDING_CHARATER
-        parameters[:expand] = false
+        parameters[:expand_line] = false
         line = line[1..-1]
       else
-        parameters[:expand] = true
+        parameters[:expand_line] = true
       end
       parameters[:line] = line.strip
       args

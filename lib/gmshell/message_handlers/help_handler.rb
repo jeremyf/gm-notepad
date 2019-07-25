@@ -12,7 +12,7 @@ module Gmshell
           "\t! - Skip expansion",
           "\t/search/ - Grep for the given 'search' within the prefix",
           "\t[index] - Target a specific 'index'",
-          "\t{table_name} - Expand the given 'table_name'"
+          "\t{table_name} - expand_line the given 'table_name'"
         ]
       end
     end

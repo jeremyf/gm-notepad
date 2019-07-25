@@ -23,23 +23,23 @@ module Gmshell
         [
           [
             ["1|Hello {bork}", "2|World"],
-            { index: "1", expand: false },
+            { index: "1", expand_line: false },
             [Gmshell::TableEntry.new(line: "1|Hello {bork}")]
           ],[
             ["1|Hello {bork}", "2|World"],
-            { grep: "world", expand: false },
+            { grep: "world", expand_line: false },
             [Gmshell::TableEntry.new(line: "2|World")]
           ],[
             ["1|Hello {bork}", "2|World"],
-            { grep: "{bork}", expand: false },
+            { grep: "{bork}", expand_line: false },
             [Gmshell::TableEntry.new(line: "1|Hello {bork}")]
           ],[
             ["1|Hello {bork}", "2|World"],
-            { grep: "{bork}", expand: true },
+            { grep: "{bork}", expand_line: true },
             [Gmshell::TableEntry.new(line: "1|Hello {bork}")]
           ],[
             ["1|Hello {bork}", "2|World"],
-            { grep: "o", expand: true },
+            { grep: "o", expand_line: true },
             [Gmshell::TableEntry.new(line: "1|Hello {bork}"), Gmshell::TableEntry.new(line: "2|World")]
           ]
         ].each_with_index do |(table, given, expected), index|

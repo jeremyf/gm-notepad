@@ -15,6 +15,10 @@ module Gmshell
       [input, handler_name, parameters].hash
     end
 
+    def expand_line?
+      parameters[:expand_line]
+    end
+
     attr_accessor :input, :handler_name, :parameters
 
     private :input=

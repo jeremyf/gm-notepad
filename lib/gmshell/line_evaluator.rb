@@ -4,8 +4,8 @@ module Gmshell
   class LineEvaluator
     TABLE_NAME_REGEXP = %r{(?<table_name_container>\{(?<table_name>[^\}]+)\})}
     DICE_REGEXP = %r{(?<dice_container>\[(?<dice>[^\]]+)\])}
-    def call(line:, table_lookup_function:, expand: true)
-      return line unless expand
+    def call(line:, table_lookup_function:, expand_line: true)
+      return line unless expand_line
       while match = line.match(TABLE_NAME_REGEXP)
         evaluated_table_name = table_lookup_function.call(table_name: match[:table_name].strip)
         line = line.sub(match[:table_name_container], evaluated_table_name)
