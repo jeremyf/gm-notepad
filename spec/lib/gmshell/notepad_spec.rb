@@ -8,7 +8,7 @@ module Gmshell
     its(:default_renderer) { is_expected.to respond_to(:call) }
 
     let(:timestamp) { true }
-    let(:table_registry) { double("term registry") }
+    let(:table_registry) { double("table registry") }
     let(:first_line) { "this line is my line" }
     let(:second_line) { "this line is your line" }
     let(:renderer) { double("renderer") }

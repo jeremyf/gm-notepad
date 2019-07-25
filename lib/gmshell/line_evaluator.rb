@@ -2,13 +2,13 @@ require 'dice'
 module Gmshell
   # Responsible for recording entries and then dumping them accordingly.
   class LineEvaluator
-    TERM_REGEXP = %r{(?<term_container>\{(?<term>[^\}]+)\})}
+    TABLE_NAME_REGEXP = %r{(?<table_name_container>\{(?<table_name>[^\}]+)\})}
     DICE_REGEXP = %r{(?<dice_container>\[(?<dice>[^\]]+)\])}
-    def call(line:, term_evaluation_function:, expand: true)
+    def call(line:, table_lookup_function:, expand: true)
       return line unless expand
-      while match = line.match(TERM_REGEXP)
-        evaluated_term = term_evaluation_function.call(term: match[:term].strip)
-        line = line.sub(match[:term_container], evaluated_term)
+      while match = line.match(TABLE_NAME_REGEXP)
+        evaluated_table_name = table_lookup_function.call(table_name: match[:table_name].strip)
+        line = line.sub(match[:table_name_container], evaluated_table_name)
       end
       while match = line.match(DICE_REGEXP)
         if parsed_dice = Dice.parse(match[:dice])

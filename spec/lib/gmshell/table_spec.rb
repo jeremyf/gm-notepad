@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'gmshell/table'
 module Gmshell
   RSpec.describe Table do
-    let(:term) { "city" }
+    let(:table_name) { "city" }
     let(:lines) do
       [
         "1| Tokyo",
@@ -11,11 +11,11 @@ module Gmshell
         "5-10| Mumbai"
       ]
     end
-    let(:subject) { described_class.new(term: term, lines: lines) }
+    let(:subject) { described_class.new(table_name: table_name, lines: lines) }
 
     context "when initialized with a table that has overlap" do
       it 'raises an exception' do
-        expect { described_class.new(term: term, lines: ["1|a", "1|b"]) }.to raise_error(/Duplicate key/)
+        expect { described_class.new(table_name: table_name, lines: ["1|a", "1|b"]) }.to raise_error(/Duplicate key/)
       end
     end
 

@@ -24,7 +24,7 @@ module Gmshell
           query_table(line[1..-1], expand: false)
         end
       when '<'
-        write_term(line)
+        write_to_table(line)
       when NON_EXPANDING_CHARATER
         write(line[1..-1], expand: false)
       else ''
@@ -70,26 +70,26 @@ module Gmshell
       if line[-1] == NON_EXPANDING_CHARATER
         line = line[0..-2]
       end
-      parameters[:term] = line.downcase
+      parameters[:table_name] = line.downcase
       args
     end
 
-    WITH_WRITE_TARGET_REGEXP = %r{\A<(?<term>[^>]+)>(?<line>.*)}
-    def write_term(line)
+    WITH_WRITE_TARGET_REGEXP = %r{\A<(?<table_name>[^>]+)>(?<line>.*)}
+    def write_to_table(line)
       parameters = {}
-      args = [:write_term, parameters]
+      args = [:write_to_table, parameters]
       if match = WITH_WRITE_TARGET_REGEXP.match(line)
         line = match[:line].strip
-        term = match[:term]
-        if index_match = WITH_INDEX_REGEXP.match(term)
-          term = term.sub(index_match[:declaration], '')
+        table_name = match[:table_name]
+        if index_match = WITH_INDEX_REGEXP.match(table_name)
+          table_name = table_name.sub(index_match[:declaration], '')
           index = index_match[:index]
           parameters[:index] = index
-        elsif grep_match = WITH_GREP_REGEXP.match(term)
-          term = term.sub(grep_match[:declaration], '')
+        elsif grep_match = WITH_GREP_REGEXP.match(table_name)
+          table_name = table_name.sub(grep_match[:declaration], '')
           parameters[:grep] = grep_match[:grep]
         end
-        parameters[:term] = term.downcase
+        parameters[:table_name] = table_name.downcase
       else
         raise "I don't know what to do"
       end

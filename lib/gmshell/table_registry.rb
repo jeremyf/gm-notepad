@@ -7,8 +7,8 @@ module Gmshell
       table_registry = new
       paths.each do |path|
         Dir.glob(File.join(path, "**/*.txt")).each do |filename|
-          term = File.basename(filename, ".txt")
-          table_registry.register_by_filename(term: term, filename: filename)
+          table_name = File.basename(filename, ".txt")
+          table_registry.register_by_filename(table_name: table_name, filename: filename)
         end
       end
       table_registry
@@ -27,16 +27,16 @@ module Gmshell
       @registry.fetch(name)
     end
 
-    def register_by_filename(term:, table_name: term, filename:)
+    def register_by_filename(table_name:, filename:)
       content = File.read(filename)
-      register(term: table_name, lines: content.split("\n"))
+      register(table_name: table_name, lines: content.split("\n"))
     end
 
-    def register_by_string(term:, table_name: term, string:)
-      register(term: table_name, lines: string.split("\n"))
+    def register_by_string(table_name:, string:)
+      register(table_name: table_name, lines: string.split("\n"))
     end
 
-    def lookup(term:, table_name: term, **kwargs)
+    def lookup(table_name:, **kwargs)
       table = @registry.fetch(table_name)
       table.lookup(**kwargs)
     rescue KeyError
@@ -44,14 +44,14 @@ module Gmshell
     end
 
     def evaluate(line:)
-      line_evaluator.call(line: line, term_evaluation_function: method(:lookup))
+      line_evaluator.call(line: line, table_lookup_function: method(:lookup))
     end
 
     private
 
-    def register(term:, table_name: term, lines:)
-      raise DuplicateKeyError.new(term: table_name, object: self) if @registry.key?(table_name)
-      @registry[table_name] = Table.new(term: table_name, lines: lines)
+    def register(table_name:, lines:)
+      raise DuplicateKeyError.new(key: table_name, object: self) if @registry.key?(table_name)
+      @registry[table_name] = Table.new(table_name: table_name, lines: lines)
     end
     attr_accessor :line_evaluator
 

@@ -5,7 +5,7 @@ module Gmshell
     before do
       @counter = 0
     end
-    let(:term_evaluation_function) { ->(term:) { "(#{term}:#{@counter+=1})" } }
+    let(:table_lookup_function) { ->(table_name:) { "(#{table_name}:#{@counter+=1})" } }
     subject { described_class.new }
     describe "#call (using evaluator that surrounds in paranthesises and increments a counter)" do
       [
@@ -26,7 +26,7 @@ module Gmshell
           expect(
             subject.call(
               line: given,
-              term_evaluation_function: term_evaluation_function,
+              table_lookup_function: table_lookup_function,
               expand: expand
             )
           ).to eq(expected)

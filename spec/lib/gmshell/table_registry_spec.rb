@@ -4,8 +4,8 @@ module Gmshell
   RSpec.describe TableRegistry do
     let(:tables) do
       [
-        { term: "programming", string: "1|Hello\n2|World" },
-        { term: "roman", string: "1|I\n2|II" }
+        { table_name: "programming", string: "1|Hello\n2|World" },
+        { table_name: "roman", string: "1|I\n2|II" }
       ]
     end
 
@@ -14,6 +14,10 @@ module Gmshell
       tables.each do |table|
         subject.register_by_string(**table)
       end
+    end
+    it "will raise an error if you try to re-register" do
+      table = tables.first
+      expect { subject.register_by_string(**table) }.to raise_error DuplicateKeyError
     end
     context '#table_names' do
       it "will be the table names for those tables registered" do
@@ -33,8 +37,8 @@ module Gmshell
       end
     end
     context '#lookup' do
-      it "will use the term and lookup in the table" do
-        expect(subject.lookup(term: "roman", index: "1").to_s).to eq("I")
+      it "will use the table_name and lookup in the table" do
+        expect(subject.lookup(table_name: "roman", index: "1").to_s).to eq("I")
       end
     end
   end

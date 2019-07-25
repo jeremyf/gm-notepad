@@ -5,7 +5,7 @@ module Gmshell
         results = call(registry: notepad.table_registry, expand: expand, **kwargs)
         notepad.log(results, expand: false)
       end
-      def self.call(registry:, term:, table_name: term, expand: false, index: nil, grep: false)
+      def self.call(registry:, table_name:, expand: false, index: nil, grep: false)
         begin
           table = registry.fetch_table(name: table_name)
         rescue KeyError

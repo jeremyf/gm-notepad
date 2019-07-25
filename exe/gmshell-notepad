@@ -38,11 +38,11 @@ OptionParser.new do |options|
     config[:defer_output] = defer_output
   end
 
-  options.on("-pPATH", "--path=PATH", String, "Path for {term}.txt files (Default: #{config[:paths].inspect})") do |path|
+  options.on("-pPATH", "--path=PATH", String, "Path for {table_name}.txt files (Default: #{config[:paths].inspect})") do |path|
     config[:paths] << path
   end
 
-  options.on("-l", "--list_tables", "List terms loaded (Default: #{config[:list_tables].inspect})") do |list_tables|
+  options.on("-l", "--list_tables", "List tables loaded (Default: #{config[:list_tables].inspect})") do |list_tables|
     config[:list_tables] = list_tables
   end
 
