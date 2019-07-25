@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'gmshell/message_handlers/query_handler'
-require 'gmshell/term_registry'
+require 'gmshell/table_registry'
 require 'gmshell/table_entry'
 
 module Gmshell
@@ -33,7 +33,7 @@ module Gmshell
         ].each_with_index do |(table, given, expected), index|
           context "with #{given.inspect} for table: #{table.inspect} (scenario ##{index})" do
             let(:registry) do
-              Gmshell::TermRegistry.new.tap do |registry|
+              Gmshell::TableRegistry.new.tap do |registry|
                 registry.register_by_string(term: term, string: table.join("\n"))
               end
             end

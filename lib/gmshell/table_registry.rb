@@ -2,16 +2,16 @@ require_relative "table"
 require_relative "exceptions"
 
 module Gmshell
-  class TermRegistry
+  class TableRegistry
     def self.load_for(paths:)
-      term_registry = new
+      table_registry = new
       paths.each do |path|
         Dir.glob(File.join(path, "**/*.txt")).each do |filename|
           term = File.basename(filename, ".txt")
-          term_registry.register_by_filename(term: term, filename: filename)
+          table_registry.register_by_filename(term: term, filename: filename)
         end
       end
-      term_registry
+      table_registry
     end
 
     def initialize(line_evaluator: default_line_evaluator)

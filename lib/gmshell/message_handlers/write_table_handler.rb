@@ -1,6 +1,6 @@
 module Gmshell
   module MessageHandlers
-    module WriteTermHandler
+    module WriteTableHandler
       def self.call(term:, line:, registry:, index: nil, expand: false, grep: nil)
         if index
         elsif grep

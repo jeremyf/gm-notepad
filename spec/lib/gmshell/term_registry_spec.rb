@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'gmshell/term_registry'
+require 'gmshell/table_registry'
 module Gmshell
-  RSpec.describe TermRegistry do
+  RSpec.describe TableRegistry do
     let(:tables) do
       [
         { term: "programming", string: "1|Hello\n2|World" },

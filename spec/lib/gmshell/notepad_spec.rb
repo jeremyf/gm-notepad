@@ -2,26 +2,26 @@ require 'spec_helper'
 require 'gmshell/notepad'
 module Gmshell
   RSpec.describe Notepad do
-    its(:default_term_registry) { is_expected.to respond_to(:evaluate) }
+    its(:default_table_registry) { is_expected.to respond_to(:evaluate) }
     its(:default_io) { is_expected.to respond_to(:puts) }
     its(:default_logger) { is_expected.to respond_to(:puts) }
 
     let(:timestamp) { true }
     let(:io) { double("io") }
     let(:logger) { double("logger") }
-    let(:term_registry) { double("term registry") }
+    let(:table_registry) { double("term registry") }
     let(:first_line) { "this line is my line" }
     let(:second_line) { "this line is your line" }
 
     let(:notepad) do
-      described_class.new(timestamp: timestamp, io: io, logger: logger, term_registry: term_registry)
+      described_class.new(timestamp: timestamp, io: io, logger: logger, table_registry: table_registry)
     end
 
     before do
       allow(io).to receive(:puts)
       allow(logger).to receive(:puts)
-      allow(term_registry).to receive(:evaluate).with(line: first_line).and_return(first_line)
-      allow(term_registry).to receive(:evaluate).with(line: second_line).and_return(second_line)
+      allow(table_registry).to receive(:evaluate).with(line: first_line).and_return(first_line)
+      allow(table_registry).to receive(:evaluate).with(line: second_line).and_return(second_line)
     end
 
     describe '#record' do

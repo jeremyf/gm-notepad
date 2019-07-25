@@ -1,6 +1,6 @@
 require 'time'
 require_relative 'message_handlers/query_handler'
-require_relative 'message_handlers/query_terms_handler'
+require_relative 'message_handlers/query_tables_handler'
 require_relative 'message_handlers/write_line_handler'
 
 module Gmshell
@@ -12,14 +12,14 @@ module Gmshell
       self.timestamp = config.fetch(:timestamp) { true }
       self.io = config.fetch(:io) { default_io }
       self.logger = config.fetch(:logger) { default_logger }
-      self.term_registry = config.fetch(:term_registry) { default_term_registry }
+      self.table_registry = config.fetch(:table_registry) { default_table_registry }
       self.message_factory = config.fetch(:message_factory) { default_message_factory }
       @lines = []
     end
 
     HANDLERS = {
       query: Gmshell::MessageHandlers::QueryHandler.method(:handle),
-      query_terms: Gmshell::MessageHandlers::QueryTermsHandler.method(:handle),
+      query_terms: Gmshell::MessageHandlers::QueryTablesHandler.method(:handle),
       write_line: Gmshell::MessageHandlers::WriteLineHandler.method(:handle)
     }
 
@@ -36,7 +36,7 @@ module Gmshell
 
     def log(lines, expand: true, capture: false)
       Array(lines).sort.each do |line|
-        line = term_registry.evaluate(line: line.to_s.strip) if expand
+        line = table_registry.evaluate(line: line.to_s.strip) if expand
         logger.puts("=>\t#{line}")
         if capture
           @lines << line
@@ -45,11 +45,11 @@ module Gmshell
     end
 
     def table_for(*args)
-      term_registry.table_for(*args)
+      table_registry.table_for(*args)
     end
 
     def terms(*args)
-      term_registry.terms(*args)
+      table_registry.terms(*args)
     end
 
     def dump!
@@ -64,12 +64,12 @@ module Gmshell
       end
     end
 
-    attr_reader :term_registry
+    attr_reader :table_registry
 
     private
 
     attr_accessor :io, :logger, :timestamp, :message_factory
-    attr_writer :config, :term_registry
+    attr_writer :config, :table_registry
 
     alias timestamp? timestamp
 
@@ -78,9 +78,9 @@ module Gmshell
       MessageFactory.new
     end
 
-    def default_term_registry
-      require_relative "term_registry"
-      TermRegistry.load_for(paths: config.fetch(:paths, []))
+    def default_table_registry
+      require_relative "table_registry"
+      TableRegistry.load_for(paths: config.fetch(:paths, []))
     end
 
     def default_io
