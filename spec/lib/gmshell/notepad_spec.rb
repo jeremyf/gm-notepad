@@ -14,7 +14,13 @@ module Gmshell
     let(:second_line) { "this line is your line" }
 
     let(:notepad) do
-      described_class.new(timestamp: timestamp, io: io, logger: logger, table_registry: table_registry)
+      described_class.new(
+        skip_config_reporting: true,
+        timestamp: timestamp,
+        io: io,
+        logger: logger,
+        table_registry: table_registry
+      )
     end
 
     before do

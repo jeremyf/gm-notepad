@@ -31,15 +31,19 @@ module Gmshell
     end
 
     def record(line:, as_of: Time.now, **kwargs)
-      log(line, capture: true, expand: true)
+      log(line, capture: true, expand: true, as_of: as_of)
     end
 
-    def log(lines, expand: true, capture: false)
+    def log(lines, expand: true, capture: false, as_of: Time.now)
       Array(lines).sort.each do |line|
         line = table_registry.evaluate(line: line.to_s.strip) if expand
         logger.puts("=>\t#{line}")
         if capture
-          @lines << line
+          if timestamp
+            @lines << "#{as_of}\t#{line}"
+          else
+            @lines << line
+          end
         end
       end
     end

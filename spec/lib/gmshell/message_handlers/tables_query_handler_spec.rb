@@ -11,7 +11,7 @@ module Gmshell
           [['abc', 'daz', 'bcd', 'def', 'xyz'], '^a', ['abc']]
         ].each_with_index do |(table_names, grep, expected), index|
           context "for table_names: #{table_names.sort.inspect}, grep: #{grep.inspect} (index: #{index})" do
-            let(:registry) { double("registry", tables: table_names.sort) }
+            let(:registry) { double("registry", table_names: table_names.sort) }
             subject { described_class.call(grep: grep, registry: registry) }
             it { is_expected.to eq(expected) }
           end

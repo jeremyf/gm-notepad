@@ -15,9 +15,9 @@ module Gmshell
         subject.register_by_string(**table)
       end
     end
-    context '#tables' do
+    context '#table_names' do
       it "will be the table names for those tables registered" do
-        expect(subject.tables).to eq(["programming", "roman"])
+        expect(subject.table_names).to eq(["programming", "roman"])
       end
     end
     context '#fetch_table' do

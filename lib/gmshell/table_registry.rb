@@ -19,7 +19,7 @@ module Gmshell
       @registry = {}
     end
 
-    def tables
+    def table_names
       @registry.keys.sort
     end
 
