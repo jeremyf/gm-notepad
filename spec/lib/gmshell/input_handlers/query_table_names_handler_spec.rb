@@ -5,7 +5,8 @@ module Gmshell
   module InputHandlers
     RSpec.describe QueryTableNamesHandler do
       let(:registry) { Gmshell::TableRegistry.new }
-      let(:handler) { described_class.new(input: '', table_registry: registry) }
+      let(:handler) { described_class.new(input: input, table_registry: registry) }
+      let(:input) { "" }
       subject { handler }
       its(:to_interactive) { is_expected.to be_truthy }
       its(:to_output) { is_expected.to be_falsey }
@@ -18,8 +19,15 @@ module Gmshell
           [['abc', 'daz', 'bcd', 'def', 'xyz'], '^a', ['abc']]
         ].each_with_index do |(table_names, grep, expected), index|
           context "for table_names: #{table_names.sort.inspect}, grep: #{grep.inspect} (index: #{index})" do
-            let(:registry) { double("registry", table_names: table_names.sort) }
-            subject { handler.call(grep: grep, registry: registry) }
+            let(:registry) do
+              TableRegistry.new.tap do |r|
+                table_names.each do |table_name|
+                  r.register_by_string(table_name: table_name, string: "")
+                end
+              end
+            end
+            let(:input) { "+/#{grep}/"}
+            subject { handler.call }
             it { is_expected.to eq(expected) }
           end
         end

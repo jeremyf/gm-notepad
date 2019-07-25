@@ -14,31 +14,26 @@ module Gmshell
         false
       end
 
+      WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
       def after_initialize!
         self.expand_line = false
         self.to_output = false
         self.to_interactive = true
-      end
 
-      WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
-      def to_params
         line = input[1..-1]
-        parameters = { expand_line: false }
-        args = [:query_table_names, parameters]
         if match = WITH_GREP_REGEXP.match(line)
           line = line.sub(match[:declaration], '')
-          grep = match[:grep]
-          parameters[:grep] = grep
+          self.grep = match[:grep]
         end
-        args
-        parameters
       end
+
+      attr_accessor :grep
 
       def lines(**kwargs)
         call(**kwargs)
       end
 
-      def call(grep: false, **kwargs)
+      def call(**kwargs)
         table_names = table_registry.table_names
         return table_names unless grep
         table_names.grep(%r{#{grep}})
