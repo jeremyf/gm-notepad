@@ -44,13 +44,12 @@ module Gmshell
       end
 
       def each_line_with_parameters
-        lines = handler.call(registry: @table_registry, **input_processing_context.parameters)
+        lines = handler.call(registry: table_registry, **input_processing_context.parameters)
         Array(lines).each do |line|
           line = table_registry.evaluate(line: line.to_s.strip) if input_processing_context.expand_line?
           yield(line, to_output: input_processing_context.to_output, to_interactive: input_processing_context.to_interactive)
         end
       end
     end
-
   end
 end
