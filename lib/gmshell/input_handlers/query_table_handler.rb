@@ -13,39 +13,38 @@ module Gmshell
         true
       end
 
+      WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
+      WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
+      NON_EXPANDING_CHARATER = '!'.freeze
       def after_initialize!
         self.expand_line = false
         self.to_output = false
         self.to_interactive = true
-      end
 
-      WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
-      WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
-      NON_EXPANDING_CHARATER = '!'.freeze
-      def to_params
-        line = input[1..-1]
-        parameters = {expand_line: false }
+        line = input[1..-1].to_s
+        self.expand_line = false
         if match = WITH_INDEX_REGEXP.match(line)
           line = line.sub(match[:declaration], '')
           index = match[:index]
-          parameters[:index] = index
+          self.index = index
         elsif match = WITH_GREP_REGEXP.match(line)
           line = line.sub(match[:declaration], '')
           grep = match[:grep]
-          parameters[:grep] = grep
+          self.grep = grep
         end
         if line[-1] == NON_EXPANDING_CHARATER
           line = line[0..-2]
         end
-        parameters[:table_name] = line.downcase
-        parameters
+        self.table_name = line.downcase
       end
+
+      attr_accessor :index, :grep, :table_name
 
       def lines(**kwargs)
         call(**kwargs)
       end
 
-      def call(table_name:, index: nil, grep: false, **kwargs)
+      def call(**kwargs)
         begin
           table = table_registry.fetch_table(name: table_name)
         rescue KeyError

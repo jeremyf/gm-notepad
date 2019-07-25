@@ -8,7 +8,8 @@ module Gmshell
     RSpec.describe QueryTableHandler do
       let(:table_name) { 'programming' }
       let(:registry) { Gmshell::TableRegistry.new }
-      let(:handler) { described_class.new(input: '', table_registry: registry) }
+      let(:input) { '' }
+      let(:handler) { described_class.new(input: input, table_registry: registry) }
       subject { handler }
       its(:to_interactive) { is_expected.to be_truthy }
       its(:to_output) { is_expected.to be_falsey }
@@ -16,13 +17,14 @@ module Gmshell
 
       describe '#call' do
         context "with a missing table_name" do
+          let(:input) { '+o' }
           let(:registry) do
             Gmshell::TableRegistry.new.tap do |r|
               r.register_by_string(table_name: "other", string: "1|Other")
             end
           end
           it "will return a message saying its missing and provide a list of matches" do
-            expect(handler.call(registry: registry, table_name: "o")).to eq(
+            expect(handler.call).to eq(
               ['Unknown table "o". Did you mean: "other"']
             )
           end
@@ -30,23 +32,19 @@ module Gmshell
         [
           [
             ["1|Hello {bork}", "2|World"],
-            { index: "1", expand_line: false },
+            "+programming[1]",
             [Gmshell::TableEntry.new(line: "1|Hello {bork}")]
           ],[
             ["1|Hello {bork}", "2|World"],
-            { grep: "world", expand_line: false },
+            "+programming/world/",
             [Gmshell::TableEntry.new(line: "2|World")]
           ],[
             ["1|Hello {bork}", "2|World"],
-            { grep: "{bork}", expand_line: false },
+            "+programming/{bork}/",
             [Gmshell::TableEntry.new(line: "1|Hello {bork}")]
           ],[
             ["1|Hello {bork}", "2|World"],
-            { grep: "{bork}", expand_line: true },
-            [Gmshell::TableEntry.new(line: "1|Hello {bork}")]
-          ],[
-            ["1|Hello {bork}", "2|World"],
-            { grep: "o", expand_line: true },
+            "+programming/o/",
             [Gmshell::TableEntry.new(line: "1|Hello {bork}"), Gmshell::TableEntry.new(line: "2|World")]
           ]
         ].each_with_index do |(table, given, expected), index|
@@ -56,7 +54,8 @@ module Gmshell
                 r.register_by_string(table_name: table_name, string: table.join("\n"))
               end
             end
-            subject { handler.call(registry: registry, table_name: table_name, **given) }
+            let(:input) { given }
+            subject { handler.call(registry: registry, table_name: table_name) }
             it { is_expected.to eq(expected) }
           end
         end
