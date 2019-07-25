@@ -2,6 +2,7 @@ require_relative 'message_handlers/query_table_handler'
 require_relative 'message_handlers/query_table_names_handler'
 require_relative 'message_handlers/write_line_handler'
 require_relative 'message_handlers/help_handler'
+require_relative 'message_handler_parameter_factory'
 
 module Gmshell
   class InputProcessor
