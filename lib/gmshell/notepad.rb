@@ -26,7 +26,7 @@ module Gmshell
     HELP_REGEXP = /\A\?(?<help_with>.*)/
     def process(input:)
       message_context = message_factory.extract(input.to_s.strip)
-      handler = HANDLERS.fetch(message_context.handler) { method(:record) }
+      handler = HANDLERS.fetch(message_context.handler_name) { method(:record) }
       lines = handler.call(registry: table_registry, **message_context.parameters)
       log(lines, **message_context.parameters.slice(:to_output, :expand))
     end

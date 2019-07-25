@@ -9,7 +9,7 @@ module Gmshell
 
     def extract(input)
       response = call(line: input.clone)
-      MessageContext.new(input: input, handler: response[0], **response[1])
+      MessageContext.new(input: input, handler_name: response[0], **response[1])
     end
 
     def call(line:)

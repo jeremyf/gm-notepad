@@ -1,8 +1,8 @@
 module Gmshell
   class MessageContext
-    def initialize(input:, handler:, **parameters)
-      self.input = input.freeze
-      self.handler = handler.freeze
+    def initialize(input:, handler_name:, **parameters)
+      self.input = input.clone
+      self.handler_name = handler_name.freeze
       self.parameters = parameters.freeze
     end
 
@@ -12,13 +12,13 @@ module Gmshell
     end
 
     def hash
-      [input, handler, parameters].hash
+      [input, handler_name, parameters].hash
     end
 
-    attr_accessor :input, :handler, :parameters
+    attr_accessor :input, :handler_name, :parameters
 
     private :input=
-    private :handler=
+    private :handler_name=
     private :parameters=
   end
 end
