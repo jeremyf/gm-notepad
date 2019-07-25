@@ -1,7 +1,7 @@
 module Gmshell
   module MessageHandlers
     module HelpHandler
-      def self.call(notepad:, expand:, **kwargs)
+      def self.call(**kwargs)
         lines = [
           "Prefixes:",
           "\t? - Help (this command)",
@@ -14,7 +14,6 @@ module Gmshell
           "\t[index] - Target a specific 'index'",
           "\t{table_name} - Expand the given 'table_name'"
         ]
-        notepad.log(lines, expand: expand)
       end
     end
   end

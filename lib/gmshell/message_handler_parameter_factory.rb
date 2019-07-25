@@ -43,7 +43,7 @@ module Gmshell
     end
 
     def write(line, expand:)
-      [:write_line, line: line.strip, expand: expand]
+      [:write_line, line: line.strip, expand: expand, to_output: true]
     end
 
     WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}

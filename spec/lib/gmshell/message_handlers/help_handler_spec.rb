@@ -7,8 +7,7 @@ module Gmshell
       let(:notepad) { double("notepad") }
       context '#call' do
         it "logs an array of helpful messages" do
-          expect(notepad).to receive(:log).with(kind_of(Array), expand: false)
-          described_class.call(notepad: notepad, expand: false)
+          expect(described_class.call).to be_a(Array)
         end
       end
     end

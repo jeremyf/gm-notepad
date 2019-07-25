@@ -17,9 +17,9 @@ module Gmshell
     end
 
     HANDLERS = {
-      query_table: Gmshell::MessageHandlers::QueryTableHandler.method(:handle),
-      query_table_names: Gmshell::MessageHandlers::QueryTableNamesHandler.method(:handle),
-      write_line: Gmshell::MessageHandlers::WriteLineHandler.method(:handle),
+      query_table: Gmshell::MessageHandlers::QueryTableHandler,
+      query_table_names: Gmshell::MessageHandlers::QueryTableNamesHandler,
+      write_line: Gmshell::MessageHandlers::WriteLineHandler,
       help: Gmshell::MessageHandlers::HelpHandler
     }
 
@@ -27,17 +27,18 @@ module Gmshell
     def process(input:)
       handler_name, parameters = message_factory.call(line: input.to_s.strip)
       handler = HANDLERS.fetch(handler_name) { method(:record) }
-      handler.call(notepad: self, **parameters)
+      lines = handler.call(registry: table_registry, **parameters)
+      log(lines, **parameters.slice(:to_output, :expand))
     end
 
     def record(line:, **kwargs)
-      log(line, capture: true, expand: true)
+      log(line, to_output: true, expand: true)
     end
 
-    def log(lines, expand: true, capture: false)
+    def log(lines, expand: true, to_output: false, to_interactive: true)
       Array(lines).each do |line|
         line = table_registry.evaluate(line: line.to_s.strip) if expand
-        renderer.call(line, to_interactive: true, to_output: capture)
+        renderer.call(line, to_interactive: to_interactive, to_output: to_output)
       end
     end
 
