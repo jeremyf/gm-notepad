@@ -11,7 +11,9 @@ module Gmshell
     end
 
     def process(input:)
-      input_processor.process(input: input)
+      input_processor.process(input: input) do |*args|
+        renderer.call(*args)
+      end
     end
 
     def close!
@@ -37,7 +39,7 @@ module Gmshell
 
     def default_input_processor
       require_relative "input_processor"
-      InputProcessor.new(table_registry: table_registry, renderer: renderer)
+      InputProcessor.new(table_registry: table_registry)
     end
 
     def default_table_registry

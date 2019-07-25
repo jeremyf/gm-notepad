@@ -5,18 +5,22 @@ require_relative 'message_handlers/help_handler'
 
 module Gmshell
   class InputProcessor
-    def initialize(table_registry:, renderer:)
+    def initialize(table_registry:)
       self.table_registry = table_registry
-      self.renderer = renderer
       @parameter_factory = MessageHandlerParameterFactory.new
     end
 
     def process(input:)
       processor = build_for(input: input)
       processor.each_line_with_parameters do |*args|
-        renderer.call(*args)
+        yield(*args)
       end
     end
+
+    attr_accessor :table_registry
+    private :table_registry=
+
+    private
 
     def build_for(input:)
       input = input.to_s.strip
@@ -48,7 +52,5 @@ module Gmshell
       end
     end
 
-    attr_accessor :table_registry, :renderer
-    private :table_registry=, :renderer=
   end
 end
