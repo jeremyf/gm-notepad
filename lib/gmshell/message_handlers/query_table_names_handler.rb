@@ -1,6 +1,6 @@
 module Gmshell
   module MessageHandlers
-    module TablesQueryHandler
+    module QueryTableNamesHandler
       def self.handle(notepad:, **kwargs)
         results = call(registry: notepad.table_registry, **kwargs)
         notepad.log(results)

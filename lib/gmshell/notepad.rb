@@ -1,6 +1,6 @@
 require 'time'
 require_relative 'message_handlers/query_handler'
-require_relative 'message_handlers/tables_query_handler'
+require_relative 'message_handlers/query_table_names_handler'
 require_relative 'message_handlers/write_line_handler'
 
 module Gmshell
@@ -19,7 +19,7 @@ module Gmshell
 
     HANDLERS = {
       query: Gmshell::MessageHandlers::QueryHandler.method(:handle),
-      tables_query: Gmshell::MessageHandlers::TablesQueryHandler.method(:handle),
+      query_table_names: Gmshell::MessageHandlers::QueryTableNamesHandler.method(:handle),
       write_line: Gmshell::MessageHandlers::WriteLineHandler.method(:handle)
     }
 

@@ -12,7 +12,7 @@ module Gmshell
         return returning_value unless returning_value.last.fetch(:term) == ''
         parameters = {}
         parameters[:grep] = returning_value.last[:grep] if returning_value.last.key?(:grep)
-        [:tables_query, parameters]
+        [:query_table_names, parameters]
       when '<'
         write_term(line)
       when NON_EXPANDING_CHARATER
