@@ -4,7 +4,7 @@ require_relative 'message_handlers/write_line_handler'
 require_relative 'message_handlers/help_handler'
 
 module Gmshell
-  class InputProcessorFactory
+  class InputProcessor
     def initialize(table_registry:, renderer:)
       self.table_registry = table_registry
       self.renderer = renderer
@@ -21,7 +21,7 @@ module Gmshell
     def build_for(input:)
       input = input.to_s.strip
       message_context = @parameter_factory.extract(input)
-      InputProcessor.new(message_context: message_context, table_registry: table_registry)
+      Handler.new(message_context: message_context, table_registry: table_registry)
     end
 
     HANDLERS = {
@@ -31,7 +31,7 @@ module Gmshell
       help: Gmshell::MessageHandlers::HelpHandler
     }
 
-    class InputProcessor
+    class Handler
       attr_reader :message_context, :table_registry, :handler
       def initialize(message_context:, table_registry:)
         @message_context = message_context

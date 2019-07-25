@@ -37,7 +37,7 @@ module Gmshell
 
     def default_input_processor
       require_relative "input_processor"
-      InputProcessorFactory.new(table_registry: table_registry, renderer: renderer)
+      InputProcessor.new(table_registry: table_registry, renderer: renderer)
     end
 
     def default_table_registry
@@ -47,7 +47,7 @@ module Gmshell
 
     def default_renderer
       require_relative 'line_renderer'
-      @renderer = LineRenderer.new(
+      LineRenderer.new(
         with_timestamp: config.fetch(:with_timestamp, false),
         defer_output: config.fetch(:defer_output, false),
         output_buffer: config.fetch(:output_buffer, default_output_buffer),
