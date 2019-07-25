@@ -2,7 +2,7 @@ require_relative "exceptions"
 require_relative "term_table_entry"
 
 module Gmshell
-  class TermTable
+  class Table
     def initialize(term:, lines:)
       self.term = term
       process(lines: lines)

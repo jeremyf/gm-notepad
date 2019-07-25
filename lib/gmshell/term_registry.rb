@@ -1,4 +1,4 @@
-require_relative "term_table"
+require_relative "table"
 require_relative "exceptions"
 
 module Gmshell
@@ -51,7 +51,7 @@ module Gmshell
 
     def register(term:, lines:)
       raise DuplicateKeyError.new(term: term, object: self) if @registry.key?(term)
-      @registry[term] = TermTable.new(term: term, lines: lines)
+      @registry[term] = Table.new(term: term, lines: lines)
     end
     attr_accessor :line_evaluator
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
-require 'gmshell/term_table'
+require 'gmshell/table'
 module Gmshell
-  RSpec.describe TermTable do
+  RSpec.describe Table do
     let(:term) { "city" }
     let(:lines) do
       [
