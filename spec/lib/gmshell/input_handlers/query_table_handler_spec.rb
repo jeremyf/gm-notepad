@@ -55,7 +55,7 @@ module Gmshell
               end
             end
             let(:input) { given }
-            subject { handler.lines(registry: registry, table_name: table_name) }
+            subject { handler.lines }
             it { is_expected.to eq(expected) }
           end
         end
