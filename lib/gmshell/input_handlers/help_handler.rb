@@ -15,7 +15,7 @@ module Gmshell
         self.expand_line = false
       end
 
-      def lines(**kwargs)
+      def lines
         [
           "Prefixes:",
           "\t? - Help (this command)",

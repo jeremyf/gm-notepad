@@ -22,7 +22,7 @@ module Gmshell
         end
       end
 
-      def lines(**kwargs)
+      def lines
         [line]
       end
     end

@@ -40,7 +40,7 @@ module Gmshell
         parameters
       end
 
-      def lines(**kwargs)
+      def lines
         if index
         elsif grep
         end
