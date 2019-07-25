@@ -1,9 +1,9 @@
 module Gmshell
   module MessageHandlers
     module QueryHandler
-      def self.handle(notepad:, **kwargs)
-        results = call(registry: notepad.term_registry, **kwargs)
-        notepad.log(results.sort)
+      def self.handle(notepad:, expand:, **kwargs)
+        results = call(registry: notepad.term_registry, expand: expand, **kwargs)
+        notepad.log(results, expand: false)
       end
       def self.call(registry:, term:, expand: false, index: nil, grep: false)
         table = registry.table_for(term: term)

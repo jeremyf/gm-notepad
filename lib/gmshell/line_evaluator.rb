@@ -4,7 +4,8 @@ module Gmshell
   class LineEvaluator
     TERM_REGEXP = %r{(?<term_container>\{(?<term>[^\}]+)\})}
     DICE_REGEXP = %r{(?<dice_container>\[(?<dice>[^\]]+)\])}
-    def call(line:, term_evaluation_function:)
+    def call(line:, term_evaluation_function:, expand: true)
+      return line unless expand
       while match = line.match(TERM_REGEXP)
         evaluated_term = term_evaluation_function.call(term: match[:term].strip)
         line = line.sub(match[:term_container], evaluated_term)

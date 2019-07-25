@@ -1,6 +1,7 @@
 require 'time'
 require_relative 'message_handlers/query_handler'
 require_relative 'message_handlers/query_terms_handler'
+require_relative 'message_handlers/write_line_handler'
 
 module Gmshell
   # Responsible for recording entries and then dumping them accordingly.
@@ -18,7 +19,8 @@ module Gmshell
 
     HANDLERS = {
       query: Gmshell::MessageHandlers::QueryHandler.method(:handle),
-      query_terms: Gmshell::MessageHandlers::QueryTermsHandler.method(:handle)
+      query_terms: Gmshell::MessageHandlers::QueryTermsHandler.method(:handle),
+      write_line: Gmshell::MessageHandlers::WriteLineHandler.method(:handle)
     }
 
     HELP_REGEXP = /\A\?(?<help_with>.*)/
@@ -29,17 +31,17 @@ module Gmshell
     end
 
     def record(line:, as_of: Time.now, **kwargs)
-      evaluated_line = term_registry.evaluate(line: line.to_s.strip)
-      logger.puts("=>\t#{evaluated_line}")
-      if timestamp?
-        @lines << "#{as_of}\t#{evaluated_line}"
-      else
-        @lines << evaluated_line
-      end
+      log(line, capture: true, expand: true)
     end
 
-    def log(line)
-      logger.puts(line)
+    def log(lines, expand: true, capture: false)
+      Array(lines).sort.each do |line|
+        line = term_registry.evaluate(line: line.to_s.strip) if expand
+        logger.puts("=>\t#{line}")
+        if capture
+          @lines << line
+        end
+      end
     end
 
     def table_for(*args)

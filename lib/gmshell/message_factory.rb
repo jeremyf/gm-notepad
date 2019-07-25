@@ -31,7 +31,7 @@ module Gmshell
     WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
     WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
     def query(line)
-      parameters = {}
+      parameters = {expand: false}
       args = [:query, parameters]
       if match = WITH_INDEX_REGEXP.match(line)
         line = line.sub(match[:declaration], '')
@@ -44,9 +44,6 @@ module Gmshell
       end
       if line[-1] == NON_EXPANDING_CHARATER
         line = line[0..-2]
-        parameters[:expand] = false
-      else
-        parameters[:expand] = true
       end
       parameters[:term] = line.downcase
       args
