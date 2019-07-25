@@ -1,6 +1,7 @@
 require_relative "input_processing_context"
 require_relative "input_handler_registry"
 require_relative "input_handlers/help_handler"
+require_relative "input_handlers/query_table_handler"
 module Gmshell
   # Responsible for extracting the appropriate message to send based
   # on the given line.
@@ -11,6 +12,7 @@ module Gmshell
     def initialize
       @input_handler_registry = InputHandlerRegistry.new
       @input_handler_registry.register(handler: InputHandlers::HelpHandler)
+      @input_handler_registry.register(handler: InputHandlers::QueryTableHandler)
     end
 
     def extract(input)
@@ -21,14 +23,12 @@ module Gmshell
     def call(line:)
       line = line.strip
       if handler = @input_handler_registry.handler_for(input: line, skip_default: true)
-        return handler.to_params
+        return handler.to_params(input: line)
       end
       case line[0]
       when QUERY_TABLE_NAMES_PREFIX
         if line == QUERY_TABLE_NAMES_PREFIX || line[0..1] == "#{QUERY_TABLE_NAMES_PREFIX}/"
           query_table_names(line[1..-1], expand_line: false)
-        else
-          query_table(line[1..-1], expand_line: false)
         end
       when '<'
         write_to_table(line)

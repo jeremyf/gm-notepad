@@ -9,7 +9,7 @@ module Gmshell
       end
 
       # An interstitial method for splicing in changes
-      def self.to_params
+      def self.to_params(*)
         [:help, { expand_line: false }]
       end
 
