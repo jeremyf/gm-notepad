@@ -1,5 +1,5 @@
 module Gmshell
-  class MessageContext
+  class InputProcessingContext
     def initialize(input:, handler_name:, **parameters)
       self.input = input.clone
       self.handler_name = handler_name.freeze

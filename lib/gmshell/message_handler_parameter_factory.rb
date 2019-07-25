@@ -1,4 +1,4 @@
-require_relative "message_context"
+require_relative "input_processing_context"
 module Gmshell
   # Responsible for extracting the appropriate message to send based
   # on the given line.
@@ -9,7 +9,7 @@ module Gmshell
 
     def extract(input)
       response = call(line: input.clone)
-      MessageContext.new(input: input, handler_name: response[0], **response[1])
+      InputProcessingContext.new(input: input, handler_name: response[0], **response[1])
     end
 
     def call(line:)

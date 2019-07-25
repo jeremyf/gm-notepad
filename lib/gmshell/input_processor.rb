@@ -24,8 +24,8 @@ module Gmshell
 
     def build_for(input:)
       input = input.to_s.strip
-      message_context = @parameter_factory.extract(input)
-      Handler.new(message_context: message_context, table_registry: table_registry)
+      input_processing_context = @parameter_factory.extract(input)
+      Handler.new(input_processing_context: input_processing_context, table_registry: table_registry)
     end
 
     HANDLERS = {
@@ -36,18 +36,18 @@ module Gmshell
     }
 
     class Handler
-      attr_reader :message_context, :table_registry, :handler
-      def initialize(message_context:, table_registry:)
-        @message_context = message_context
+      attr_reader :input_processing_context, :table_registry, :handler
+      def initialize(input_processing_context:, table_registry:)
+        @input_processing_context = input_processing_context
         @table_registry = table_registry
-        @handler = HANDLERS.fetch(message_context.handler_name)
+        @handler = HANDLERS.fetch(input_processing_context.handler_name)
       end
 
       def each_line_with_parameters
-        lines = handler.call(registry: @table_registry, **message_context.parameters)
+        lines = handler.call(registry: @table_registry, **input_processing_context.parameters)
         Array(lines).each do |line|
-          line = table_registry.evaluate(line: line.to_s.strip) if message_context.expand_line?
-          yield(line, to_output: message_context.to_output, to_interactive: message_context.to_interactive)
+          line = table_registry.evaluate(line: line.to_s.strip) if input_processing_context.expand_line?
+          yield(line, to_output: input_processing_context.to_output, to_interactive: input_processing_context.to_interactive)
         end
       end
     end
