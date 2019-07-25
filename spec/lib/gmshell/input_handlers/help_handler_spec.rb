@@ -5,6 +5,10 @@ module Gmshell
   module InputHandlers
     RSpec.describe HelpHandler do
       let(:handler) { described_class.new(input: nil) }
+      subject { handler }
+      its(:to_interactive) { is_expected.to be_truthy }
+      its(:to_output) { is_expected.to be_falsey }
+      its(:expand_line?) { is_expected.to be_falsey }
       context '#call' do
         subject { handler.call }
         it "logs an array of helpful messages" do

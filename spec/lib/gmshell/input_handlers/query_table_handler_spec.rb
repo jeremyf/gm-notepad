@@ -8,6 +8,10 @@ module Gmshell
     RSpec.describe QueryTableHandler do
       let(:table_name) { 'programming' }
       let(:handler) { described_class.new(input: '') }
+      subject { handler }
+      its(:to_interactive) { is_expected.to be_truthy }
+      its(:to_output) { is_expected.to be_falsey }
+      its(:expand_line?) { is_expected.to be_falsey }
 
       describe '#call' do
         context "with a missing table_name" do
