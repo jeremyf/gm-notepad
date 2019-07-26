@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'gmshell'
+require 'gm/notepad'
 class Buffer
   attr_reader :name, :lines
   def initialize(name)
@@ -12,10 +12,10 @@ class Buffer
 end
 RSpec.describe "basic features" do
   let(:output_buffer) { Buffer.new("output") }
-  let(:path_to_fixtures) { File.expand_path('../../fixtures', __FILE__) }
+  let(:path_to_fixtures) { PATH_TO_FIXTURES }
   let(:interactive_buffer) { Buffer.new("interactive") }
   let(:notepad) do
-    Gmshell::Notepad.new(
+    Gm::Notepad.new(
       with_timestamp: false,
       skip_config_reporting: true,
       output_buffer: output_buffer,
