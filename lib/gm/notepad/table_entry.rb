@@ -1,10 +1,11 @@
+require 'gm/notepad/defaults'
 module Gm
   module Notepad
-    TABLE_ENTRY_SEPARATOR = "|".freeze
     TABLE_ENTRY_RANGE_MARKER = "-".freeze
     class TableEntry
-      def initialize(line:)
-        self.lookup_column, self.entry_column = line.split(TABLE_ENTRY_SEPARATOR)
+      def initialize(line:, column_delimiter: DEFAULT_COLUMN_DELIMITER, **config)
+        self.column_delimiter = column_delimiter
+        self.lookup_column, self.entry_column = line.split(column_delimiter)
       end
 
       include Comparable
@@ -23,10 +24,14 @@ module Gm
 
       attr_reader :lookup_column, :entry_column
 
-      alias to_s entry_column
+      def to_s
+        "[#{lookup_column}]\t#{entry_column}"
+      end
       alias to_str entry_column
 
       private
+
+      attr_accessor :column_delimiter
 
       def lookup_column=(input)
         @lookup_column = input.strip.freeze

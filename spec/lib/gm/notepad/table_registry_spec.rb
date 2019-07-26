@@ -39,7 +39,7 @@ module Gm
       end
       context '#lookup' do
         it "will use the table_name and lookup in the table" do
-          expect(subject.lookup(table_name: "roman", index: "1").to_s).to eq("I")
+          expect(subject.lookup(table_name: "roman", index: "1").to_s).to eq("[1]\tI")
         end
       end
     end

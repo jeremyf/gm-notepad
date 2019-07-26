@@ -25,7 +25,7 @@ module Gm
         context "without file" do
           it "adds records to the table" do
             subject.append(line: "a| Sao Paulo")
-            expect(subject.lookup(index: "a").to_s).to eq("Sao Paulo")
+            expect(subject.lookup(index: "a").to_s).to eq("[a]\tSao Paulo")
           end
         end
         context "with underlying file" do
@@ -47,7 +47,7 @@ module Gm
           end
           it "will append the line" do
             subject.append(line: "1 | World", write: true)
-            expect(subject.lookup(index: "1").to_s).to eq("World")
+            expect(subject.lookup(index: "1").to_s).to eq("[1]\tWorld")
             expect(File.read(filename).to_s).to eq("a | Hello\n1 | World\n")
           end
         end
@@ -55,8 +55,8 @@ module Gm
 
       context "#lookup" do
         it "allows for lookup by index" do
-          expect(subject.lookup(index: "1").to_s).to eq("Tokyo")
-          expect(subject.lookup(index: "7").to_s).to eq("Mumbai")
+          expect(subject.lookup(index: "1").to_s).to eq("[1]\tTokyo")
+          expect(subject.lookup(index: "7").to_s).to eq("[5-10]\tMumbai")
         end
 
         it "raises KeyError for missing index" do

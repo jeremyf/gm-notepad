@@ -1,10 +1,11 @@
-require_relative "exceptions"
-require_relative "table_entry"
+require "gm/notepad/exceptions"
+require "gm/notepad/table_entry"
 
 module Gm
   module Notepad
     class Table
-      def initialize(table_name:, lines:, filename: nil)
+      def initialize(table_name:, lines:, filename: nil, **config)
+        self.config = config
         self.table_name = table_name
         self.filename = filename
         process(lines: lines)
@@ -19,7 +20,7 @@ module Gm
       end
 
       def all
-        @table.values
+        @table.values.uniq
       end
 
       def grep(expression)
@@ -43,7 +44,7 @@ module Gm
 
       private
 
-      attr_accessor :table_name, :filename
+      attr_accessor :table_name, :filename, :config
 
       def random_index
         rand(@table.size)
@@ -52,7 +53,7 @@ module Gm
       def process(lines:)
         @table = {}
         lines.each do |line|
-          entry = TableEntry.new(line: line)
+          entry = TableEntry.new(line: line, **config)
           entry.lookup_range.each do |i|
             key = i.to_s
             raise DuplicateKeyError.new(key: table_name, object: self) if @table.key?(key)

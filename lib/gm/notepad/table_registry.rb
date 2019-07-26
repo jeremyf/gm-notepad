@@ -1,30 +1,36 @@
-require_relative "table"
-require_relative "exceptions"
+require "gm/notepad/table"
+require "gm/notepad/exceptions"
 
 module Gm
   module Notepad
     # Responsible for loading and registering all of the named tables
     class TableRegistry
-      def self.load_for(paths:, table_extension: ".txt")
-        table_registry = new(paths: paths, table_extension: table_extension)
-        paths.each do |path|
-          Dir.glob(File.join(path, "**/*#{table_extension}")).each do |filename|
-            table_name = File.basename(filename, table_extension)
-            table_registry.register_by_filename(table_name: table_name, filename: filename)
-          end
-        end
+      def self.load_for(**config)
+        table_registry = new(**config)
+        table_registry.load!
         table_registry
       end
 
-      def initialize(line_evaluator: default_line_evaluator, paths: [], table_extension: ".txt")
+      def initialize(line_evaluator: default_line_evaluator, **config)
+        self.config = config
         self.line_evaluator = line_evaluator
-        self.table_extension = table_extension
-        self.paths = paths
+        self.paths = config.fetch(:paths) { [] }
+        self.table_extension = config.fetch(:table_extension) { ".txt" }
+        self.filesystem_directory = config.fetch(:filesystem_directory) { "." }
         @registry = {}
       end
 
+      def load!
+        paths.each do |path|
+          Dir.glob(File.join(path, "**/*#{table_extension}")).each do |filename|
+            table_name = File.basename(filename, table_extension)
+            register_by_filename(table_name: table_name, filename: filename)
+          end
+        end
+      end
+
       private
-      attr_accessor :line_evaluator, :paths, :table_extension
+      attr_accessor :line_evaluator, :paths, :table_extension, :filesystem_directory, :config
       public
 
       def table_names
@@ -39,8 +45,8 @@ module Gm
         table = nil
         begin
           table = fetch_table(name: table_name)
-        rescue KeyError => e
-          filename = File.join(paths.first || ".", "#{table_name}#{table_extension}")
+        rescue KeyError
+          filename = File.join(filesystem_directory, "#{table_name}#{table_extension}")
           table = register(table_name: table_name, lines: [], filename: filename)
         end
         table.append(line: line, write: write)
@@ -70,7 +76,7 @@ module Gm
 
       def register(table_name:, lines:, filename: nil)
         raise DuplicateKeyError.new(key: table_name, object: self) if @registry.key?(table_name)
-        @registry[table_name] = Table.new(table_name: table_name, lines: lines, filename: filename)
+        @registry[table_name] = Table.new(table_name: table_name, lines: lines, filename: filename, **config)
       end
 
       def default_line_evaluator

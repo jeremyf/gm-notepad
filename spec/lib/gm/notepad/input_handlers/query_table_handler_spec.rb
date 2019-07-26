@@ -38,12 +38,24 @@ module Gm
               [TableEntry.new(line: "1|Hello {bork}")]
             ],[
               ["1|Hello {bork}", "2|World"],
+              "+programming[]",
+              [TableEntry.new(line: "1|Hello {bork}"), TableEntry.new(line: "2|World")]
+            ],[
+              ["1|Hello {bork}", "2|World"],
+              "+programming[75]",
+              [%(Entry with index "75" not found in "programming" table)]
+            ],[
+              ["1|Hello {bork}", "2|World"],
               "+programming/world/",
               [TableEntry.new(line: "2|World")]
             ],[
               ["1|Hello {bork}", "2|World"],
               "+programming/{bork}/",
               [TableEntry.new(line: "1|Hello {bork}")]
+            ],[
+              ["1|Hello {bork}", "2|World"],
+              "+programming//",
+              [TableEntry.new(line: "1|Hello {bork}"), TableEntry.new(line: "2|World")]
             ],[
               ["1|Hello {bork}", "2|World"],
               "+programming/o/",

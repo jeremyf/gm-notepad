@@ -5,7 +5,7 @@ module Gm
   module Notepad
     module InputHandlers
       RSpec.describe WriteToTableHandler do
-        let(:input) { "<table>" }
+        let(:input) { "#{described_class::HANDLED_PREFIX}table:" }
         let(:handler) { described_class.new(input: input) }
         subject { handler }
         its(:to_interactive) { is_expected.to be_truthy }

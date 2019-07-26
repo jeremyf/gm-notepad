@@ -3,11 +3,18 @@ require 'gm/notepad'
 
 require 'optparse'
 config = {
-  config_reporting: false,
+  report_config: false,
   defer_output: false,
+  filesystem_directory: '.',
   interactive_buffer: $stderr,
+  interactive_color: true,
+  output_color: false,
+  list_tables: false,
   output_buffer: $stdout,
   paths: ['.'],
+  column_delimiter: Gm::Notepad::DEFAULT_COLUMN_DELIMITER,
+  shell_prompt: Gm::Notepad::DEFAULT_SHELL_PROMPT,
+  skip_readlines: false,
   table_extension: '.txt',
   with_timestamp: false
 }
@@ -20,36 +27,58 @@ OptionParser.new do |options|
     "Note taking tool with random table expansion.\n\n" \
     "Examples:\n" \
     "\t$ #{command_name}\n" \
-    "\t$ #{command_name} rolls.txt\n" \
-    "\t$ echo '{name}' | #{command_name}"
+    "\t$ #{command_name} filename \n" \
+    "\t$ echo '{name}' | #{command_name}\n\n" \
+    "Options:\n"
 
-  # Separator just adds a new line with the specified text.
-  options.separator ""
-  options.separator "Specific options:"
+  options.on_head("-l", "--list_tables", "List tables loaded and exit (Default: #{config[:list_tables].inspect})") do |list_tables|
+    config[:list_tables] = list_tables
+  end
 
+  options.on("-r", "--report_config", "Dump the configuration data (Default: #{config[:report_config].inspect})") do |report_config|
+    config[:report_config] = report_config
+  end
+
+  options.on("-pPATH", "--path=PATH", String, "Path(s) for {table_name}.<config.table_extension> files (Default: #{config[:paths].inspect})") do |path|
+    config[:paths] << path
+  end
+
+  options.on("-fDIR", "--filesystem_directory=DIR", String, "Path to dump tables (Default: #{config[:filesystem_directory].inspect})") do |filesystem_directory|
+    # Should we guard that this exists?
+    config[:filesystem_directory] = filesystem_directory
+  end
+
+  options.on("-xEXT", "--table_extension=EXT", String, "Extension to use for selecting tables (Default: #{config[:table_extension].inspect})") do |table_extension|
+    config[:table_extension] = table_extension
+  end
+
+  options.on("-dDELIM", "--delimiter=DELIM", String, "Default column delimiter for tables (Default: #{config[:column_delimiter].inspect})") do |column_delimiter|
+    map = { "t" => "\t" }
+    config[:column_delimiter] = map.fetch(column_delimiter) { column_delimiter }
+  end
+
+  options.separator("")
+  options.separator("Output options:")
   options.on("-t", "--timestamp", "Append a timestamp to the note (Default: #{config[:with_timestamp].inspect})") do |timestamp|
     config[:with_timestamp] = timestamp
   end
 
-  options.on("-c", "--config_reporting", "Dump the configuration data (Default: #{config[:config_reporting].inspect})") do |config_reporting|
-    config[:config_reporting] = config_reporting
-  end
-
-  options.on("-d", "--defer_output", "Defer output until system close (Default: #{config[:defer_output].inspect})") do |defer_output|
+  options.on("--defer_output", "Defer output until system close (Default: #{config[:defer_output].inspect})") do |defer_output|
     config[:defer_output] = defer_output
   end
 
-  options.on("-pPATH", "--path=PATH", String, "Path for {table_name}.<config.table_extension> files (Default: #{config[:paths].inspect})") do |path|
-    config[:paths] << path
+  options.separator("")
+  options.separator("Color options:")
+
+  options.on("-i", "--skip-interactive-color", "Disable color rendering for interactive buffer (Default: #{!config[:interactive_color].inspect})") do |interactive_color|
+    config[:interactive_color] = !interactive_color
   end
 
-  options.on("-tEXT", "--table_extension=EXT", String, "Path for {table_name}.<config.table_extension> files (Default: #{config[:table_extension].inspect})") do |table_extension|
-    config[:table_extension] = table_extension
+  options.on("-o", "--with-output-color", "Enable color rendering for output buffer (Default: #{!config[:output_color].inspect})") do |output_color|
+    config[:output_color] = output_color
   end
 
-  options.on("-l", "--list_tables", "List tables loaded (Default: #{config[:list_tables].inspect})") do |list_tables|
-    config[:list_tables] = list_tables
-  end
+  options.separator("")
 
   options.on_tail("-h", "--help", "You're looking at it!") do
     $stderr.puts options
@@ -58,26 +87,35 @@ OptionParser.new do |options|
 end.parse!
 
 if config[:list_tables]
-  notepad = Gm::Notepad.new(config.merge(config_reporting: true))
+  notepad = Gm::Notepad.new(config.merge(report_config: true))
   notepad.process(input: "+")
   exit(1)
 end
 
 begin
   @notepad = Gm::Notepad.new(**config)
-  # Keep reading lines of input as long as they're coming.
-  while input = ARGF.gets
+  if config.fetch(:skip_readlines)
+    input_getter = -> { print "#{config.fetch(:shell_prompt)}  "; ARGF.gets }
+  else
+    require 'gm/notepad/readline'
+    input_getter = Gm::Notepad::Readline.input_getter(**config)
+  end
+  while input = input_getter.call
+  # # Keep reading lines of input as long as they're coming.
     input.each_line do |input|
       begin
         @notepad.process(input: input)
       rescue Errno::EPIPE
+        @notepad.close!
+
         # sysexits(3) specifies that exit code 74 represent an IO error,
         # which is the likely situation
-        @notepad.close!
         exit(74)
       end
     end
   end
+rescue => e
+  $stderr.puts e
 ensure
   @notepad.close!
 end

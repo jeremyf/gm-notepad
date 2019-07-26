@@ -1,4 +1,4 @@
-require_relative "default_handler"
+require "gm/notepad/input_handlers/default_handler"
 module Gm
   module Notepad
     module InputHandlers
@@ -16,6 +16,8 @@ module Gm
 
         WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
         WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
+        WITH_EMPTY_INDEX_REGEX = %r{(?<declaration>\[\])}
+        WITH_EMPTY_GREP_REGEX = %r{(?<declaration>\/\/)}
         NON_EXPANDING_CHARATER = '!'.freeze
         def after_initialize!
           self.expand_line = false
@@ -24,10 +26,13 @@ module Gm
 
           line = input[1..-1].to_s
           self.expand_line = false
-          if match = WITH_INDEX_REGEXP.match(line)
+          if match = WITH_EMPTY_INDEX_REGEX.match(line)
             line = line.sub(match[:declaration], '')
-            index = match[:index]
-            self.index = index
+          elsif match = WITH_INDEX_REGEXP.match(line)
+            line = line.sub(match[:declaration], '')
+            self.index = match[:index]
+          elsif match = WITH_EMPTY_GREP_REGEX.match(line)
+            line = line.sub(match[:declaration], '')
           elsif match = WITH_GREP_REGEXP.match(line)
             line = line.sub(match[:declaration], '')
             grep = match[:grep]
@@ -50,7 +55,11 @@ module Gm
             return [message]
           end
           if index
-            [table.lookup(index: index)]
+            begin
+              [table.lookup(index: index)]
+            rescue KeyError
+              [%(Entry with index "#{index}" not found in "#{table_name}" table)]
+            end
           elsif grep
             regexp = %r{#{grep}}i
             table.grep(regexp)

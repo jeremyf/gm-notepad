@@ -1,18 +1,19 @@
-require_relative "default_handler"
+require "gm/notepad/input_handlers/default_handler"
 
 module Gm
   module Notepad
     module InputHandlers
       class WriteToTableHandler < DefaultHandler
+        HANDLED_PREFIX = "<".freeze
         def self.handles?(input:)
-          return true if input[0] == "<"
+          return true if input[0] == HANDLED_PREFIX
         end
 
         attr_accessor :index, :grep, :table_name, :line
         NON_EXPANDING_CHARATER = '!'.freeze
         WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
         WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
-        WITH_WRITE_TARGET_REGEXP = %r{\A<(?<table_name>[^>]+)>(?<line>.*)}
+        WITH_WRITE_TARGET_REGEXP = %r{\A#{HANDLED_PREFIX}(?<table_name>[^:]+):(?<line>.*)}
         def after_initialize!
           self.to_filesystem = true
           self.to_interactive = true

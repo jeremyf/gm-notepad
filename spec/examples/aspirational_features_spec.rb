@@ -2,13 +2,13 @@ require 'spec_helper'
 require 'gm/notepad'
 
 RSpec.describe "An aspirational feature" do
-  let(:output_buffer) { Buffer.new("output") }
+  let(:output_buffer) { SpecSupport::Buffer.new("output") }
   let(:path_to_fixtures) { PATH_TO_FIXTURES }
-  let(:interactive_buffer) { Buffer.new("interactive") }
+  let(:interactive_buffer) { SpecSupport::Buffer.new("interactive") }
   let(:notepad) do
     Gm::Notepad.new(
       with_timestamp: false,
-      config_reporting: false,
+      report_config: false,
       output_buffer: output_buffer,
       interactive_buffer: interactive_buffer,
       defer_output: false,

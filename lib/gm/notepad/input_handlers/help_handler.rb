@@ -1,4 +1,4 @@
-require_relative "default_handler"
+require "gm/notepad/input_handlers/default_handler"
 module Gm
   module Notepad
     module InputHandlers
@@ -21,7 +21,7 @@ module Gm
             "Prefixes:",
             "\t? - Help (this command)",
             "\t+ - Query table names and contents",
-            "\t<table_name> - Write the results to the given table",
+            "\t<table_name: - Write the results to the given table",
             "",
             "Tokens:",
             "\t! - Skip expansion",

@@ -1,0 +1,14 @@
+# Write entry `1|entry one` to in memory table `basic_example`
+<#basic_example:1|entry one
+# Should render to interactive the internal help
+?
+# Should render to interactive the given tables
++
+# Should render to interactive the table `basic_example`
++basic_example
+# Should render `entry one`
+{basic_example}
+# Should append entry `2|entry two` into memory table `basic_example`
+<basic_example:2|entry two
+# Should dump basic_example onto the file system
++basic_example>

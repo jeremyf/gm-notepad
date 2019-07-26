@@ -1,4 +1,4 @@
-require_relative "default_handler"
+require "gm/notepad/input_handlers/default_handler"
 
 module Gm
   module Notepad
