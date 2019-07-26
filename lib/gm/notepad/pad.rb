@@ -27,7 +27,7 @@ module Gm
 
       attr_reader :renderer
       def open!
-        return if config[:skip_config_reporting]
+        return unless config[:config_reporting]
         renderer.call("# Configuration Parameters:", to_interactive: true, to_output: true)
         config.each do |key, value|
           line = "#   config[#{key.inspect}] = #{value.inspect}"
@@ -45,7 +45,10 @@ module Gm
 
       def default_table_registry
         require_relative "table_registry"
-        TableRegistry.load_for(paths: config.fetch(:paths, []))
+        TableRegistry.load_for(
+          paths: config.fetch(:paths, []),
+          table_extension: config.fetch(:table_extension, ".txt")
+        )
       end
 
       def default_renderer

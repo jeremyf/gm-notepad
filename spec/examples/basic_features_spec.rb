@@ -17,7 +17,7 @@ RSpec.describe "basic features" do
   let(:notepad) do
     Gm::Notepad.new(
       with_timestamp: false,
-      skip_config_reporting: true,
+      config_reporting: false,
       output_buffer: output_buffer,
       interactive_buffer: interactive_buffer,
       defer_output: false,

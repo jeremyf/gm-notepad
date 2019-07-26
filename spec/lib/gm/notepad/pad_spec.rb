@@ -18,7 +18,7 @@ module Gm
 
       let(:notepad) do
         described_class.new(
-          skip_config_reporting: true,
+          config_reporting: true,
           timestamp: true,
           renderer: renderer,
           table_registry: table_registry,

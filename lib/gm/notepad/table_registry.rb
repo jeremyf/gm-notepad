@@ -4,22 +4,27 @@ require_relative "exceptions"
 module Gm
   module Notepad
     class TableRegistry
-      def self.load_for(paths:)
-        table_registry = new(paths: paths)
+      def self.load_for(paths:, table_extension: ".txt")
+        table_registry = new(paths: paths, table_extension: table_extension)
         paths.each do |path|
-          Dir.glob(File.join(path, "**/*.txt")).each do |filename|
-            table_name = File.basename(filename, ".txt")
+          Dir.glob(File.join(path, "**/*#{table_extension}")).each do |filename|
+            table_name = File.basename(filename, table_extension)
             table_registry.register_by_filename(table_name: table_name, filename: filename)
           end
         end
         table_registry
       end
 
-      def initialize(line_evaluator: default_line_evaluator, paths: [])
+      def initialize(line_evaluator: default_line_evaluator, paths: [], table_extension: ".txt")
         self.line_evaluator = line_evaluator
+        self.table_extension = table_extension
         self.paths = paths
         @registry = {}
       end
+
+      private
+      attr_accessor :line_evaluator, :paths, :table_extension
+      public
 
       def table_names
         @registry.keys.sort
@@ -34,7 +39,7 @@ module Gm
         begin
           table = fetch_table(name: table_name)
         rescue KeyError => e
-          filename = File.join(paths.first || ".", "#{table_name}.txt")
+          filename = File.join(paths.first || ".", "#{table_name}#{table_extension}")
           table = register(table_name: table_name, lines: [], filename: filename)
         end
         table.append(line: line, write: write)
@@ -66,7 +71,6 @@ module Gm
         raise DuplicateKeyError.new(key: table_name, object: self) if @registry.key?(table_name)
         @registry[table_name] = Table.new(table_name: table_name, lines: lines, filename: filename)
       end
-      attr_accessor :line_evaluator, :paths
 
       def default_line_evaluator
         require_relative 'line_evaluator'
