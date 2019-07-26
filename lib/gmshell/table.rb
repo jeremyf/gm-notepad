@@ -3,8 +3,9 @@ require_relative "table_entry"
 
 module Gmshell
   class Table
-    def initialize(table_name:, lines:)
+    def initialize(table_name:, lines:, filename: nil)
       self.table_name = table_name
+      self.filename = filename
       process(lines: lines)
     end
 
@@ -32,7 +33,7 @@ module Gmshell
 
     private
 
-    attr_accessor :table_name
+    attr_accessor :table_name, :filename
 
     def random_index
       rand(@table.size)

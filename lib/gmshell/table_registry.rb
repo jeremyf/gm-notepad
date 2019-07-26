@@ -29,7 +29,7 @@ module Gmshell
 
     def register_by_filename(table_name:, filename:)
       content = File.read(filename)
-      register(table_name: table_name, lines: content.split("\n"))
+      register(table_name: table_name, lines: content.split("\n"), filename: filename)
     end
 
     def register_by_string(table_name:, string:)
@@ -49,9 +49,9 @@ module Gmshell
 
     private
 
-    def register(table_name:, lines:)
+    def register(table_name:, lines:, filename: nil)
       raise DuplicateKeyError.new(key: table_name, object: self) if @registry.key?(table_name)
-      @registry[table_name] = Table.new(table_name: table_name, lines: lines)
+      @registry[table_name] = Table.new(table_name: table_name, lines: lines, filename: filename)
     end
     attr_accessor :line_evaluator
 
