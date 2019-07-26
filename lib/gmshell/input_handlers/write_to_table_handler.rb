@@ -43,7 +43,8 @@ module Gmshell
         if expand_line
         else
         end
-        [line]
+        table_registry.append(table_name: table_name, line: line, write: true)
+        []
       end
     end
   end
