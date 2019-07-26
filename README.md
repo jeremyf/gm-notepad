@@ -237,3 +237,4 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [ ] Create a configuration object that captures the initial input (reduce passing around parameters and persisting copies of the config)
 - [ ] Aspiration: Enable `{{monster}[ac]}` to pick a random monster and then fetch that monster's AC
 - [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
+- [ ] Add column handling `{table[][]}`
