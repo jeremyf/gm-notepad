@@ -13,12 +13,13 @@ module Gmshell
       def initialize(input:, table_registry: nil)
         self.to_interactive = false
         self.to_output = false
+        self.to_filesystem = false
         self.expand_line = false
         self.input = input
         self.table_registry = table_registry
         after_initialize!
       end
-      attr_accessor :table_registry, :to_interactive, :to_output, :expand_line, :input
+      attr_accessor :table_registry, :to_interactive, :to_output, :expand_line, :input, :to_filesystem
 
       def after_initialize!
       end

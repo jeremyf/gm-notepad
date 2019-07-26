@@ -12,6 +12,7 @@ module Gmshell
       let(:handler) { described_class.new(input: input, table_registry: registry) }
       subject { handler }
       its(:to_interactive) { is_expected.to be_truthy }
+      its(:to_filesystem) { is_expected.to be_falsey }
       its(:to_output) { is_expected.to be_falsey }
       its(:expand_line?) { is_expected.to be_falsey }
 

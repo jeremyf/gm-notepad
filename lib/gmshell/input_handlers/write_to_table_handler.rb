@@ -13,6 +13,9 @@ module Gmshell
       WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
       WITH_WRITE_TARGET_REGEXP = %r{\A<(?<table_name>[^>]+)>(?<line>.*)}
       def after_initialize!
+        self.to_filesystem = true
+        self.to_interactive = true
+
         if match = WITH_WRITE_TARGET_REGEXP.match(input)
           line = match[:line].strip
           table_name = match[:table_name]
