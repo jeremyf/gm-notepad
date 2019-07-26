@@ -17,3 +17,16 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+# For testing purposes you may want a buffer that conforms to the
+# expected interface.
+class Buffer
+  attr_reader :name, :lines
+  def initialize(name)
+    @name = name
+    @lines = []
+  end
+  def puts(line)
+    @lines << line
+  end
+end

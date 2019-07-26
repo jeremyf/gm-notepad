@@ -1,15 +1,6 @@
 require 'spec_helper'
 require 'gm/notepad'
-class Buffer
-  attr_reader :name, :lines
-  def initialize(name)
-    @name = name
-    @lines = []
-  end
-  def puts(line)
-    @lines << line
-  end
-end
+
 RSpec.describe "basic features" do
   let(:output_buffer) { Buffer.new("output") }
   let(:path_to_fixtures) { PATH_TO_FIXTURES }

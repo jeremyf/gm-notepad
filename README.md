@@ -161,3 +161,5 @@ And there you go.
 - [ ] Add index name when rendering table entries
 - [ ] Add force write results to `output`
 - [ ] Add concept of history
+- [ ] When expanding tables account for line expansion (via \n and \t)
+- [ ] Separate the InputHandler into pre-amble (e.g. allow overrides to where we are writing, determine what command we are writing)
