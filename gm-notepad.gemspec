@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{A command line tool for GM-ing}
   spec.description   = %q{A command line tool for GM-ing}
   spec.homepage      = "https://github.com/jeremyf/gm-notepad"
+  spec.license       = "APACHE2"
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
