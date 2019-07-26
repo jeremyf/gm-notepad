@@ -2,14 +2,6 @@
 
 A command-line tool to help with your GM-ing.
 
-## Todo
-
-- [ ] Colorize puts to `interactive` buffer
-- [ ] Normalize `WriteToTableHandler` to use a renderer
-- [ ] Normalize `WriteToTableHandler` to deliver on `grep` and `index` behavior
-- [ ] Gracefully handle requesting an entry from a table with an index that does not exist (e.g. with test data try `+name[23]`)
-- [ ] Gracefully handle `+name[]`, where "name" is a registered table
-
 ## To install
 
 `$ gem install gm-notepad`
@@ -44,10 +36,9 @@ Examples:
 Specific options:
         --timestamp                  Append a timestamp to the note (Default: false)
     -c, --config_reporting           Dump the configuration data (Default: false)
-    -d, --defer_output               Defer output until system close (Default: true)
+    -d, --defer_output               Defer output until system close (Default: false)
     -p, --path=PATH                  Path for {table_name}.<config.table_extension> files (Default: ["."])
-    -tTABLE_EXTENSION,               Path for {table_name}.<config.table_extension> files (Default: ".txt")
-        --table_extension
+    -t, --table_extension=EXT        Path for {table_name}.<config.table_extension> files (Default: ".txt")
     -l, --list_tables                List tables loaded (Default: nil)
     -h, --help                       You're looking at it!
 ```
@@ -60,8 +51,8 @@ Which writes the following to the `interactive` buffer (eg. `$stderr`)::
 
 ```console
 =>	# Configuration Parameters:
-=>	#   config[:config_reporting] = true
-=>	#   config[:defer_output] = true
+=>	#   config[:config_reporting] = false
+=>	#   config[:defer_output] = false
 =>	#   config[:interactive_buffer] = #<IO:<STDERR>>
 =>	#   config[:output_buffer] = #<IO:<STDOUT>>
 =>	#   config[:paths] = ["."]
@@ -116,3 +107,57 @@ You now have an interactive shell for `gm-notepad`. Type `?` and hit
 =>		[index] - Target a specific 'index'
 =>		{table_name} - expand_line the given 'table_name'
 ```
+
+Now, let's take look at a table. Again in an active `gm-notepad` session type
+the following: `+first-name`
+
+`gm-notepad` will write the following to `interactive` buffer (eg. `$stderr`):
+
+```console
+=>	Frodo
+=>	Merry
+=>	Pippin
+=>	Sam
+=>	{first-name}Wise
+```
+
+These are the five table entries in the `first-name` table. Notice the fifth
+entry: `{first-name}Wise`. The `{first-name}` references a table named
+"first-name" (the same on you are looking at). Now type the following in your `gm-notepad`
+session: `Hello {first-name}`
+
+`gm-notepad` will read the line and recursively expand the `{first-name}` and
+write the result to the `interactive` buffer and `output` buffer.
+
+In the session you might have something like the below:
+
+```console
+=>	Hello SamWise
+Hello SamWise
+```
+The line with starting with `=>` is the `interactive` buffer. The other line
+is written to the `output` buffer.
+
+To wrap up our first session, let's try one more thing. In your `gm-notepad`
+session type the following: `{first-name} owes [2d6]gp to {first-name}`:
+
+```console
+Frodo owes 3gp to SamWise
+```
+
+And there you go.
+
+## Todo
+
+- [ ] Colorize puts to `interactive` buffer
+- [ ] Normalize `WriteToTableHandler` to use a renderer
+- [ ] Normalize `WriteToTableHandler` to deliver on `grep` and `index` behavior
+- [ ] Gracefully handle requesting an entry from a table with an index that does not exist (e.g. with test data try `+name[23]`)
+- [ ] Gracefully handle `+name[]`, where "name" is a registered table
+- [ ] Add time to live for line expansion (to prevent infinite loops)
+- [ ] Enable "up" and "down" to scroll through history
+- [ ] Add config that expands dice results while including the requested roll
+- [ ] Determine feasibility of adding dice to the `{}` expansion syntax (instead of the `[]` syntax)
+- [ ] Add index name when rendering table entries
+- [ ] Add force write results to `output`
+- [ ] Add concept of history

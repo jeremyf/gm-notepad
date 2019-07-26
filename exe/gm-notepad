@@ -4,7 +4,7 @@ require 'gm/notepad'
 require 'optparse'
 config = {
   config_reporting: false,
-  defer_output: true,
+  defer_output: false,
   interactive_buffer: $stderr,
   output_buffer: $stdout,
   paths: ['.'],
@@ -43,7 +43,7 @@ OptionParser.new do |options|
     config[:paths] << path
   end
 
-  options.on("-tTABLE_EXTENSION", "--table_extension=TABLE_EXTENSION", String, "Path for {table_name}.<config.table_extension> files (Default: #{config[:table_extension].inspect})") do |table_extension|
+  options.on("-tEXT", "--table_extension=EXT", String, "Path for {table_name}.<config.table_extension> files (Default: #{config[:table_extension].inspect})") do |table_extension|
     config[:table_extension] = table_extension
   end
 

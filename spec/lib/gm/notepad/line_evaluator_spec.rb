@@ -13,7 +13,7 @@ module Gm
           ["{hello} {world}", "(hello:1) (world:2)", true],
           ["{hello{world}}", "(hello(world:1):2)", true],
           ["{hello} {hello}", "(hello:1) (hello:2)", true],
-          ["[1d1]", "1 (1d1)", true],
+          ["[1d1]", "1", true],
           ["[taco]", "(taco)", true],
           ["[taco]{hello}", "(taco)(hello:1)", true],
           ["{hello} {world}", "{hello} {world}", false],

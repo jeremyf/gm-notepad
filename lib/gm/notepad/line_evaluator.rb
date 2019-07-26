@@ -13,7 +13,7 @@ module Gm
         end
         while match = line.match(DICE_REGEXP)
           if parsed_dice = Dice.parse(match[:dice])
-            evaluated_dice = "#{parsed_dice.evaluate} (#{match[:dice]})"
+            evaluated_dice = "#{parsed_dice.evaluate}"
           else
             evaluated_dice = "(#{match[:dice]})"
           end
