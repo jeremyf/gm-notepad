@@ -2,6 +2,12 @@
 
 A command-line tool to help with your GM-ing.
 
+## Todo
+
+- [ ] Colorize puts to `interactive` buffer
+- [ ] Normalize `WriteToTableHandler` to use a renderer
+- [ ] Normalize `WriteToTableHandler` to deliver on `grep` and `index` behavior
+
 ## To install
 
 `$ gem install gm-notepad`
