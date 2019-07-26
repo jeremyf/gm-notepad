@@ -11,10 +11,13 @@ module Gmshell
       to_str <=> String(other)
     end
 
+    NUMBER_RANGE_REGEXP = %r{(?<left>\d+) *- *(?<right>\d+)}
     def lookup_range
-      left, right = lookup_column.split(TABLE_ENTRY_RANGE_MARKER)
-      right = left unless right
-      (left.strip.to_i..right.strip.to_i)
+      if match = NUMBER_RANGE_REGEXP.match(lookup_column)
+        (match[:left].to_i..match[:right].to_i).map(&:to_s)
+      else
+        [lookup_column]
+      end
     end
 
     attr_reader :lookup_column, :entry_column

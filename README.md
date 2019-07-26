@@ -9,8 +9,5 @@ A suite of command line tools for GM-ing.
 
 ## Todo
 
-Process:
-- with the given input, determine the handler
-- handler convert input to lines to evaluate
-- evaluate lines
-- render lines according to handler
+- [ ] Switch table column delimiter from "|" to "\t" (maybe)
+- [ ] Allow index to be non-integer
