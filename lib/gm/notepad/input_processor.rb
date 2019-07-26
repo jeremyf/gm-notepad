@@ -1,5 +1,6 @@
 module Gm
   module Notepad
+    # Responsible for processing the given input into a renderable state
     class InputProcessor
       def initialize(table_registry:, **config)
         self.table_registry = table_registry

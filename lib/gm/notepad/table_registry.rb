@@ -3,6 +3,7 @@ require_relative "exceptions"
 
 module Gm
   module Notepad
+    # Responsible for loading and registering all of the named tables
     class TableRegistry
       def self.load_for(paths:, table_extension: ".txt")
         table_registry = new(paths: paths, table_extension: table_extension)

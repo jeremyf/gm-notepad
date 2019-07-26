@@ -1,7 +1,7 @@
 require 'time'
 module Gm
   module Notepad
-    # Responsible for rendering lines
+    # Responsible for rendering lines to the corresponding buffers
     class LineRenderer
       def initialize(with_timestamp: false, defer_output:, output_buffer: default_output_buffer, interactive_buffer: default_interactive_buffer)
         @output_buffer = output_buffer

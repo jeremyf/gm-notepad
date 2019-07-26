@@ -1,6 +1,7 @@
 require_relative 'input_handlers/default_handler'
 module Gm
   module Notepad
+    # Responsible for registering the various input handlers
     class InputHandlerRegistry
       def initialize
         @registry = []

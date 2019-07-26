@@ -7,6 +7,8 @@ A command-line tool to help with your GM-ing.
 - [ ] Colorize puts to `interactive` buffer
 - [ ] Normalize `WriteToTableHandler` to use a renderer
 - [ ] Normalize `WriteToTableHandler` to deliver on `grep` and `index` behavior
+- [ ] Gracefully handle requesting an entry from a table with an index that does not exist (e.g. with test data try `+name[23]`)
+- [ ] Gracefully handle `+name[]`, where "name" is a registered table
 
 ## To install
 
