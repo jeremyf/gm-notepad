@@ -31,6 +31,15 @@ module Gmshell
       returning_value
     end
 
+    def append(line:, write: false)
+      process(lines: [line])
+      return unless filename
+      return unless write
+      File.open(filename, "a") do |file|
+        file.puts(line)
+      end
+    end
+
     private
 
     attr_accessor :table_name, :filename

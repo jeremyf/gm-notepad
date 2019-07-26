@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'gmshell/table'
+require 'fileutils'
 module Gmshell
   RSpec.describe Table do
     let(:table_name) { "city" }
@@ -11,11 +12,43 @@ module Gmshell
         "5-10| Mumbai"
       ]
     end
-    let(:subject) { described_class.new(table_name: table_name, lines: lines) }
+    subject { described_class.new(table_name: table_name, lines: lines) }
 
     context "when initialized with a table that has overlap" do
       it 'raises an exception' do
         expect { described_class.new(table_name: table_name, lines: ["1|a", "1|b"]) }.to raise_error(/Duplicate key/)
+      end
+    end
+
+    describe '#append' do
+      context "without file" do
+        it "adds records to the table" do
+          subject.append(line: "a| Sao Paulo")
+          expect(subject.lookup(index: "a").to_s).to eq("Sao Paulo")
+        end
+      end
+      context "with underlying file" do
+        subject do
+          described_class.new(
+            table_name: table_name,
+            lines: File.read(filename).split("\n"),
+            filename: filename
+          )
+        end
+        let(:filename) { File.expand_path("../../../fixtures/spec-data.txt", __FILE__) }
+        before do
+          File.open(filename, "w+") do |file|
+            file.puts "a | Hello"
+          end
+        end
+        after do
+          FileUtils.rm(filename)
+        end
+        it "will append the line" do
+          subject.append(line: "1 | World", write: true)
+          expect(subject.lookup(index: "1").to_s).to eq("World")
+          expect(File.read(filename).to_s).to eq("a | Hello\n1 | World\n")
+        end
       end
     end
 
