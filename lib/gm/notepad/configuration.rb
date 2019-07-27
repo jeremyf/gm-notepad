@@ -33,15 +33,15 @@ module Gm
         :renderer,
       ]
 
-      def self.init!(target:, with:, &block)
+      def self.init!(target:, from_config:, &block)
         target.define_method(:initialize) do |config:|
           @config = config
-          with.each do |method_name|
+          from_config.each do |method_name|
             send("#{method_name}=", @config[method_name])
           end
           instance_exec(&block) if block
         end
-        with.each do |method_name|
+        from_config.each do |method_name|
           target.attr_accessor(method_name)
           protected "#{method_name}="
         end

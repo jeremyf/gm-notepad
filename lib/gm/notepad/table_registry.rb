@@ -12,7 +12,7 @@ module Gm
         table_registry
       end
 
-      Configuration.init!(target: self, with: [:paths, :table_extension, :filesystem_directory]) do
+      Configuration.init!(target: self, from_config: [:paths, :table_extension, :filesystem_directory]) do
         @registry = {}
         @line_evaluator = LineEvaluator.new
       end
