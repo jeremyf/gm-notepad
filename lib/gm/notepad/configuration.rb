@@ -20,10 +20,6 @@ module Gm
         with_timestamp: false
       }.freeze
 
-      def self.defaults_for(*keys)
-        CLI_CONFIG_DEFAULTS.slice(*keys)
-      end
-
       # NOTE: ORDER MATTERS! I have a temporal dependency in these
       # defaults
       INTERNAL_CONFIG_DEFAULTS_METHOD_NAMES = [

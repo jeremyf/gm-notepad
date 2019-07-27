@@ -6,7 +6,7 @@ module Gm
   module Notepad
     module InputHandlers
       RSpec.describe QueryTableNamesHandler do
-        let(:registry) { TableRegistry.new(config: Configuration.defaults_for(:paths, :table_extension, :filesystem_directory)) }
+        let(:registry) { TableRegistry.new }
         let(:handler) { described_class.new(input: input, table_registry: registry) }
         let(:input) { "" }
         subject { handler }

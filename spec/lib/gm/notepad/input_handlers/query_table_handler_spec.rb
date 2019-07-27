@@ -8,7 +8,7 @@ module Gm
     module InputHandlers
       RSpec.describe QueryTableHandler do
         let(:table_name) { 'programming' }
-        let(:registry) { TableRegistry.new(config: Configuration.defaults_for(:paths, :table_extension, :filesystem_directory)) }
+        let(:registry) { TableRegistry.new }
         let(:input) { '' }
         let(:handler) { described_class.new(input: input, table_registry: registry) }
         subject { handler }

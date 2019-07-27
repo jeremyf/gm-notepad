@@ -11,9 +11,7 @@ module Gm
         ]
       end
 
-      let(:subject) do
-        described_class.new(config: Configuration.defaults_for(:paths, :table_extension, :filesystem_directory) )
-      end
+      let(:subject) { described_class.new }
       before do
         tables.each do |table|
           subject.register_by_string(**table)
