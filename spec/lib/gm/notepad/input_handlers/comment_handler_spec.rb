@@ -18,6 +18,11 @@ module Gm
             is_expected.to eq([input])
           end
         end
+        describe '.handles?' do
+          subject { described_class }
+          it { is_expected.to handle("#") }
+          it { is_expected.not_to handle("a#") }
+        end
       end
     end
   end
