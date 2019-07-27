@@ -3,8 +3,7 @@ module Gm
   module Notepad
     TABLE_ENTRY_RANGE_MARKER = "-".freeze
     class TableEntry
-      def initialize(line:, column_delimiter: DEFAULT_COLUMN_DELIMITER, **config)
-        self.column_delimiter = column_delimiter
+      Configuration.init!(target: self, from_config: [:column_delimiter], additional_params: [:line]) do
         self.lookup_column, self.entry_column = line.split(column_delimiter)
       end
 
@@ -30,8 +29,6 @@ module Gm
       alias to_str entry_column
 
       private
-
-      attr_accessor :column_delimiter
 
       def lookup_column=(input)
         @lookup_column = input.strip.downcase.freeze

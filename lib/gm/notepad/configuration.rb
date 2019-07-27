@@ -36,8 +36,8 @@ module Gm
       def self.init!(target:, from_config: [], additional_params: [], &block)
         # Need to rebind the parameter
         _additional_params = additional_params
-        target.define_method(:initialize) do |config:, **params|
-          @config = config
+        target.define_method(:initialize) do |config: nil, **params|
+          @config = config || CLI_CONFIG_DEFAULTS
           from_config.each do |method_name|
             send("#{method_name}=", @config[method_name])
           end
