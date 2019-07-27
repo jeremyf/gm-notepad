@@ -9,6 +9,7 @@ module Gm
       end
       let(:tables) do
         [
+          { table_name: "multi-column", string: "1|Cell 0|Cell 1"},
           { table_name: "hello", string: "1|hello:1" },
           { table_name: "world", string: "1|world:1" },
           { table_name: "helloworld:1", string: "1|nested" },
@@ -28,6 +29,8 @@ module Gm
       describe "#call" do
         [
           ["{critical[1d1]}", "rolled on table", true],
+          ["{multi-column[][1]}", "Cell 1", true],
+          ["{multi-column}", "Cell 0\tCell 1", true],
           ["{hello} {world}", "hello:1 world:1", true],
           ["{hello{world}}", "nested", true],
           ["{hello} {hello}", "hello:1 hello:1", true],

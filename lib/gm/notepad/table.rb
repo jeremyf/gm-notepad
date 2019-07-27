@@ -8,15 +8,15 @@ module Gm
         process(lines: lines)
       end
 
-      def lookup(index: false)
-        if index
-          begin
-            @table.fetch(index.to_s)
-          rescue KeyError
-            raise MissingTableEntryError.new(table_name: table_name, index: index.to_s)
-          end
+      def lookup(index: false, cell: false)
+        if index && cell
+          lookup_entry_by(index: index).cells[cells.to_i]
+        elsif index
+          lookup_entry_by(index: index)
+        elsif cell
+          lookup_random_entry.cells[cell.to_i]
         else
-          @table.values[random_index]
+          lookup_random_entry
         end
       end
 
@@ -44,6 +44,18 @@ module Gm
       end
 
       private
+
+      def lookup_entry_by(index:)
+        begin
+          @table.fetch(index.to_s)
+        rescue KeyError
+          raise MissingTableEntryError.new(table_name: table_name, index: index.to_s)
+        end
+      end
+
+      def lookup_random_entry
+        @table.values[random_index]
+      end
 
       attr_accessor :filename, :config
       attr_reader :table_name
