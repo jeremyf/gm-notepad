@@ -58,11 +58,6 @@ module Gm
       end
 
       def initialize(input_handler_registry: nil, table_registry: nil, renderer: nil, input_processor: nil, **overrides)
-        # INTERNAL_CONFIG_DEFAULTS_METHOD_NAMES.each do |method_name|
-        #   send("#{method_name}=", (overrides[method_name] || send("default_#{method_name}")))
-        #   overrides.delete(method_name)
-        # end
-
         CLI_CONFIG_DEFAULTS.each_pair do |key, default_value|
           value = overrides.fetch(key, default_value)
           if !value.is_a?(IO)
