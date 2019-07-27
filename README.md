@@ -43,8 +43,6 @@ line and render it to one or more of the buffers.
 
 ## Examples
 
-### Simple Help
-
 First, take a look at the help: `$ gm-notepad -h`
 
 ```console
@@ -100,10 +98,10 @@ glob: `./**/*.txt`.
 
 Included in the gem's test suite are four files:
 
-* `./spec/fixtures/name.txt`
-* `./spec/fixtures/first-name.txt`
-* `./spec/fixtures/last-name.txt`
-* `./spec/fixtures/location.csv`
+* ./spec/fixtures/name.txt
+* ./spec/fixtures/first-name.txt
+* ./spec/fixtures/last-name.txt
+* ./spec/fixtures/location.csv
 
 When I run `gm-notepad -l`, `gm-notepad` does the following:
 
@@ -209,6 +207,7 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [X] Colorize puts to `interactive` buffer
 - [X] Disable colors as a configuration option
 - [ ] Write expected interface document
+- [ ] Allow `{critical[2d6+1]}` to roll the dice then lookup the value in the critical table
 - [X] Skip table lines that begin with `#`
 - [X] Skip processing input lines that begin with `#`
 - [X] Allow configuration to specify table delimiter
@@ -230,7 +229,7 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [ ] Create a configuration object that captures the initial input (reduce passing around parameters and persisting copies of the config)
 - [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
 - [ ] Add column handling `{table[][]}`
-- [X] Support `\{\{table}-name}` You should be able to do `{{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
+- [X] Support `\{\{table}-name}` You should be able to do `\{\{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
 - [X] Ensure index names are lower-case
 - [ ] Hit 100% spec coverage
 
