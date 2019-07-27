@@ -1,5 +1,6 @@
 require 'dice'
 require 'gm/notepad/parameters/table_lookup'
+require 'gm/notepad/evaluators/dice_evaluator'
 module Gm
   module Notepad
     # Responsible for recording entries and then dumping them accordingly.
@@ -22,9 +23,7 @@ module Gm
         while match = text.match(TABLE_NAME_REGEXP)
           table_lookup = Parameters::TableLookup.new(text: match[:table_name].strip)
           if table_lookup.index
-            if index = Dice.parse(table_lookup.index)
-              table_lookup.index = index.evaluate
-            end
+            table_lookup.index = Evaluators::DiceEvaluator.call(text: table_lookup.index)
             entry = table_registry.lookup(index: table_lookup.index, table_name: table_lookup.table_name)
           else
             entry = table_registry.lookup(table_name: table_lookup.table_name)
@@ -36,11 +35,7 @@ module Gm
       DICE_REGEXP = %r{(?<dice_container>\[(?<dice>[^\]]+)\])}
       def parse_dice(text:)
         while match = text.match(DICE_REGEXP)
-          if parsed_dice = Dice.parse(match[:dice])
-            evaluated_dice = "#{parsed_dice.evaluate}"
-          else
-            evaluated_dice = "(#{match[:dice]})"
-          end
+          evaluated_dice = Evaluators::DiceEvaluator.call(text: match[:dice], fallback: "(#{match[:dice]})")
           text = text.sub(match[:dice_container], evaluated_dice)
         end
         text
