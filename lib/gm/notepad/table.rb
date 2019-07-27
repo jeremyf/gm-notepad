@@ -4,10 +4,7 @@ require "gm/notepad/table_entry"
 module Gm
   module Notepad
     class Table
-      def initialize(table_name:, lines:, filename: nil, **config)
-        self.config = config
-        self.table_name = table_name
-        self.filename = filename
+      Configuration.init!(target: self, additional_params: [:table_name, :filename, :lines]) do
         process(lines: lines)
       end
 

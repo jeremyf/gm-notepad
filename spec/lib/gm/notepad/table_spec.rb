@@ -14,11 +14,13 @@ module Gm
           "5-10| Mumbai"
         ]
       end
-      subject { described_class.new(table_name: table_name, lines: lines) }
+      let(:filename) { nil }
+      subject { described_class.new(config: {}, table_name: table_name, lines: lines, filename: filename) }
 
       context "when initialized with a table that has overlap" do
+        let(:lines) { ["1|a", "1|b"] }
         it 'raises an exception' do
-          expect { described_class.new(table_name: table_name, lines: ["1|a", "1|b"]) }.to raise_error(/Duplicate key/)
+          expect { subject }.to raise_error(/Duplicate key/)
         end
       end
 
@@ -30,13 +32,7 @@ module Gm
           end
         end
         context "with underlying file" do
-          subject do
-            described_class.new(
-              table_name: table_name,
-              lines: File.read(filename).split("\n"),
-              filename: filename
-            )
-          end
+          let(:lines) { File.read(filename).split("\n") }
           let(:filename) { File.join(PATH_TO_FIXTURES, "spec-data.txt") }
           before do
             File.open(filename, "w+") do |file|

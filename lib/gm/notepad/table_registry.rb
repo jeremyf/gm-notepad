@@ -72,7 +72,7 @@ module Gm
       def register(table_name:, lines:, filename: nil)
         table_name = table_name.downcase
         raise DuplicateKeyError.new(key: table_name, object: self) if registry.key?(table_name.downcase)
-        registry[table_name] = Table.new(table_name: table_name, lines: lines, filename: filename, **config)
+        registry[table_name] = Table.new(config: config, table_name: table_name, lines: lines, filename: filename)
       end
     end
   end

@@ -33,17 +33,30 @@ module Gm
         :renderer,
       ]
 
-      def self.init!(target:, from_config:, &block)
-        target.define_method(:initialize) do |config:|
+      def self.init!(target:, from_config: [], additional_params: [], &block)
+        # Need to rebind the parameter
+        _additional_params = additional_params
+        target.define_method(:initialize) do |config:, **params|
           @config = config
           from_config.each do |method_name|
             send("#{method_name}=", @config[method_name])
           end
+          _additional_params.each do |key|
+            send("#{key}=", params.fetch(key))
+          end
           instance_exec(&block) if block
         end
         from_config.each do |method_name|
-          target.attr_accessor(method_name)
-          protected "#{method_name}="
+          target.module_exec do
+            attr_accessor(method_name)
+            protected "#{method_name}="
+          end
+        end
+        _additional_params.each do |method_name|
+          target.module_exec do
+            attr_accessor(method_name)
+            protected "#{method_name}="
+          end
         end
         target.attr_reader :config
       end
