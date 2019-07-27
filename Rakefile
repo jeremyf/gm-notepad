@@ -30,4 +30,5 @@ namespace :commitment do
 end
 
 task(default: ['commitment:configure_test_for_code_coverage', :spec, 'commitment:code_coverage'])
+task(build: :default)
 task(release: :default)
