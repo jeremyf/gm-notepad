@@ -14,6 +14,11 @@ module Gm
         to_str <=> String(other)
       end
 
+      def lookup(cell:)
+        # TODO: Need to deal with named columns
+        cells[cell.to_i]
+      end
+
       NUMBER_RANGE_REGEXP = %r{(?<left>\d+) *- *(?<right>\d+)}
       def lookup_range
         if match = NUMBER_RANGE_REGEXP.match(index)

@@ -10,11 +10,11 @@ module Gm
 
       def lookup(index: false, cell: false)
         if index && cell
-          lookup_entry_by(index: index).cells[cells.to_i]
+          lookup_entry_by(index: index).lookup(cell: cell)
         elsif index
           lookup_entry_by(index: index)
         elsif cell
-          lookup_random_entry.cells[cell.to_i]
+          lookup_random_entry.lookup(cell: cell)
         else
           lookup_random_entry
         end
