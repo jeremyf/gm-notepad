@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'gm/notepad/table_registry'
 require 'gm/notepad/input_handlers/query_table_names_handler'
 
 module Gm
@@ -13,6 +14,14 @@ module Gm
         its(:to_output) { is_expected.to be_falsey }
         its(:to_filesystem) { is_expected.to be_falsey }
         its(:expand_line?) { is_expected.to be_falsey }
+
+        describe ".handles?" do
+          subject { described_class }
+          it { is_expected.to handle("+/") }
+          it { is_expected.not_to handle("?") }
+          it { is_expected.to handle("+") }
+          it { is_expected.not_to handle("+some") }
+        end
 
         describe '#lines' do
           [

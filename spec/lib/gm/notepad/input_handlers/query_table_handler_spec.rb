@@ -17,6 +17,14 @@ module Gm
         its(:to_output) { is_expected.to be_falsey }
         its(:expand_line?) { is_expected.to be_falsey }
 
+        describe ".handles?" do
+          subject { described_class }
+          it { is_expected.not_to handle("+/") }
+          it { is_expected.not_to handle("?") }
+          it { is_expected.not_to handle("+") }
+          it { is_expected.to handle("+some") }
+        end
+
         describe '#lines' do
           context "with a missing table_name" do
             let(:input) { '+o' }

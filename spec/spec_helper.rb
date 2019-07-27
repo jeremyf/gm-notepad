@@ -5,6 +5,10 @@ require "gm/notepad"
 require 'rspec/its'
 require 'coverage_helper'
 
+Dir.glob(File.join(File.expand_path('../matchers', __FILE__), "**/*_matcher.rb")).each do |filename|
+  require filename
+end
+
 PATH_TO_FIXTURES = File.expand_path('../fixtures', __FILE__)
 
 RSpec.configure do |config|
