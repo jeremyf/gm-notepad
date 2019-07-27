@@ -1,4 +1,6 @@
+require 'forwardable'
 require "gm/notepad/input_handlers/default_handler"
+require "gm/notepad/parameters/table_lookup"
 module Gm
   module Notepad
     module InputHandlers
@@ -14,11 +16,6 @@ module Gm
           true
         end
 
-        WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
-        WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
-        WITH_EMPTY_INDEX_REGEX = %r{(?<declaration>\[\])}
-        WITH_EMPTY_GREP_REGEX = %r{(?<declaration>\/\/)}
-        NON_EXPANDING_CHARATER = '!'.freeze
         def after_initialize!
           self.expand_line = false
           self.to_output = false
@@ -26,25 +23,11 @@ module Gm
 
           line = input[1..-1].to_s
           self.expand_line = false
-          if match = WITH_EMPTY_INDEX_REGEX.match(line)
-            line = line.sub(match[:declaration], '')
-          elsif match = WITH_INDEX_REGEXP.match(line)
-            line = line.sub(match[:declaration], '')
-            self.index = match[:index]
-          elsif match = WITH_EMPTY_GREP_REGEX.match(line)
-            line = line.sub(match[:declaration], '')
-          elsif match = WITH_GREP_REGEXP.match(line)
-            line = line.sub(match[:declaration], '')
-            grep = match[:grep]
-            self.grep = grep
-          end
-          if line[-1] == NON_EXPANDING_CHARATER
-            line = line[0..-2]
-          end
-          self.table_name = line.downcase
+          @table_lookup_parameters = Parameters::TableLookup.new(text: line)
         end
 
-        attr_accessor :index, :grep, :table_name
+        extend Forwardable
+        def_delegators :@table_lookup_parameters, :index, :grep, :table_name
 
         def lines
           begin
