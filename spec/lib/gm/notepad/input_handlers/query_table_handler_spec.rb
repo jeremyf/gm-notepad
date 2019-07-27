@@ -8,7 +8,7 @@ module Gm
     module InputHandlers
       RSpec.describe QueryTableHandler do
         let(:table_name) { 'programming' }
-        let(:registry) { TableRegistry.new }
+        let(:registry) { TableRegistry.new(config: Configuration.defaults_for(:paths, :table_extension, :filesystem_directory)) }
         let(:input) { '' }
         let(:handler) { described_class.new(input: input, table_registry: registry) }
         subject { handler }
@@ -28,10 +28,8 @@ module Gm
         describe '#lines' do
           context "with a missing table_name" do
             let(:input) { '+o' }
-            let(:registry) do
-              TableRegistry.new.tap do |r|
-                r.register_by_string(table_name: "other", string: "1|Other")
-              end
+            before do
+              registry.register_by_string(table_name: "other", string: "1|Other")
             end
             it "will return a message saying its missing and provide a list of matches" do
               expect(handler.lines).to eq(
@@ -71,10 +69,8 @@ module Gm
             ]
           ].each_with_index do |(table, given, expected), index|
             context "with #{given.inspect} for table: #{table.inspect} (scenario ##{index})" do
-              let(:registry) do
-                TableRegistry.new.tap do |r|
-                  r.register_by_string(table_name: table_name, string: table.join("\n"))
-                end
+              before do
+                registry.register_by_string(table_name: table_name, string: table.join("\n"))
               end
               let(:input) { given }
               subject { handler.lines }

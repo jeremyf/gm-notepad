@@ -20,6 +20,10 @@ module Gm
         with_timestamp: false
       }.freeze
 
+      def self.defaults_for(*keys)
+        CLI_CONFIG_DEFAULTS.slice(*keys)
+      end
+
       # NOTE: ORDER MATTERS! I have a temporal dependency in these
       # defaults
       INTERNAL_CONFIG_DEFAULTS_METHOD_NAMES = [
@@ -90,7 +94,7 @@ module Gm
 
       def default_table_registry
         require "gm/notepad/table_registry"
-        TableRegistry.load_for(**self)
+        TableRegistry.load_for(config: self)
       end
 
       def default_renderer

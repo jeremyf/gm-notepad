@@ -1,23 +1,20 @@
 require "gm/notepad/table"
 require "gm/notepad/exceptions"
+require 'gm/notepad/line_evaluator'
 
 module Gm
   module Notepad
     # Responsible for loading and registering all of the named tables
     class TableRegistry
-      def self.load_for(**config)
-        table_registry = new(**config)
+      def self.load_for(config:)
+        table_registry = new(config: config)
         table_registry.load!
         table_registry
       end
 
-      def initialize(line_evaluator: default_line_evaluator, **config)
-        self.config = config
-        self.line_evaluator = line_evaluator
-        self.paths = config.fetch(:paths) { [] }
-        self.table_extension = config.fetch(:table_extension) { ".txt" }
-        self.filesystem_directory = config.fetch(:filesystem_directory) { "." }
+      Configuration.init!(self, with: [:paths, :table_extension, :filesystem_directory]) do
         @registry = {}
+        @line_evaluator = LineEvaluator.new
       end
 
       def load!
@@ -29,9 +26,11 @@ module Gm
         end
       end
 
-      private
-      attr_accessor :line_evaluator, :paths, :table_extension, :filesystem_directory, :config
-      public
+      attr_reader :line_evaluator
+
+      # private
+      # attr_accessor :line_evaluator, :paths, :table_extension, :filesystem_directory, :config
+      # public
 
       def table_names
         @registry.keys.sort
@@ -78,11 +77,6 @@ module Gm
         table_name = table_name.downcase
         raise DuplicateKeyError.new(key: table_name, object: self) if @registry.key?(table_name.downcase)
         @registry[table_name] = Table.new(table_name: table_name, lines: lines, filename: filename, **config)
-      end
-
-      def default_line_evaluator
-        require 'gm/notepad/line_evaluator'
-        LineEvaluator.new
       end
     end
   end

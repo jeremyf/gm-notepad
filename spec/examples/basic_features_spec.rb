@@ -7,12 +7,9 @@ RSpec.describe "basic features" do
   let(:interactive_buffer) { SpecSupport::Buffer.new("interactive") }
   let(:notepad) do
     Gm::Notepad.new(
-      with_timestamp: false,
-      report_config: false,
       output_buffer: output_buffer,
       interactive_buffer: interactive_buffer,
       interactive_color: false,
-      defer_output: false,
       paths: [path_to_fixtures]
     )
   end
