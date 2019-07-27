@@ -1,12 +1,9 @@
-
+require 'gm/notepad/configuration'
 module Gm
   module Notepad
     # Responsible for processing the given input into a renderable state
     class InputProcessor
-      def initialize(table_registry:, **config)
-        self.table_registry = table_registry
-        self.input_handler_registry = config.fetch(:input_handler_registry) { default_input_handler_registry }
-      end
+      Configuration.init!(self, with: [:table_registry, :input_handler_registry])
 
       def process(input:)
         processor = build_for(input: input)
@@ -15,9 +12,6 @@ module Gm
         end
       end
 
-      attr_accessor :table_registry, :input_handler_registry
-      private :table_registry=, :input_handler_registry
-
       private
 
       def build_for(input:)
@@ -25,24 +19,6 @@ module Gm
         handler = input_handler_registry.handler_for(input: input)
         handler.table_registry = table_registry
         handler
-      end
-
-      def default_input_handler_registry
-        require "gm/notepad/input_handler_registry"
-        require "gm/notepad/input_handlers/help_handler"
-        require "gm/notepad/input_handlers/comment_handler"
-        require "gm/notepad/input_handlers/query_table_handler"
-        require "gm/notepad/input_handlers/query_table_names_handler"
-        require "gm/notepad/input_handlers/write_to_table_handler"
-        require "gm/notepad/input_handlers/write_line_handler"
-        InputHandlerRegistry.new do |registry|
-          registry.register(handler: InputHandlers::HelpHandler)
-          registry.register(handler: InputHandlers::CommentHandler)
-          registry.register(handler: InputHandlers::QueryTableHandler)
-          registry.register(handler: InputHandlers::QueryTableNamesHandler)
-          registry.register(handler: InputHandlers::WriteToTableHandler)
-          registry.register(handler: InputHandlers::WriteLineHandler)
-        end
       end
     end
   end

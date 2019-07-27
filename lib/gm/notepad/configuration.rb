@@ -23,7 +23,8 @@ module Gm
       INTERNAL_CONFIG_DEFAULTS_METHOD_NAMES = [
         :input_processor,
         :renderer,
-        :table_registry
+        :table_registry,
+        :input_handler_registry
       ]
 
       def self.init!(klass, with:, &block)
@@ -39,7 +40,7 @@ module Gm
         klass.attr_reader :config
       end
 
-      def initialize(table_registry: nil, renderer: nil, input_processor: nil, **overrides)
+      def initialize(input_handler_registry: nil, table_registry: nil, renderer: nil, input_processor: nil, **overrides)
         CLI_CONFIG_DEFAULTS.each_pair do |key, default_value|
           value = overrides.fetch(key, default_value)
           if !value.is_a?(IO)
@@ -51,6 +52,7 @@ module Gm
         self.table_registry = (table_registry || default_table_registry)
         self.renderer = (renderer || default_renderer)
         self.input_processor = (input_processor || default_input_processor)
+        self.input_handler_registry = (input_handler_registry || default_input_handler_registry)
       end
       attr_reader(*CLI_CONFIG_DEFAULTS.keys)
       attr_reader(*INTERNAL_CONFIG_DEFAULTS_METHOD_NAMES)
@@ -70,7 +72,7 @@ module Gm
 
       def default_input_processor
         require "gm/notepad/input_processor"
-        InputProcessor.new(**self)
+        InputProcessor.new(config: self)
       end
 
       def default_table_registry
@@ -81,6 +83,24 @@ module Gm
       def default_renderer
         require 'gm/notepad/line_renderer'
         LineRenderer.new(**self)
+      end
+
+      def default_input_handler_registry
+        require "gm/notepad/input_handler_registry"
+        require "gm/notepad/input_handlers/help_handler"
+        require "gm/notepad/input_handlers/comment_handler"
+        require "gm/notepad/input_handlers/query_table_handler"
+        require "gm/notepad/input_handlers/query_table_names_handler"
+        require "gm/notepad/input_handlers/write_to_table_handler"
+        require "gm/notepad/input_handlers/write_line_handler"
+        InputHandlerRegistry.new do |registry|
+          registry.register(handler: InputHandlers::HelpHandler)
+          registry.register(handler: InputHandlers::CommentHandler)
+          registry.register(handler: InputHandlers::QueryTableHandler)
+          registry.register(handler: InputHandlers::QueryTableNamesHandler)
+          registry.register(handler: InputHandlers::WriteToTableHandler)
+          registry.register(handler: InputHandlers::WriteLineHandler)
+        end
       end
     end
   end
