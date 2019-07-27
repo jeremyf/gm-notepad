@@ -20,27 +20,36 @@ module Gm
         with_timestamp: false
       }.freeze
 
+      # NOTE: ORDER MATTERS! I have a temporal dependency in these
+      # defaults
       INTERNAL_CONFIG_DEFAULTS_METHOD_NAMES = [
+        :table_registry,
+        :input_handler_registry,
         :input_processor,
         :renderer,
-        :table_registry,
-        :input_handler_registry
       ]
 
       def self.init!(klass, with:, &block)
         klass.define_method(:initialize) do |config:|
           @config = config
+          with.each do |method_name|
+            send("#{method_name}=", @config[method_name])
+          end
           instance_exec(&block) if block
         end
         with.each do |method_name|
-          klass.define_method(method_name) do
-            config.public_send(method_name)
-          end
+          klass.attr_accessor(method_name)
+          protected "#{method_name}="
         end
         klass.attr_reader :config
       end
 
       def initialize(input_handler_registry: nil, table_registry: nil, renderer: nil, input_processor: nil, **overrides)
+        # INTERNAL_CONFIG_DEFAULTS_METHOD_NAMES.each do |method_name|
+        #   send("#{method_name}=", (overrides[method_name] || send("default_#{method_name}")))
+        #   overrides.delete(method_name)
+        # end
+
         CLI_CONFIG_DEFAULTS.each_pair do |key, default_value|
           value = overrides.fetch(key, default_value)
           if !value.is_a?(IO)
@@ -50,9 +59,9 @@ module Gm
           self.send("#{key}=", value)
         end
         self.table_registry = (table_registry || default_table_registry)
+        self.input_handler_registry = (input_handler_registry || default_input_handler_registry)
         self.renderer = (renderer || default_renderer)
         self.input_processor = (input_processor || default_input_processor)
-        self.input_handler_registry = (input_handler_registry || default_input_handler_registry)
       end
       attr_reader(*CLI_CONFIG_DEFAULTS.keys)
       attr_reader(*INTERNAL_CONFIG_DEFAULTS_METHOD_NAMES)
@@ -64,6 +73,10 @@ module Gm
         INTERNAL_CONFIG_DEFAULTS_METHOD_NAMES.each_with_object(config) do |key, mem|
           mem[key] = send(key)
         end
+      end
+
+      def [](value)
+        public_send(value)
       end
 
       private
@@ -82,7 +95,7 @@ module Gm
 
       def default_renderer
         require 'gm/notepad/line_renderer'
-        LineRenderer.new(**self)
+        LineRenderer.new(config: self)
       end
 
       def default_input_handler_registry

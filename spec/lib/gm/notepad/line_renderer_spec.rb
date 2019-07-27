@@ -6,15 +6,16 @@ module Gm
     RSpec.describe LineRenderer do
       let(:interactive_buffer) { SpecSupport::Buffer.new("Interactive Buffer") }
       let(:output_buffer) { SpecSupport::Buffer.new("Output Buffer") }
-      let(:line_renderer) do
+      subject do
         described_class.new(
-          defer_output: defer_output,
-          with_timestamp: with_timestamp
+          config: {
+            interactive_buffer: interactive_buffer,
+            output_buffer: output_buffer,
+            defer_output: defer_output,
+            with_timestamp: with_timestamp
+          }
         )
       end
-      subject { described_class.new(defer_output: true) }
-      its(:default_output_buffer) { is_expected.to respond_to(:puts) }
-      its(:default_interactive_buffer) { is_expected.to respond_to(:puts) }
 
       [
         [
@@ -46,9 +47,10 @@ module Gm
         describe "initialized_with: #{initialize_with.inspect}" do
           let(:renderer) do
             described_class.new(
-              interactive_buffer: interactive_buffer,
-              output_buffer: output_buffer,
-              **initialize_with
+              config: initialize_with.merge(
+                interactive_buffer: interactive_buffer,
+                output_buffer: output_buffer,
+              )
             )
           end
           describe "#call(#{args.inspect})" do
