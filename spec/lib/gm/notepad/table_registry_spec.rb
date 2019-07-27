@@ -34,8 +34,8 @@ module Gm
           end
         end
         context 'for a invalid table name' do
-          it 'will raise a KeyError' do
-            expect { subject.fetch_table(name: "missing") }.to raise_error(KeyError)
+          it 'will raise a MissingTableError' do
+            expect { subject.fetch_table(name: "missing") }.to raise_error(MissingTableError)
           end
         end
       end

@@ -10,7 +10,11 @@ module Gm
 
       def lookup(index: false)
         if index
-          @table.fetch(index)
+          begin
+            @table.fetch(index.to_s)
+          rescue KeyError
+            raise MissingTableEntryError.new(table_name: table_name, index: index.to_s)
+          end
         else
           @table.values[random_index]
         end

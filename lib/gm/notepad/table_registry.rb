@@ -34,13 +34,15 @@ module Gm
 
       def fetch_table(name:)
         registry.fetch(name.downcase)
+      rescue KeyError
+        raise MissingTableError.new(name: name.downcase)
       end
 
       def append(table_name:, line:, write:)
         table = nil
         begin
           table = fetch_table(name: table_name)
-        rescue KeyError
+        rescue MissingTableError
           filename = File.join(filesystem_directory, "#{table_name}#{table_extension}")
           table = register(table_name: table_name, lines: [], filename: filename)
         end
@@ -57,10 +59,15 @@ module Gm
       end
 
       def lookup(table_name:, **kwargs)
-        table = fetch_table(name: table_name)
-        table.lookup(**kwargs)
-      rescue KeyError
-        "(undefined #{table_name})"
+        # TODO: Push this onto the table, as it removes nosy neighbor syndrom
+        begin
+          table = fetch_table(name: table_name)
+          table.lookup(**kwargs)
+        rescue MissingTableError
+          "(undefined table_name: #{table_name.inspect})"
+        rescue KeyError
+          "(missing entry for #{kwargs.inspect})"
+        end
       end
 
       def evaluate(line:)

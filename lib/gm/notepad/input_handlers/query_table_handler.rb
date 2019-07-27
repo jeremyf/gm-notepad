@@ -1,4 +1,5 @@
 require 'forwardable'
+require 'gm/notepad/exceptions'
 require "gm/notepad/input_handlers/default_handler"
 require "gm/notepad/parameters/table_lookup"
 module Gm
@@ -32,7 +33,7 @@ module Gm
         def lines
           begin
             table = table_registry.fetch_table(name: table_name)
-          rescue KeyError
+          rescue MissingTableError
             message = "Unknown table #{table_name.inspect}. Did you mean: "
             message += table_registry.table_names.grep(/\A#{table_name}/).map(&:inspect).join(", ")
             return [message]
@@ -40,7 +41,7 @@ module Gm
           if index
             begin
               [table.lookup(index: index)]
-            rescue KeyError
+            rescue MissingTableEntryError
               [%(Entry with index "#{index}" not found in "#{table_name}" table)]
             end
           elsif grep

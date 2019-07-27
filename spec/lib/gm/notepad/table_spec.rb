@@ -56,8 +56,8 @@ module Gm
           expect(subject.lookup(index: "7").to_s).to eq("[5-10]\tMumbai")
         end
 
-        it "raises KeyError for missing index" do
-          expect { subject.lookup(index: "0") }.to raise_error(KeyError)
+        it "raises MissingTableEntryError for missing index" do
+          expect { subject.lookup(index: "0") }.to raise_error(MissingTableEntryError)
         end
 
         it "will use a random value (within range) for the index" do
@@ -65,7 +65,7 @@ module Gm
         end
 
         it 'will not register lines starting with "#"' do
-          expect { subject.lookup(index: "#") }.to raise_error(KeyError)
+          expect { subject.lookup(index: "#") }.to raise_error(MissingTableEntryError)
         end
       end
     end
