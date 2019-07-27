@@ -107,6 +107,8 @@ module Gm
       end
 
       def default_input_handler_registry
+        # Order matters. The first registered will be the first to
+        # answer "Can you handle the input?"
         require "gm/notepad/input_handler_registry"
         require "gm/notepad/input_handlers/help_handler"
         require "gm/notepad/input_handlers/comment_handler"
