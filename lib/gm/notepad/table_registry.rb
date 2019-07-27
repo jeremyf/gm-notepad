@@ -38,7 +38,7 @@ module Gm
       end
 
       def fetch_table(name:)
-        @registry.fetch(name)
+        @registry.fetch(name.downcase)
       end
 
       def append(table_name:, line:, write:)
@@ -62,7 +62,7 @@ module Gm
       end
 
       def lookup(table_name:, **kwargs)
-        table = @registry.fetch(table_name)
+        table = fetch_table(name: table_name)
         table.lookup(**kwargs)
       rescue KeyError
         "(undefined #{table_name})"
@@ -75,12 +75,13 @@ module Gm
       private
 
       def register(table_name:, lines:, filename: nil)
-        raise DuplicateKeyError.new(key: table_name, object: self) if @registry.key?(table_name)
+        table_name = table_name.downcase
+        raise DuplicateKeyError.new(key: table_name, object: self) if @registry.key?(table_name.downcase)
         @registry[table_name] = Table.new(table_name: table_name, lines: lines, filename: filename, **config)
       end
 
       def default_line_evaluator
-        require_relative 'line_evaluator'
+        require 'gm/notepad/line_evaluator'
         LineEvaluator.new
       end
     end

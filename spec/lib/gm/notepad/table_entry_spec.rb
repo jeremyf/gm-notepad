@@ -23,6 +23,13 @@ module Gm
         its(:lookup_column) { is_expected.to eq("a-2") }
         its(:lookup_range) { is_expected.to eq(["a-2"]) }
       end
+      context 'for line of "A-2| Tokyo"' do
+        let(:line) { "A-2#{DEFAULT_COLUMN_DELIMITER} Tokyo" }
+        subject { described_class.new(line: line) }
+        its(:entry_column) { is_expected.to eq("Tokyo") }
+        its(:lookup_column) { is_expected.to eq("a-2") }
+        its(:lookup_range) { is_expected.to eq(["a-2"]) }
+      end
     end
   end
 end

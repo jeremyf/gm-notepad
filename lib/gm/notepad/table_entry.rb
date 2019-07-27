@@ -34,7 +34,7 @@ module Gm
       attr_accessor :column_delimiter
 
       def lookup_column=(input)
-        @lookup_column = input.strip.freeze
+        @lookup_column = input.strip.downcase.freeze
       end
 
       def entry_column=(input)

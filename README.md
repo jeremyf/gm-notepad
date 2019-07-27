@@ -238,3 +238,5 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [ ] Aspiration: Enable `{{monster}[ac]}` to pick a random monster and then fetch that monster's AC
 - [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
 - [ ] Add column handling `{table[][]}`
+- [ ] Support `{{table}-name}`
+- [X] Ensure index names are lower-case

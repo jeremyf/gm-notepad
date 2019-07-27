@@ -44,7 +44,12 @@ module Gm
 
       private
 
-      attr_accessor :table_name, :filename, :config
+      attr_accessor :filename, :config
+      attr_reader :table_name
+
+      def table_name=(input)
+        @table_name = input.downcase
+      end
 
       def random_index
         rand(@table.size)
