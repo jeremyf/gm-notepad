@@ -4,7 +4,7 @@ module Gm
     TABLE_ENTRY_RANGE_MARKER = "-".freeze
     class TableEntry
       Configuration.init!(target: self, from_config: [:column_delimiter], additional_params: [:line]) do
-        self.lookup_column, self.entry_column = line.split(column_delimiter)
+        self.index, self.entry_column = line.split(column_delimiter)
       end
 
       include Comparable
@@ -14,24 +14,24 @@ module Gm
 
       NUMBER_RANGE_REGEXP = %r{(?<left>\d+) *- *(?<right>\d+)}
       def lookup_range
-        if match = NUMBER_RANGE_REGEXP.match(lookup_column)
+        if match = NUMBER_RANGE_REGEXP.match(index)
           (match[:left].to_i..match[:right].to_i).map(&:to_s)
         else
-          [lookup_column]
+          [index]
         end
       end
 
-      attr_reader :lookup_column, :entry_column
+      attr_reader :index, :entry_column
 
       def to_s
-        "[#{lookup_column}]\t#{entry_column}"
+        "[#{index}]\t#{entry_column}"
       end
       alias to_str entry_column
 
       private
 
-      def lookup_column=(input)
-        @lookup_column = input.strip.downcase.freeze
+      def index=(input)
+        @index = input.strip.downcase.freeze
       end
 
       def entry_column=(input)
