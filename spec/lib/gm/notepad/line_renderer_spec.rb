@@ -12,6 +12,9 @@ module Gm
           with_timestamp: with_timestamp
         )
       end
+      subject { described_class.new(defer_output: true) }
+      its(:default_output_buffer) { is_expected.to respond_to(:puts) }
+      its(:default_interactive_buffer) { is_expected.to respond_to(:puts) }
 
       [
         [
