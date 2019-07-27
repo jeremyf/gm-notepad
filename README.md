@@ -217,7 +217,6 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [X] Skip table lines that begin with `#`
 - [X] Skip processing input lines that begin with `#`
 - [X] Allow configuration to specify table delimiter
-- [ ] Add option to dump all tables to the given directory
 - [ ] Raise load error if table index is a "dice" expression
 - [X] Allow configuration for where to dump data
 - [ ] Normalize `WriteToTableHandler` to use a renderer
@@ -226,7 +225,6 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [X] Gracefully handle `+name[]`, where "name" is a registered table
 - [ ] Add time to live for line expansion (to prevent infinite loops); I suspect 100 to be reasonable
 - [X] Enable "up" and "down" to scroll through history
-- [ ] Add config that expands dice results while including the requested roll
 - [X] Add index name when rendering table entries
 - [ ] Gracefully handle loading a malformed data file (maybe?)
 - [X] Add concept of history
@@ -250,3 +248,5 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [ ] Add auto index expansion for "["
 - [ ] Determine feasibility of adding dice to the `{}` expansion syntax (instead of the `[]` syntax)
 - [ ] Add force write results to `output`
+- [ ] Add option to dump all tables to the given directory
+- [ ] Add config that expands dice results while including the requested roll
