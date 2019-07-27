@@ -3,10 +3,10 @@ module Gm
   module Notepad
     module InputHandlers
       class CommentHandler < DefaultHandler
-        COMMEND_PREFIX = '#'.freeze
+        COMMENT_PREFIX = '#'.freeze
 
         def self.handles?(input:)
-          return false unless input[0] == COMMEND_PREFIX
+          return false unless input[0] == COMMENT_PREFIX
           true
         end
 
