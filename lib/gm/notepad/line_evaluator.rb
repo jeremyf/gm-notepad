@@ -1,4 +1,5 @@
 require 'dice'
+require 'gm/notepad/parameters/table_lookup'
 module Gm
   module Notepad
     # Responsible for recording entries and then dumping them accordingly.
@@ -19,8 +20,8 @@ module Gm
 
       def parse_table(text:)
         while match = text.match(TABLE_NAME_REGEXP)
-          table_name = match[:table_name].strip
-          entry = table_registry.lookup(table_name: table_name)
+          table_lookup = Parameters::TableLookup.new(text: match[:table_name].strip)
+          entry = table_registry.lookup(table_name: table_lookup.table_name)
           text = text.sub(match[:table_name_container], entry)
         end
         text

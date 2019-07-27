@@ -1,7 +1,7 @@
-
 module Gm
   module Notepad
     module Parameters
+      # Responsible for teasing apart the table logic
       class TableLookup
         WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
         WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
