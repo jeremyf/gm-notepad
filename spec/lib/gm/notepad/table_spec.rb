@@ -7,6 +7,7 @@ module Gm
       let(:table_name) { "city" }
       let(:lines) do
         [
+          "# Table comments",
           "1| Tokyo",
           "2| Berlin",
           "3-4| Dhaka",
@@ -65,6 +66,10 @@ module Gm
 
         it "will use a random value (within range) for the index" do
           expect(subject.lookup).to be_a(TableEntry)
+        end
+
+        it 'will not register lines starting with "#"' do
+          expect { subject.lookup(index: "#") }.to raise_error(KeyError)
         end
       end
     end

@@ -209,7 +209,7 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [X] Colorize puts to `interactive` buffer
 - [X] Disable colors as a configuration option
 - [ ] Write expected interface document
-- [ ] Skip table lines that begin with `#`
+- [X] Skip table lines that begin with `#`
 - [X] Skip processing input lines that begin with `#`
 - [ ] Allow configuration to specify colors
 - [X] Allow configuration to specify table delimiter
@@ -240,3 +240,4 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [ ] Add column handling `{table[][]}`
 - [X] Support `{{table}-name}` You should be able to do `{{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
 - [X] Ensure index names are lower-case
+- [ ] Hit 100% spec coverage

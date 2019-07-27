@@ -58,6 +58,7 @@ module Gm
       def process(lines:)
         @table = {}
         lines.each do |line|
+          next if line[0] == '#'
           entry = TableEntry.new(line: line, **config)
           entry.lookup_range.each do |i|
             key = i.to_s
