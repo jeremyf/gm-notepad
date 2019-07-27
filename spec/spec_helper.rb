@@ -39,5 +39,10 @@ module SpecSupport
     # Added to conform to the .close! behavior of IOs
     def print(line)
     end
+
+    def is_a?(klass)
+      return true if klass == IO
+      super
+    end
   end
 end

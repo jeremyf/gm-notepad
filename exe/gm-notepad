@@ -2,22 +2,7 @@
 require 'gm/notepad'
 
 require 'optparse'
-config = {
-  report_config: false,
-  defer_output: false,
-  filesystem_directory: '.',
-  interactive_buffer: $stderr,
-  interactive_color: true,
-  output_color: false,
-  list_tables: false,
-  output_buffer: $stdout,
-  paths: ['.'],
-  column_delimiter: Gm::Notepad::DEFAULT_COLUMN_DELIMITER,
-  shell_prompt: Gm::Notepad::DEFAULT_SHELL_PROMPT,
-  skip_readlines: false,
-  table_extension: '.txt',
-  with_timestamp: false
-}
+config = Gm::Notepad::Configuration::CLI_CONFIG_DEFAULTS.clone
 
 command_name = File.basename(__FILE__)
 

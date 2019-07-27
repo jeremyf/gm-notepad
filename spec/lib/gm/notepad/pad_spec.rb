@@ -3,13 +3,14 @@ require 'gm/notepad/pad'
 module Gm
   module Notepad
     RSpec.describe Pad do
-      its(:default_table_registry) { is_expected.to respond_to(:evaluate) }
-      its(:default_interactive_buffer) { is_expected.to respond_to(:puts) }
-      its(:default_output_buffer) { is_expected.to respond_to(:puts) }
-      its(:default_renderer) { is_expected.to respond_to(:call) }
-      its(:default_input_processor) { is_expected.to respond_to(:process) }
+      let(:config) do
+        Configuration.new(
+          table_registry: table_registry,
+          renderer: renderer,
+          input_processor: input_processor,
+        )
+      end
 
-      let(:timestamp) { true }
       let(:table_registry) { double("table registry") }
       let(:first_line) { "this line is my line" }
       let(:second_line) { "this line is your line" }
@@ -17,13 +18,7 @@ module Gm
       let(:input_processor) { double("input processor") }
 
       let(:notepad) do
-        described_class.new(
-          report_config: true,
-          timestamp: true,
-          renderer: renderer,
-          table_registry: table_registry,
-          input_processor: input_processor
-        )
+        described_class.new(config: config)
       end
 
       before do

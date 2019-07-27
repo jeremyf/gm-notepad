@@ -11,6 +11,7 @@ RSpec.describe "basic features" do
       report_config: false,
       output_buffer: output_buffer,
       interactive_buffer: interactive_buffer,
+      interactive_color: false,
       defer_output: false,
       paths: [path_to_fixtures]
     )
