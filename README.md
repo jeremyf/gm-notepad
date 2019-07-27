@@ -218,6 +218,7 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [X] Skip processing input lines that begin with `#`
 - [X] Allow configuration to specify table delimiter
 - [ ] Add option to dump all tables to the given directory
+- [ ] Raise load error if table index is a "dice" expression
 - [X] Allow configuration for where to dump data
 - [ ] Normalize `WriteToTableHandler` to use a renderer
 - [ ] Normalize `WriteToTableHandler` to deliver on `grep` and `index` behavior
