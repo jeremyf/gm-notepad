@@ -23,6 +23,11 @@ module Gm
       # Hook-in the above completion function
       ::Readline.completion_proc = completion_function
 
+      # In the interactive shell, where are we sending the prompts?
+      # If this defaults to $stdout then if we are directing $stdout
+      # to a file, we end up typing blind into the terminal
+      ::Readline.output = $stderr
+
       def self.input_getter(**config)
         -> { ::Readline.readline("#{config.fetch(:shell_prompt, ">")}  ", true) }
       end

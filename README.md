@@ -226,7 +226,7 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [X] Add concept of history
 - [ ] When expanding tables account for line expansion (via \n and \t)
 - [ ] Separate the InputHandler into pre-amble (e.g. allow overrides to where we are writing, determine what command we are writing)
-- [ ] Create a configuration object that captures the initial input (reduce passing around parameters and persisting copies of the config)
+- [X] Create a configuration object that captures the initial input (reduce passing around parameters and persisting copies of the config)
 - [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
 - [ ] Add column handling `{table[][]}`
 - [X] Support `\{\{table}-name}` You should be able to do `\{\{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
