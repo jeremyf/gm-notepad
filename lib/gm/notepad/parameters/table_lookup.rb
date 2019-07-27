@@ -13,7 +13,7 @@ module Gm
           extract_parameters!
         end
 
-        attr_reader :index, :grep, :table_name
+        attr_accessor :index, :grep, :table_name
 
         def parameters
           parameters = { table_name: table_name }

@@ -207,8 +207,9 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [X] Colorize puts to `interactive` buffer
 - [X] Disable colors as a configuration option
 - [ ] Write expected interface document
-- [ ] Handle `{critical[5]}`
-- [ ] Allow `{critical[{2d6+1}]}` to roll the dice then lookup the value in the critical table
+- [X] Handle `{critical[5]}`
+- [X] Allow `{critical[{2d6+1}]}` to roll the dice then lookup the value in the critical table
+- [ ] For `{critical[{2d6+1}]}`, how to handle out of bounds
 - [X] Skip table lines that begin with `#`
 - [X] Skip processing input lines that begin with `#`
 - [X] Allow configuration to specify table delimiter

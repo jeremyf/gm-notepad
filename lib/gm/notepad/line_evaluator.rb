@@ -21,7 +21,14 @@ module Gm
       def parse_table(text:)
         while match = text.match(TABLE_NAME_REGEXP)
           table_lookup = Parameters::TableLookup.new(text: match[:table_name].strip)
-          entry = table_registry.lookup(table_name: table_lookup.table_name)
+          if table_lookup.index
+            if index = Dice.parse(table_lookup.index)
+              table_lookup.index = index.evaluate
+            end
+            entry = table_registry.lookup(index: table_lookup.index, table_name: table_lookup.table_name)
+          else
+            entry = table_registry.lookup(table_name: table_lookup.table_name)
+          end
           text = text.sub(match[:table_name_container], entry)
         end
         text

@@ -15,7 +15,7 @@ module Gm
           { table_name: "inner", string: "1|resolved-inner" },
           { table_name: "resolved-inner-outer", string: "1|nested-resolve" },
           { table_name: "outer", string: "1|resolved-outer" },
-          { table_name: "critical", string: "1|foe injured" },
+          { table_name: "critical", string: "1|rolled on table\n1d1|did not roll on table" },
         ]
       end
       let(:table_registry) { TableRegistry.new }
@@ -27,7 +27,7 @@ module Gm
       subject { described_class.new(table_registry: table_registry) }
       describe "#call" do
         [
-          # ["{critical[1]}", "foe injured", true],
+          ["{critical[1d1]}", "rolled on table", true],
           ["{hello} {world}", "hello:1 world:1", true],
           ["{hello{world}}", "nested", true],
           ["{hello} {hello}", "hello:1 hello:1", true],
