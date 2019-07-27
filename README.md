@@ -177,6 +177,10 @@ Hello SamWise
 The line with starting with `=>` is the `interactive` buffer. The other line
 is written to the `output` buffer.
 
+You can also roll within a table. In the `gm-notepad` type the following:
+`{first-name[1d4]}`. The system will output "Frodo", "Merry", "Pippin", or "Sam".
+You won't get a "SamWise" or "FrodoWise" (or "FrodoWiseWise").
+
 To wrap up our first session, let's try one more thing. In your `gm-notepad`
 session type the following: `{first-name} owes [2d6]gp to {first-name}`:
 

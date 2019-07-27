@@ -80,7 +80,7 @@ end
 begin
   @notepad = Gm::Notepad.new(**config)
   if config.fetch(:skip_readlines)
-    input_getter = -> { print "#{config.fetch(:shell_prompt)}  "; ARGF.gets }
+    input_getter = ARGF.method(:gets)
   else
     require 'gm/notepad/readline'
     input_getter = Gm::Notepad::Readline.input_getter(**config)

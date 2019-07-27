@@ -14,7 +14,6 @@ module Gm
         output_buffer: $stdout,
         paths: ['.'],
         column_delimiter: Gm::Notepad::DEFAULT_COLUMN_DELIMITER,
-        shell_prompt: Gm::Notepad::DEFAULT_SHELL_PROMPT,
         skip_readlines: false,
         table_extension: '.txt',
         with_timestamp: false

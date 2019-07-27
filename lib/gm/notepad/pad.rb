@@ -20,6 +20,7 @@ module Gm
       private
 
       def open!
+        renderer.call("Welcome to gm-notepad. type \"?\" for help.", to_interactive: true, to_output: false)
         return unless config.report_config
         lines = ["# Configuration Parameters:"]
         config.each_pair do |key, value|

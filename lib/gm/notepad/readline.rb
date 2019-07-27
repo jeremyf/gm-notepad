@@ -29,7 +29,7 @@ module Gm
       ::Readline.output = $stderr
 
       def self.input_getter(**config)
-        -> { ::Readline.readline("#{config.fetch(:shell_prompt, ">")}  ", true) }
+        -> { ::Readline.readline("", true) }
       end
     end
   end

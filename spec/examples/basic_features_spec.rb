@@ -40,7 +40,8 @@ RSpec.describe "basic features" do
     end
     notepad.close!
     expect(output_buffer.lines).to eq([])
-    expect(interactive_buffer.lines).to eq(
+    # Becase the last three lines should be the above table's evaluated
+    expect(interactive_buffer.lines[-3..-1]).to eq(
       [
         "=>\t[1]\t{first-name} {last-name}",
         "=>\t[3]\tPippin",
