@@ -5,7 +5,7 @@ module Gm
   module Notepad
     # Responsible for rendering lines to the corresponding buffers
     class LineRenderer
-      Configuration.init!(self, with: [:with_timestamp, :defer_output, :output_buffer, :interactive_buffer]) do
+      Configuration.init!(target: self, with: [:with_timestamp, :defer_output, :output_buffer, :interactive_buffer]) do
         @lines = []
         yield(self) if block_given?
       end

@@ -3,7 +3,7 @@ module Gm
   module Notepad
     # Responsible for processing the given input into a renderable state
     class InputProcessor
-      Configuration.init!(self, with: [:table_registry, :input_handler_registry])
+      Configuration.init!(target: self, with: [:table_registry, :input_handler_registry])
 
       def process(input:)
         processor = build_for(input: input)

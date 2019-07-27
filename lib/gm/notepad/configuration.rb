@@ -33,8 +33,8 @@ module Gm
         :renderer,
       ]
 
-      def self.init!(klass, with:, &block)
-        klass.define_method(:initialize) do |config:|
+      def self.init!(target:, with:, &block)
+        target.define_method(:initialize) do |config:|
           @config = config
           with.each do |method_name|
             send("#{method_name}=", @config[method_name])
@@ -42,10 +42,10 @@ module Gm
           instance_exec(&block) if block
         end
         with.each do |method_name|
-          klass.attr_accessor(method_name)
+          target.attr_accessor(method_name)
           protected "#{method_name}="
         end
-        klass.attr_reader :config
+        target.attr_reader :config
       end
 
       def initialize(input_handler_registry: nil, table_registry: nil, renderer: nil, input_processor: nil, **overrides)

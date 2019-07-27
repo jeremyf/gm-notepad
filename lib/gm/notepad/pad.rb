@@ -3,7 +3,7 @@ module Gm
   module Notepad
     # Responsible for recording entries and then dumping them accordingly.
     class Pad
-      Notepad::Configuration.init!(self, with: [:table_registry, :renderer, :input_processor]) do
+      Notepad::Configuration.init!(target: self, with: [:table_registry, :renderer, :input_processor]) do
         open!
       end
 
