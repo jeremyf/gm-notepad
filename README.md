@@ -232,7 +232,8 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [ ] Separate the InputHandler into pre-amble (e.g. allow overrides to where we are writing, determine what command we are writing)
 - [X] Create a configuration object that captures the initial input (reduce passing around parameters and persisting copies of the config)
 - [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
-- [ ] Add column handling `{table[][]}`
+- [X] Add column handling `{table[][]}`
+- [ ] Gracefully handle cell lookup when named cell for entry is not found
 - [X] Support `\{\{table}-name}` You should be able to do `\{\{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
 - [X] Ensure index names are lower-case
 - [ ] Hit 100% spec coverage
