@@ -207,7 +207,8 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [X] Colorize puts to `interactive` buffer
 - [X] Disable colors as a configuration option
 - [ ] Write expected interface document
-- [ ] Allow `{critical[2d6+1]}` to roll the dice then lookup the value in the critical table
+- [ ] Handle `{critical[5]}`
+- [ ] Allow `{critical[{2d6+1}]}` to roll the dice then lookup the value in the critical table
 - [X] Skip table lines that begin with `#`
 - [X] Skip processing input lines that begin with `#`
 - [X] Allow configuration to specify table delimiter
@@ -222,7 +223,6 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [ ] Add config that expands dice results while including the requested roll
 - [X] Add index name when rendering table entries
 - [ ] Gracefully handle loading a malformed data file (maybe?)
-- [ ] Add force write results to `output`
 - [X] Add concept of history
 - [ ] When expanding tables account for line expansion (via \n and \t)
 - [ ] Separate the InputHandler into pre-amble (e.g. allow overrides to where we are writing, determine what command we are writing)
@@ -243,3 +243,4 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [ ] Add auto table expansion for "+"
 - [ ] Add auto index expansion for "["
 - [ ] Determine feasibility of adding dice to the `{}` expansion syntax (instead of the `[]` syntax)
+- [ ] Add force write results to `output`

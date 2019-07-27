@@ -3,25 +3,39 @@ module Gm
   module Notepad
     # Responsible for recording entries and then dumping them accordingly.
     class LineEvaluator
+      def initialize(table_registry:)
+        @table_registry = table_registry
+      end
+      attr_reader :table_registry
+
       TABLE_NAME_REGEXP = %r{(?<table_name_container>\{(?<table_name>[^\{\}]+)\})}
-      DICE_REGEXP = %r{(?<dice_container>\[(?<dice>[^\]]+)\])}
-      def call(line:, table_lookup_function:, expand_line: true)
+      def call(line:, expand_line: true)
         return line unless expand_line
-        match = line.match(TABLE_NAME_REGEXP)
-        while match
-          evaluated_table_name = table_lookup_function.call(table_name: match[:table_name].strip)
-          line = line.sub(match[:table_name_container], evaluated_table_name)
-          match = line.match(TABLE_NAME_REGEXP)
+        text = parse_table(text: line)
+        parse_dice(text: text)
+      end
+
+      private
+
+      def parse_table(text:)
+        while match = text.match(TABLE_NAME_REGEXP)
+          table_name = match[:table_name].strip
+          entry = table_registry.lookup(table_name: table_name)
+          text = text.sub(match[:table_name_container], entry)
         end
-        while match = line.match(DICE_REGEXP)
+        text
+      end
+      DICE_REGEXP = %r{(?<dice_container>\[(?<dice>[^\]]+)\])}
+      def parse_dice(text:)
+        while match = text.match(DICE_REGEXP)
           if parsed_dice = Dice.parse(match[:dice])
             evaluated_dice = "#{parsed_dice.evaluate}"
           else
             evaluated_dice = "(#{match[:dice]})"
           end
-          line = line.sub(match[:dice_container], evaluated_dice)
+          text = text.sub(match[:dice_container], evaluated_dice)
         end
-        line
+        text
       end
     end
   end

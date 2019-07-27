@@ -14,7 +14,7 @@ module Gm
 
       Configuration.init!(target: self, from_config: [:paths, :table_extension, :filesystem_directory]) do
         @registry = {}
-        @line_evaluator = LineEvaluator.new
+        @line_evaluator = LineEvaluator.new(table_registry: self)
       end
 
       def load!
@@ -64,7 +64,7 @@ module Gm
       end
 
       def evaluate(line:)
-        line_evaluator.call(line: line, table_lookup_function: method(:lookup))
+        line_evaluator.call(line: line)
       end
 
       private
