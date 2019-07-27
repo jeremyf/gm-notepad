@@ -7,9 +7,11 @@ module Gm
       DICE_REGEXP = %r{(?<dice_container>\[(?<dice>[^\]]+)\])}
       def call(line:, table_lookup_function:, expand_line: true)
         return line unless expand_line
-        while match = line.match(TABLE_NAME_REGEXP)
+        match = line.match(TABLE_NAME_REGEXP)
+        while match
           evaluated_table_name = table_lookup_function.call(table_name: match[:table_name].strip)
           line = line.sub(match[:table_name_container], evaluated_table_name)
+          match = line.match(TABLE_NAME_REGEXP)
         end
         while match = line.match(DICE_REGEXP)
           if parsed_dice = Dice.parse(match[:dice])
