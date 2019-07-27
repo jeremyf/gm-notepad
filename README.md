@@ -211,33 +211,36 @@ entry has a 1 in 3 chance of being randomly chosen.
 - [ ] Write expected interface document
 - [X] Skip table lines that begin with `#`
 - [X] Skip processing input lines that begin with `#`
-- [ ] Allow configuration to specify colors
 - [X] Allow configuration to specify table delimiter
-- [ ] Allow option to add a table to memory (instead of writing the table)
 - [ ] Add option to dump all tables to the given directory
 - [X] Allow configuration for where to dump data
 - [ ] Normalize `WriteToTableHandler` to use a renderer
 - [ ] Normalize `WriteToTableHandler` to deliver on `grep` and `index` behavior
 - [X] Gracefully handle requesting an entry from a table with an index that does not exist (e.g. with test data try `+name[23]`)
 - [X] Gracefully handle `+name[]`, where "name" is a registered table
-- [ ] Add time to live for line expansion (to prevent infinite loops)
+- [ ] Add time to live for line expansion (to prevent infinite loops); I suspect 100 to be reasonable
 - [X] Enable "up" and "down" to scroll through history
 - [ ] Add config that expands dice results while including the requested roll
-- [ ] Determine feasibility of adding dice to the `{}` expansion syntax (instead of the `[]` syntax)
 - [X] Add index name when rendering table entries
 - [ ] Gracefully handle loading a malformed data file (maybe?)
 - [ ] Add force write results to `output`
 - [X] Add concept of history
 - [ ] When expanding tables account for line expansion (via \n and \t)
 - [ ] Separate the InputHandler into pre-amble (e.g. allow overrides to where we are writing, determine what command we are writing)
+- [ ] Create a configuration object that captures the initial input (reduce passing around parameters and persisting copies of the config)
+- [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
+- [ ] Add column handling `{table[][]}`
+- [X] Support `\{\{table}-name}` You should be able to do `{{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
+- [X] Ensure index names are lower-case
+- [ ] Hit 100% spec coverage
+
+### Stretch TODO
+
 - [ ] Handle a `.gm-notepadrc` to inject default configurations
+- [ ] Allow configuration to specify colors
+- [ ] Aspiration: Enable `\{\{monster}[ac]}` to pick a random monster and then fetch that monster's AC
+- [ ] Allow option to add a table to memory (instead of writing the table)
 - [ ] Add auto table expansion for "{}"
 - [ ] Add auto table expansion for "+"
 - [ ] Add auto index expansion for "["
-- [ ] Create a configuration object that captures the initial input (reduce passing around parameters and persisting copies of the config)
-- [ ] Aspiration: Enable `{{monster}[ac]}` to pick a random monster and then fetch that monster's AC
-- [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
-- [ ] Add column handling `{table[][]}`
-- [X] Support `{{table}-name}` You should be able to do `{{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
-- [X] Ensure index names are lower-case
-- [ ] Hit 100% spec coverage
+- [ ] Determine feasibility of adding dice to the `{}` expansion syntax (instead of the `[]` syntax)
