@@ -21,13 +21,20 @@ module Gm
         private
         WITH_GREP_REGEXP = %r{(?<declaration>\/(?<found>[^\/]+)/)}
         WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<found>[^\]]+)\])}
+        CELL_WITHOUT_INDEX_REGEXP = %r{(?<declaration>\[\]\[(?<found>[^\]]+)\])}
+        EMPTY_INDEX_EMPTY_CELL_REGEXP = %r{(?<declaration>\[\]\[\])}
         WITH_EMPTY_INDEX_REGEX = %r{(?<declaration>\[\])}
         WITH_EMPTY_GREP_REGEX = %r{(?<declaration>\/\/)}
 
         def extract_parameters!
           @parameters = {}
           text = @text
-          if match = WITH_EMPTY_INDEX_REGEX.match(text)
+          if match = EMPTY_INDEX_EMPTY_CELL_REGEXP.match(text)
+            text = text.sub(match[:declaration], '')
+          elsif match = CELL_WITHOUT_INDEX_REGEXP.match(text)
+            text = text.sub(match[:declaration], '')
+            @cell = match[:found]
+          elsif match = WITH_EMPTY_INDEX_REGEX.match(text)
             text = text.sub(match[:declaration], '')
           elsif match = WITH_INDEX_REGEXP.match(text)
             text = text.sub(match[:declaration], '')
