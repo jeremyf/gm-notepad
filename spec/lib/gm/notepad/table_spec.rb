@@ -15,7 +15,7 @@ module Gm
         ]
       end
       let(:filename) { nil }
-      subject { described_class.new(config: {}, table_name: table_name, lines: lines, filename: filename) }
+      subject { described_class.new(table_name: table_name, lines: lines, filename: filename) }
 
       context "when initialized with a table that has overlap" do
         let(:lines) { ["1|a", "1|b"] }

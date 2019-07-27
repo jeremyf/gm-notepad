@@ -17,7 +17,7 @@ module Gm
         skip_readlines: false,
         table_extension: '.txt',
         with_timestamp: false
-      }.freeze
+      }
 
       # NOTE: ORDER MATTERS! I have a temporal dependency in these
       # defaults

@@ -4,7 +4,9 @@ module Gm
     TABLE_ENTRY_RANGE_MARKER = "-".freeze
     class TableEntry
       Configuration.init!(target: self, from_config: [:column_delimiter], additional_params: [:line]) do
-        self.index, self.entry_column = line.split(column_delimiter)
+        row = line.split(column_delimiter)
+        self.index = row.shift
+        self.cells = row
       end
 
       include Comparable
@@ -21,12 +23,17 @@ module Gm
         end
       end
 
-      attr_reader :index, :entry_column
+      attr_reader :index, :cells
+
+      def entry
+        cells.join("\t")
+      end
+      alias entry_column entry
 
       def to_s
-        "[#{index}]\t#{entry_column}"
+        "[#{index}]\t#{entry}"
       end
-      alias to_str entry_column
+      alias to_str entry
 
       private
 
@@ -34,8 +41,8 @@ module Gm
         @index = input.strip.downcase.freeze
       end
 
-      def entry_column=(input)
-        @entry_column = input.strip.freeze
+      def cells=(input)
+        @cells = Array(input).map { |i| i.strip.freeze }.freeze
       end
     end
   end
