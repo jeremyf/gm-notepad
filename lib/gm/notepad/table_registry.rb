@@ -26,18 +26,14 @@ module Gm
         end
       end
 
-      attr_reader :line_evaluator
-
-      # private
-      # attr_accessor :line_evaluator, :paths, :table_extension, :filesystem_directory, :config
-      # public
+      attr_reader :line_evaluator, :registry
 
       def table_names
-        @registry.keys.sort
+        registry.keys.sort
       end
 
       def fetch_table(name:)
-        @registry.fetch(name.downcase)
+        registry.fetch(name.downcase)
       end
 
       def append(table_name:, line:, write:)
@@ -75,8 +71,8 @@ module Gm
 
       def register(table_name:, lines:, filename: nil)
         table_name = table_name.downcase
-        raise DuplicateKeyError.new(key: table_name, object: self) if @registry.key?(table_name.downcase)
-        @registry[table_name] = Table.new(table_name: table_name, lines: lines, filename: filename, **config)
+        raise DuplicateKeyError.new(key: table_name, object: self) if registry.key?(table_name.downcase)
+        registry[table_name] = Table.new(table_name: table_name, lines: lines, filename: filename, **config)
       end
     end
   end
