@@ -3,7 +3,7 @@ module Gm
   module Notepad
     # Responsible for recording entries and then dumping them accordingly.
     class LineEvaluator
-      TABLE_NAME_REGEXP = %r{(?<table_name_container>\{(?<table_name>[^\}]+)\})}
+      TABLE_NAME_REGEXP = %r{(?<table_name_container>\{(?<table_name>[^\{\}]+)\})}
       DICE_REGEXP = %r{(?<dice_container>\[(?<dice>[^\]]+)\])}
       def call(line:, table_lookup_function:, expand_line: true)
         return line unless expand_line

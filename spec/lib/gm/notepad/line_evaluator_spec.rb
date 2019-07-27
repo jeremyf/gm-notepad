@@ -6,7 +6,16 @@ module Gm
       before do
         @counter = 0
       end
-      let(:table_lookup_function) { ->(table_name:) { "(#{table_name}:#{@counter+=1})" } }
+      let(:table_lookup_function) do
+        ->(table_name:) do
+          {
+            "inner" => "the-inner",
+            "the-inner-outer" => "found"
+          }.fetch(table_name) {
+            "(#{table_name}:#{@counter+=1})"
+          }
+        end
+      end
       subject { described_class.new }
       describe "#call (using evaluator that surrounds in paranthesises and increments a counter)" do
         [
@@ -18,6 +27,7 @@ module Gm
           ["[taco]{hello}", "(taco)(hello:1)", true],
           ["{hello} {world}", "{hello} {world}", false],
           ["{hello{world}}", "{hello{world}}", false],
+          ["{{inner}-outer}", "found", true],
           ["{hello} {hello}", "{hello} {hello}", false],
           ["[1d1]", "[1d1]", false],
           ["[taco]", "[taco]", false],
