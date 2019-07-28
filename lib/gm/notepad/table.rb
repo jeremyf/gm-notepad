@@ -1,11 +1,13 @@
 require "gm/notepad/exceptions"
 require "gm/notepad/configuration"
 require "gm/notepad/table_entry"
+require "gm/notepad/table_column_set"
 
 module Gm
   module Notepad
     class Table
       Configuration.init!(target: self, additional_params: [:table_name, :filename, :lines]) do
+        set_null_table_column_set!
         process(lines: lines)
       end
 
@@ -23,6 +25,10 @@ module Gm
 
       def all
         @table.values.uniq
+      end
+
+      def column_names
+        @table_column_set.names
       end
 
       def grep(expression)
@@ -69,20 +75,38 @@ module Gm
         rand(@table.size)
       end
 
+      STARTS_WITH_COMMENT_REGEXP = %r{\A#}
+      STARTS_WITH_INDEX_DECLARATION_REGEXP = %r{\Aindex}i
       def process(lines:)
         @table = {}
         lines.each do |line|
+          line = line.strip
           # Handle Comment
-          next if line[0] == '#'
-          # Handle Column Names declaration
-
-          # Handle Rows declaration
-          entry = TableEntry.new(table: self, line: line, config: config)
-          entry.lookup_range.each do |i|
-            key = i.to_s
-            raise DuplicateKeyError.new(key: table_name, object: self) if @table.key?(key)
-            @table[key] = entry
+          case line
+          when STARTS_WITH_COMMENT_REGEXP
+            next
+          when STARTS_WITH_INDEX_DECLARATION_REGEXP
+            register_index_declaration!(line: line)
+          else
+            make_entry!(line: line)
           end
+        end
+      end
+
+      def set_null_table_column_set!
+        @table_column_set = TableColumnSet::Null.new
+      end
+
+      def register_index_declaration!(line:)
+        @table_column_set = TableColumnSet.new(table: self, line: line, config: config)
+      end
+
+      def make_entry!(line:)
+        entry = TableEntry.new(table: self, line: line, config: config)
+        entry.lookup_range.each do |i|
+          key = i.to_s
+          raise DuplicateKeyError.new(key: table_name, object: self) if @table.key?(key)
+          @table[key] = entry
         end
       end
     end

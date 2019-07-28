@@ -4,6 +4,14 @@ require "gm/notepad/configuration"
 module Gm
   module Notepad
     class TableColumnSet
+      # Because we may not have an index row, from which we create a TableColumnSet.
+      # So this class provides the necessary external interface.
+      class Null
+        def names
+          []
+        end
+      end
+
       Configuration.init!(target: self, additional_params: [:table, :line], from_config: [:column_delimiter]) do
         @columns = []
         @index =
