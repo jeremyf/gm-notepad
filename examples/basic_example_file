@@ -1,14 +1,32 @@
 # Write entry `1|entry one` to in memory table `basic_example`
-<#basic_example:1|entry one
+<basic_example:1|entry one
+
 # Should render to interactive the internal help
 ?
+
+# Should roll the dice
+[2d6] goblins attack
+
 # Should render to interactive the given tables
 +
+
 # Should render to interactive the table `basic_example`
 +basic_example
+
 # Should render `entry one`
 {basic_example}
+
 # Should append entry `2|entry two` into memory table `basic_example`
 <basic_example:2|entry two
-# Should dump basic_example onto the file system
-+basic_example>
+
+# Should show that there are two entries in `basic example`
++basic_example
+
+# Should lookup entry 1 and 2
+{basic_example[1]} and {basic_example[2]}
+
+# Should lookup entry 1 and 2
+{basic_example[1d1]}
+
+# Should lookup entry 1 and 2
+{2d6} {basic_example[1d1]}
