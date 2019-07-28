@@ -39,7 +39,7 @@ module Gm
       end
 
       def render_output(lines, defer_output:, as_of:)
-        Array(lines).each do |line|
+        each_expanded_line(lines: lines) do |line|
           if config[:with_timestamp]
             line = "#{as_of}\t#{line}"
           end
@@ -52,8 +52,18 @@ module Gm
       end
 
       def render_interactive(lines)
-        Array(lines).each do |line|
+        each_expanded_line(lines: lines) do |line|
           interactive_buffer.puts("=>\t#{line}")
+        end
+      end
+
+      # Gracefully expand the \t and \n for the output buffer
+      def each_expanded_line(lines:)
+        Array(lines).each do |unexpanded_line|
+          unexpanded_line.to_s.split('\\n').each do |line|
+            line = line.gsub('\\t', "\t")
+            yield(line)
+          end
         end
       end
     end
