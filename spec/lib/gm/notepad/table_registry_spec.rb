@@ -26,6 +26,24 @@ module Gm
           expect(subject.table_names).to eq([ "month", "programming", "roman"])
         end
       end
+
+      context '#append' do
+        context "with missing table" do
+          it 'will register the table' do
+            subject.append(table_name: "new_table_name", line: "1 | Hello", write: false)
+            expect(subject.table_names).to include("new_table_name")
+            expect(subject.lookup(table_name: "new_table_name", index: "1")).to eq("Hello")
+          end
+        end
+        context "with existing table" do
+          it 'will add an entry' do
+            expect(subject.table_names).to include("month")
+            subject.append(table_name: "MONTH", line: "13 | Baker", write: false)
+            expect(subject.lookup(table_name: "month", index: "13")).to eq("Baker")
+          end
+        end
+      end
+
       context '#fetch_table' do
         context 'for a valid table name' do
           it 'will return a table' do
