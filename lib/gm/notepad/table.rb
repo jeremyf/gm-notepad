@@ -6,7 +6,8 @@ require "gm/notepad/table_column_set"
 module Gm
   module Notepad
     class Table
-      Configuration.init!(target: self, additional_params: [:table_name, :filename, :lines]) do
+      Configuration.init!(target: self, from_config: [:column_delimiter, :index_entry_prefix], additional_params: [:table_name, :filename, :lines]) do
+        @index_entry_prefix_regexp = %r{^#{Regexp.escape(index_entry_prefix)} *#{Regexp.escape(column_delimiter)}}i.freeze
         set_null_table_column_set!
         process(lines: lines)
       end
@@ -76,7 +77,6 @@ module Gm
       end
 
       STARTS_WITH_COMMENT_REGEXP = %r{\A#}
-      STARTS_WITH_INDEX_DECLARATION_REGEXP = %r{\Aindex}i
       def process(lines:)
         @table = {}
         lines.each do |line|
@@ -85,7 +85,7 @@ module Gm
           case line
           when STARTS_WITH_COMMENT_REGEXP
             next
-          when STARTS_WITH_INDEX_DECLARATION_REGEXP
+          when @index_entry_prefix_regexp
             register_index_declaration!(line: line)
           else
             make_entry!(line: line)

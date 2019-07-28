@@ -7,6 +7,7 @@ module Gm
         report_config: false,
         defer_output: false,
         filesystem_directory: '.',
+        index_entry_prefix: "index",
         interactive_buffer: $stderr,
         interactive_color: true,
         output_color: false,
