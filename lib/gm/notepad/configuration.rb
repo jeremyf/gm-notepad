@@ -13,7 +13,7 @@ module Gm
         output_color: false,
         list_tables: false,
         output_buffer: $stdout,
-        paths: ['.'],
+        paths: [],
         column_delimiter: Gm::Notepad::DEFAULT_COLUMN_DELIMITER,
         skip_readlines: false,
         table_extension: '.txt',
@@ -90,6 +90,14 @@ module Gm
       private
       attr_writer(*CLI_CONFIG_DEFAULTS.keys)
       attr_writer(*INTERNAL_CONFIG_DEFAULTS_METHOD_NAMES)
+
+      def paths=(input)
+        if input.empty?
+          @paths = ["."]
+        else
+          @paths = Array(input)
+        end
+      end
 
       def default_input_processor
         require "gm/notepad/input_processor"

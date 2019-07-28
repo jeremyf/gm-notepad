@@ -24,7 +24,7 @@ OptionParser.new do |options|
     config[:report_config] = report_config
   end
 
-  options.on("-pPATH", "--path=PATH", String, "Path(s) for {table_name}.<config.table_extension> files (Default: #{config[:paths].inspect})") do |path|
+  options.on("-pPATH", "--path=PATH", String, "Path(s) for {table_name}.<config.table_extension> files (Default: [\".\"])") do |path|
     config[:paths] << path
   end
 
