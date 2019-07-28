@@ -59,15 +59,10 @@ module Gm
       end
 
       def lookup(table_name:, **kwargs)
-        # TODO: Push this onto the table, as it removes nosy neighbor syndrom
-        begin
-          table = fetch_table(name: table_name)
-          table.lookup(**kwargs)
-        rescue MissingTableError
-          "(undefined table_name: #{table_name.inspect})"
-        rescue KeyError
-          "(missing entry for #{kwargs.inspect})"
-        end
+        table = fetch_table(name: table_name)
+        table.lookup(**kwargs)
+      rescue MissingTableError, MissingTableEntryError => e
+        e.to_buffer_message
       end
 
       def evaluate(line:)
