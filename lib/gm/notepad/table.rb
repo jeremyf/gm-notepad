@@ -77,7 +77,7 @@ module Gm
           # Handle Column Names declaration
 
           # Handle Rows declaration
-          entry = TableEntry.new(line: line, config: config)
+          entry = TableEntry.new(table: self, line: line, config: config)
           entry.lookup_range.each do |i|
             key = i.to_s
             raise DuplicateKeyError.new(key: table_name, object: self) if @table.key?(key)

@@ -3,7 +3,7 @@ module Gm
   module Notepad
     TABLE_ENTRY_RANGE_MARKER = "-".freeze
     class TableEntry
-      Configuration.init!(target: self, from_config: [:column_delimiter], additional_params: [:line]) do
+      Configuration.init!(target: self, from_config: [:column_delimiter], additional_params: [:line, :table]) do
         row = line.split(column_delimiter)
         self.index = row.shift
         self.cells = row

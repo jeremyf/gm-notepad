@@ -41,11 +41,11 @@ module Gm
             [
               ["1|Hello {bork}", "2|World"],
               "+programming[1]",
-              [TableEntry.new(line: "1|Hello {bork}")]
+              ["[1]\tHello {bork}"]
             ],[
               ["1|Hello {bork}", "2|World"],
               "+programming[]",
-              [TableEntry.new(line: "1|Hello {bork}"), TableEntry.new(line: "2|World")]
+              ["[1]\tHello {bork}", "[2]\tWorld"]
             ],[
               ["1|Hello {bork}", "2|World"],
               "+programming[75]",
@@ -53,19 +53,19 @@ module Gm
             ],[
               ["1|Hello {bork}", "2|World"],
               "+programming/world/",
-              [TableEntry.new(line: "2|World")]
+              ["[2]\tWorld"]
             ],[
               ["1|Hello {bork}", "2|World"],
               "+programming/{bork}/",
-              [TableEntry.new(line: "1|Hello {bork}")]
+              ["[1]\tHello {bork}"]
             ],[
               ["1|Hello {bork}", "2|World"],
               "+programming//",
-              [TableEntry.new(line: "1|Hello {bork}"), TableEntry.new(line: "2|World")]
+              ["[1]\tHello {bork}", "[2]\tWorld"]
             ],[
               ["1|Hello {bork}", "2|World"],
               "+programming/o/",
-              [TableEntry.new(line: "1|Hello {bork}"), TableEntry.new(line: "2|World")]
+              ["[1]\tHello {bork}", "[2]\tWorld"]
             ]
           ].each_with_index do |(table, given, expected), index|
             context "with #{given.inspect} for table: #{table.inspect} (scenario ##{index})" do
@@ -73,7 +73,7 @@ module Gm
                 registry.register_by_string(table_name: table_name, string: table.join("\n"))
               end
               let(:input) { given }
-              subject { handler.lines }
+              subject { handler.lines.map(&:to_s) }
               it { is_expected.to eq(expected) }
             end
           end
