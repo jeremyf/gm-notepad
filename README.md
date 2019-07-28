@@ -189,14 +189,12 @@ Frodo owes 3gp to SamWise
 ```
 
 Let's take a look at the `+character` table. Your table indices need not be
-numbers. And you can mix numbers and text. _If you expand the table via
-`{table}` each text index counts as 1 entry. For the below table, each
-entry has a 1 in 3 chance of being randomly chosen.
+numbers. And you can mix numbers and text. This example introduces the idea of
+columns. _I am still working on retrieving by column names as well as rendering column names_.
 
 ```console
-=>	[name]	Grell
-=>	[ac]	15
-=>	[hd]	12D12
+=>	[grell]	Grell	15	12D12
+=>	[jehat]	Jehat	19	14D6
 ```
 
 ## Testing Locally

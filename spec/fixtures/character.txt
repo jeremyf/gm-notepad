@@ -1,3 +1,4 @@
-name | Grell
-ac | 15
-hd | 12D12
+# Characters
+INDEX | Name  | AC | HD
+Grell | Grell | 15 | 12D12
+Jehat | Jehat | 19 | 12D6
