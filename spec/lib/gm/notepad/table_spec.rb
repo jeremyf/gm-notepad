@@ -15,9 +15,10 @@ module Gm
         ]
       end
       let(:filename) { nil }
-      subject { described_class.new(table_name: table_name, lines: lines, filename: filename) }
+      let(:table) { described_class.new(table_name: table_name, lines: lines, filename: filename) }
 
       context "when initialized with a table that has overlap" do
+        subject { table }
         let(:lines) { ["1|a", "1|b"] }
         it 'raises an exception' do
           expect { subject }.to raise_error(/Duplicate key/)
@@ -25,6 +26,7 @@ module Gm
       end
 
       describe '#append' do
+        subject { table }
         context "without file" do
           it "adds records to the table" do
             subject.append(line: "a| Sao Paulo")
@@ -51,6 +53,7 @@ module Gm
       end
 
       context "#lookup" do
+        subject { table }
         it "allows for lookup by index" do
           expect(subject.lookup(index: "1").to_s).to eq("[1]\tTokyo")
           expect(subject.lookup(index: "7").to_s).to eq("[5-10]\tMumbai")

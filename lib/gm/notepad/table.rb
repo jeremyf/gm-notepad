@@ -1,4 +1,5 @@
 require "gm/notepad/exceptions"
+require "gm/notepad/configuration"
 require "gm/notepad/table_entry"
 
 module Gm
@@ -71,7 +72,11 @@ module Gm
       def process(lines:)
         @table = {}
         lines.each do |line|
+          # Handle Comment
           next if line[0] == '#'
+          # Handle Column Names declaration
+
+          # Handle Rows declaration
           entry = TableEntry.new(line: line, config: config)
           entry.lookup_range.each do |i|
             key = i.to_s
