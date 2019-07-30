@@ -1,14 +1,14 @@
 require 'dice'
+require 'dry-initializer'
+require 'gm/notepad/container'
 require 'gm/notepad/parameters/table_lookup'
 require 'gm/notepad/evaluators/dice_evaluator'
 module Gm
   module Notepad
     # Responsible for recording entries and then dumping them accordingly.
     class LineEvaluator
-      def initialize(table_registry:)
-        @table_registry = table_registry
-      end
-      attr_reader :table_registry
+      extend Dry::Initializer
+      option :table_registry, default: -> { Container.resolve(:table_registry) }, reader: :private
 
       TABLE_NAME_REGEXP = %r{(?<table_name_container>\{(?<table_name>[^\{\}]+)\})}
       def call(line:, expand_line: true)

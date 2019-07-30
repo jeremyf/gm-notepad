@@ -1,9 +1,12 @@
-require 'gm/notepad/configuration'
+require 'gm/notepad/container'
+require 'dry/configurable'
 module Gm
   module Notepad
     # Responsible for processing the given input into a renderable state
     class InputProcessor
-      Configuration.init!(target: self, from_config: [:table_registry, :input_handler_registry])
+      extend Dry::Initializer
+      option :table_registry, default: -> { Container.resolve(:table_registry) }
+      option :input_handler_registry, default: -> { Container.resolve(:input_handler_registry) }
 
       def process(input:)
         processor = build_for(input: input)

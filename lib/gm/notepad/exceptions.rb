@@ -10,7 +10,7 @@ module Gm
     class MissingTableError < RuntimeError
       def initialize(name:)
         @name = name
-        super(%(Missing table "#{name}"))
+        super(%((Missing table "#{name}")))
       end
       alias to_buffer_message to_s
     end

@@ -2,11 +2,18 @@ require 'spec_helper'
 require 'gm/notepad'
 
 RSpec.describe "with default configuration" do
+  before do
+    Gm::Notepad::Config.config.paths = [PATH_TO_FIXTURES]
+    Gm::Notepad::Config.config.output_buffer = output_buffer
+    Gm::Notepad::Config.config.interactive_buffer = interactive_buffer
+    Gm::Notepad::Config.config.interactive_color = false
+    Gm::Notepad::Config.config.output_color = false
+  end
+  let(:output_buffer) { SpecSupport::Buffer.new("output") }
+  let(:interactive_buffer) { SpecSupport::Buffer.new("output") }
   # TODO: Add test for filesystem and if the results were evaluated
   RSpec::Matchers.define "meet_processing_expectations" do |interactive:, output:|
     match do |input|
-      output_buffer = SpecSupport::Buffer.new("output")
-      interactive_buffer = SpecSupport::Buffer.new("interactive")
       notepad = Gm::Notepad.new(
         output_buffer: output_buffer,
         interactive_buffer: interactive_buffer,

@@ -1,29 +1,18 @@
 require 'spec_helper'
-require 'gm/notepad/pad'
+require 'gm/notepad/app'
 module Gm
   module Notepad
-    RSpec.describe Pad do
-      let(:config) do
-        Configuration.new(
-          table_registry: table_registry,
-          renderer: renderer,
-          input_processor: input_processor,
-        )
-      end
-
-      let(:table_registry) { double("table registry") }
+    RSpec.describe App do
       let(:first_line) { "this line is my line" }
       let(:second_line) { "this line is your line" }
       let(:renderer) { double("renderer") }
       let(:input_processor) { double("input processor") }
 
       let(:notepad) do
-        described_class.new(config: config)
+        described_class.new(renderer: renderer, input_processor: input_processor)
       end
 
       before do
-        allow(table_registry).to receive(:evaluate).with(line: first_line).and_return(first_line)
-        allow(table_registry).to receive(:evaluate).with(line: second_line).and_return(second_line)
         allow(renderer).to receive(:call)
         allow(renderer).to receive(:process)
       end

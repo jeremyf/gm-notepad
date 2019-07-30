@@ -1,7 +1,16 @@
 require 'spec_helper'
 require 'gm/notepad'
+require 'gm/notepad/app'
 
 RSpec.describe "basic features" do
+  before do
+    Gm::Notepad::Config.config.paths = [PATH_TO_FIXTURES]
+    Gm::Notepad::Config.config.output_buffer = output_buffer
+    Gm::Notepad::Config.config.interactive_buffer = interactive_buffer
+    Gm::Notepad::Config.config.interactive_color = false
+    Gm::Notepad::Config.config.output_color = false
+  end
+
   let(:output_buffer) { SpecSupport::Buffer.new("output") }
   let(:path_to_fixtures) { PATH_TO_FIXTURES }
   let(:interactive_buffer) { SpecSupport::Buffer.new("interactive") }

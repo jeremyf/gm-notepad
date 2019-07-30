@@ -1,5 +1,5 @@
-require "gm/notepad/exceptions"
-require "gm/notepad/configuration"
+require 'dry-initializer'
+require 'gm/notepad/container'
 
 module Gm
   module Notepad
@@ -12,21 +12,25 @@ module Gm
         end
       end
 
-      Configuration.init!(target: self, additional_params: [:table, :line], from_config: [:column_delimiter]) do
-        @columns = []
-        @index =
+      extend Dry::Initializer
+      option :line, proc(&:to_s)
+      option :table
+      option :column_delimiter, default: -> { Container.resolve(:config).column_delimiter }
+
+      def initialize(*args)
+        super
         process_line!
       end
 
       def names
-        @columns.map(&:to_s)
+        @column_registry.map(&:to_s)
       end
 
       private
       def process_line!
         columns = line.split(column_delimiter)
         @index = columns.shift
-        @columns = columns.map {|c| c.strip.downcase }
+        @column_registry = columns.map {|c| c.strip.downcase }
       end
     end
   end

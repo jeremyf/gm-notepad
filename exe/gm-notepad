@@ -2,7 +2,8 @@
 require 'gm/notepad'
 
 require 'optparse'
-config = Gm::Notepad::Configuration::CLI_CONFIG_DEFAULTS.clone
+defaults = Gm::Notepad::Config
+config = {}
 
 command_name = File.basename(__FILE__)
 
@@ -16,50 +17,51 @@ OptionParser.new do |options|
     "\t$ echo '{name}' | #{command_name}\n\n" \
     "Options:\n"
 
-  options.on_head("-l", "--list_tables", "List tables loaded and exit (Default: #{config[:list_tables].inspect})") do |list_tables|
+  options.on_head("-l", "--list_tables", "List tables loaded and exit (Default: #{defaults.list_tables.inspect})") do |list_tables|
     config[:list_tables] = list_tables
   end
 
-  options.on("-r", "--report_config", "Dump the configuration data (Default: #{config[:report_config].inspect})") do |report_config|
+  options.on("-r", "--report_config", "Dump the configuration data (Default: #{defaults.report_config.inspect})") do |report_config|
     config[:report_config] = report_config
   end
 
-  options.on("-pPATH", "--path=PATH", String, "Path(s) for {table_name}.<config.table_extension> files (Default: [\".\"])") do |path|
+  options.on("-pPATH", "--path=PATH", String, "Path(s) for {table_name}.<config.table_extension> files (Default: #{defaults.paths.inspect})") do |path|
+    config[:paths] ||= []
     config[:paths] << path
   end
 
-  options.on("-fDIR", "--filesystem_directory=DIR", String, "Path to dump tables (Default: #{config[:filesystem_directory].inspect})") do |filesystem_directory|
+  options.on("-fDIR", "--filesystem_directory=DIR", String, "Path to dump tables (Default: #{defaults.filesystem_directory.inspect})") do |filesystem_directory|
     # Should we guard that this exists?
     config[:filesystem_directory] = filesystem_directory
   end
 
-  options.on("-xEXT", "--table_extension=EXT", String, "Extension to use for selecting tables (Default: #{config[:table_extension].inspect})") do |table_extension|
+  options.on("-xEXT", "--table_extension=EXT", String, "Extension to use for selecting tables (Default: #{defaults.table_extension.inspect})") do |table_extension|
     config[:table_extension] = table_extension
   end
 
-  options.on("-dDELIM", "--delimiter=DELIM", String, "Default column delimiter for tables (Default: #{config[:column_delimiter].inspect})") do |column_delimiter|
+  options.on("-dDELIM", "--delimiter=DELIM", String, "Default column delimiter for tables (Default: #{defaults.column_delimiter.inspect})") do |column_delimiter|
     map = { "t" => "\t" }
     config[:column_delimiter] = map.fetch(column_delimiter) { column_delimiter }
   end
 
   options.separator("")
   options.separator("Output options:")
-  options.on("-t", "--timestamp", "Append a timestamp to the note (Default: #{config[:with_timestamp].inspect})") do |timestamp|
+  options.on("-t", "--timestamp", "Append a timestamp to the note (Default: #{defaults.with_timestamp.inspect})") do |timestamp|
     config[:with_timestamp] = timestamp
   end
 
-  options.on("--defer_output", "Defer output until system close (Default: #{config[:defer_output].inspect})") do |defer_output|
+  options.on("--defer_output", "Defer output until system close (Default: #{defaults.defer_output.inspect})") do |defer_output|
     config[:defer_output] = defer_output
   end
 
   options.separator("")
   options.separator("Color options:")
 
-  options.on("-i", "--skip-interactive-color", "Disable color rendering for interactive buffer (Default: #{!config[:interactive_color].inspect})") do |interactive_color|
+  options.on("-i", "--skip-interactive-color", "Disable color rendering for interactive buffer (Default: #{(!defaults.interactive_color).inspect})") do |interactive_color|
     config[:interactive_color] = !interactive_color
   end
 
-  options.on("-o", "--with-output-color", "Enable color rendering for output buffer (Default: #{!config[:output_color].inspect})") do |output_color|
+  options.on("-o", "--with-output-color", "Enable color rendering for output buffer (Default: #{(!defaults.output_color).inspect})") do |output_color|
     config[:output_color] = output_color
   end
 
@@ -72,14 +74,14 @@ OptionParser.new do |options|
 end.parse!
 
 if config[:list_tables]
-  notepad = Gm::Notepad.new(config.merge(report_config: true))
+  notepad = Gm::Notepad.new(finalize: true, **config.merge(report_config: true))
   notepad.process(input: "+")
   exit(1)
 end
 
 begin
-  @notepad = Gm::Notepad.new(**config)
-  if config.fetch(:skip_readlines)
+  @notepad = Gm::Notepad.new(finalize: true, **config)
+  if Gm::Notepad::Config.skip_readlines
     input_getter = ARGF.method(:gets)
   else
     require 'gm/notepad/readline'
@@ -100,6 +102,7 @@ begin
     end
   end
 rescue => e
+  require 'byebug'; debugger; true
   $stderr.puts e
 ensure
   @notepad.close!

@@ -2,6 +2,7 @@ require "bundler/setup"
 GEM_ROOT = File.expand_path('../../', __FILE__)
 $LOAD_PATH.unshift File.join(GEM_ROOT, 'lib')
 require "gm/notepad"
+require "gm/notepad/config"
 require 'rspec/its'
 require 'coverage_helper'
 
@@ -20,6 +21,17 @@ RSpec.configure do |config|
 
   config.expect_with :rspec do |c|
     c.syntax = :expect
+  end
+
+  config.before(:each) { Gm::Notepad::Config.reset_config }
+end
+
+require "dry/configurable/test_interface"
+module Gm
+  module Notepad
+    class Config
+      enable_test_interface
+    end
   end
 end
 

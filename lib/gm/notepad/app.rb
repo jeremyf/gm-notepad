@@ -1,13 +1,22 @@
-require 'gm/notepad/configuration'
+require 'dry-initializer'
+require 'gm/notepad/container'
 module Gm
   module Notepad
     # Responsible for recording entries and then dumping them accordingly.
-    class Pad
-      Notepad::Configuration.init!(target: self, from_config: [:table_registry, :renderer, :input_processor]) do
+    class App
+      extend Dry::Initializer
+      option :renderer, default: -> { Container.resolve(:renderer) }
+      option :input_processor, default: -> { Container.resolve(:input_processor) }
+      option :report_config, default: -> { Container.resolve(:config).report_config }, reader: :private
+      option :list_tables, default: -> { Container.resolve(:config).list_tables }, reader: :private
+
+      def initialize(*args)
+        super
         open!
       end
 
       def process(input:)
+
         input_processor.process(input: input) do |*args|
           renderer.call(*args)
         end
@@ -21,14 +30,14 @@ module Gm
 
       def open!
         renderer.call("Welcome to gm-notepad. type \"?\" for help.", to_interactive: true, to_output: false)
-        return unless config.report_config
+        return unless report_config
         lines = ["# Configuration Parameters:"]
-        config.each_pair do |key, value|
-          lines << "#   config[#{key.inspect}] = #{value.inspect}"
+        Config.settings.each do |setting|
+          lines << "#   config[#{setting.inspect}] = #{Config.public_send(setting).inspect}"
         end
         # When running :list_tables by default I don't want to report
         # that to the output buffer.
-        to_output = !config.list_tables
+        to_output = !list_tables
         renderer.call(lines, to_interactive: true, to_output: to_output)
       end
     end
