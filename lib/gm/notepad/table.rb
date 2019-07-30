@@ -1,13 +1,20 @@
+require 'dry-initializer'
 require "gm/notepad/exceptions"
-require "gm/notepad/configuration"
 require "gm/notepad/table_entry"
 require "gm/notepad/table_column_set"
+require 'gm/notepad/container'
 
 module Gm
   module Notepad
     class Table
-      Configuration.init!(target: self, from_config: [:column_delimiter, :index_entry_prefix], additional_params: [:table_name, :filename, :lines]) do
-        @index_entry_prefix_regexp = %r{^#{Regexp.escape(index_entry_prefix)} *#{Regexp.escape(column_delimiter)}}i.freeze
+      extend Dry::Initializer
+      option :table_name, proc(&:to_s)
+      option :filename, optional: true
+      option :lines, type: method(:Array)
+      option :index_entry_prefix_regexp, default: -> { Container.resolve(:config).index_entry_prefix_regexp }
+
+      def initialize(*args)
+        super
         set_null_table_column_set!
         process(lines: lines)
       end
@@ -65,7 +72,7 @@ module Gm
         @table.values[random_index]
       end
 
-      attr_accessor :filename, :config
+      attr_accessor :filename
       attr_reader :table_name
 
       def table_name=(input)
@@ -98,11 +105,11 @@ module Gm
       end
 
       def register_index_declaration!(line:)
-        @table_column_set = TableColumnSet.new(table: self, line: line, config: config)
+        @table_column_set = TableColumnSet.new(table: self, line: line)
       end
 
       def make_entry!(line:)
-        entry = TableEntry.new(table: self, line: line, config: config)
+        entry = TableEntry.new(table: self, line: line)
         entry.lookup_range.each do |i|
           key = i.to_s
           raise DuplicateKeyError.new(key: table_name, object: self) if @table.key?(key)

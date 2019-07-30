@@ -236,6 +236,7 @@ columns. _I am still working on retrieving by column names as well as rendering 
 - [X] Ensure index names are lower-case
 - [ ] Hit 100% spec coverage
 - [ ] Create a "To Render Object"; When you parse the input, you push relevant lines to that "To Render Object". When you look at a table, you want to know what the column names are.
+- [ ] Remove "defer" printing concept
 
 ### Stretch TODO
 

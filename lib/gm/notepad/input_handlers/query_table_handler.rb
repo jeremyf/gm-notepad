@@ -9,11 +9,11 @@ module Gm
         QUERY_TABLE_NAMES_PREFIX = '+'.freeze
         def self.handles?(input:)
           # Does not have the table prefix
-          return false unless input[0] == QUERY_TABLE_NAMES_PREFIX
+          return false unless input.match(/^\+/)
           # It is only the table prefix
-          return false if input == QUERY_TABLE_NAMES_PREFIX
+          return false if input.match(/^\+$/)
           # It is querying all tables by way of grep
-          return false if input[0..1] == "#{QUERY_TABLE_NAMES_PREFIX}/"
+          return false if input.match(/^\+\//)
           true
         end
 

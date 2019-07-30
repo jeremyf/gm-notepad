@@ -4,16 +4,20 @@ require 'gm/notepad/line_renderer'
 module Gm
   module Notepad
     RSpec.describe LineRenderer do
+      before do
+        Gm::Notepad::Config.config.output_buffer = output_buffer
+        Gm::Notepad::Config.config.interactive_buffer = interactive_buffer
+        Gm::Notepad::Config.config.interactive_color = false
+        Gm::Notepad::Config.config.output_color = false
+      end
       let(:interactive_buffer) { SpecSupport::Buffer.new("Interactive Buffer") }
       let(:output_buffer) { SpecSupport::Buffer.new("Output Buffer") }
       subject do
         described_class.new(
-          config: {
-            interactive_buffer: interactive_buffer,
-            output_buffer: output_buffer,
-            defer_output: defer_output,
-            with_timestamp: with_timestamp
-          }
+          interactive_buffer: interactive_buffer,
+          output_buffer: output_buffer,
+          defer_output: defer_output,
+          with_timestamp: with_timestamp
         )
       end
 
@@ -38,16 +42,13 @@ module Gm
           { defer_output: false },
           ["my_line", { to_output: false, to_interactive: false, as_of: "NOW" }],
           { output_buffer: [], interactive_buffer: [] }
-        ],[
-          { defer_output: false, interactive_color: true, output_color: true },
-          ["my_line", { to_output: true, to_interactive: true, as_of: "NOW" }],
-          { output_buffer: ["\e[1mmy_line\e[0m"], interactive_buffer: ["\e[2m=>\tmy_line\e[0m"] }
         ]
       ].each do |initialize_with, args, expected|
         describe "initialized_with: #{initialize_with.inspect}" do
           let(:renderer) do
+
             described_class.new(
-              config: initialize_with.merge(
+              **initialize_with.merge(
                 interactive_buffer: interactive_buffer,
                 output_buffer: output_buffer,
               )

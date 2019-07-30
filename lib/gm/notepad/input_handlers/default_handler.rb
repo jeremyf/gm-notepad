@@ -1,3 +1,4 @@
+require 'gm/notepad/throughput_text'
 module Gm
   module Notepad
     module InputHandlers
@@ -16,7 +17,7 @@ module Gm
           self.to_output = false
           self.to_filesystem = false
           self.expand_line = false
-          self.input = input
+          self.input = input.is_a?(ThroughputText) ? input : ThroughputText.new(original_text: input)
           self.table_registry = table_registry
           after_initialize!
         end
@@ -26,7 +27,7 @@ module Gm
         end
 
         def lines
-          []
+          input.lines
         end
 
         alias expand_line? expand_line

@@ -1,9 +1,17 @@
-require 'gm/notepad/defaults'
+require 'dry-initializer'
+require 'gm/notepad/container'
+
 module Gm
   module Notepad
     TABLE_ENTRY_RANGE_MARKER = "-".freeze
     class TableEntry
-      Configuration.init!(target: self, from_config: [:column_delimiter], additional_params: [:line, :table]) do
+      extend Dry::Initializer
+      option :line, proc(&:to_s)
+      option :table
+      option :column_delimiter, default: -> { Container.resolve(:config).column_delimiter }
+
+      def initialize(*args)
+        super
         row = line.split(column_delimiter)
         self.index = row.shift
         self.cells = row

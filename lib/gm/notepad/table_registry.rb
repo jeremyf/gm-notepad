@@ -1,29 +1,27 @@
+require 'dry-initializer'
 require "gm/notepad/table"
 require "gm/notepad/exceptions"
 require 'gm/notepad/line_evaluator'
+require 'gm/notepad/container'
 
 module Gm
   module Notepad
     # Responsible for loading and registering all of the named tables
     class TableRegistry
-      def self.load_for(config:)
-        table_registry = new(config: config)
-        table_registry.load!
-        table_registry
+      def self.build_and_load
+        new { load! }
       end
 
-      Configuration.init!(target: self, from_config: [:paths, :table_extension, :filesystem_directory]) do
-        @registry = {}
-        @line_evaluator = LineEvaluator.new(table_registry: self)
-      end
+      extend Dry::Initializer
+      option :paths, default: -> { Container.resolve(:config).paths }
+      option :table_extension, default: -> { Container.resolve(:config).table_extension }
+      option :filesystem_directory, default: -> { Container.resolve(:config).filesystem_directory }
+      option :registry, default: -> { Hash.new }
+      option :line_evaluator, default: -> { LineEvaluator.new(table_registry: self) }
 
-      def load!
-        paths.each do |path|
-          Dir.glob(File.join(path, "**/*#{table_extension}")).each do |filename|
-            table_name = File.basename(filename, table_extension)
-            register_by_filename(table_name: table_name, filename: filename)
-          end
-        end
+      def initialize(*args, &block)
+        super
+        instance_exec(&block) if block_given?
       end
 
       attr_reader :line_evaluator, :registry
@@ -71,10 +69,19 @@ module Gm
 
       private
 
+      def load!
+        paths.each do |path|
+          Dir.glob(File.join(path, "**/*#{table_extension}")).each do |filename|
+            table_name = File.basename(filename, table_extension)
+            register_by_filename(table_name: table_name, filename: filename)
+          end
+        end
+      end
+
       def register(table_name:, lines:, filename: nil)
         table_name = table_name.downcase
         raise DuplicateKeyError.new(key: table_name, object: self) if registry.key?(table_name.downcase)
-        registry[table_name] = Table.new(config: config, table_name: table_name, lines: lines, filename: filename)
+        registry[table_name] = Table.new(table_name: table_name, lines: lines, filename: filename)
       end
     end
   end

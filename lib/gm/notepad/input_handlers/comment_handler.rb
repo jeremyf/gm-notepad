@@ -6,7 +6,7 @@ module Gm
         COMMENT_PREFIX = '#'.freeze
 
         def self.handles?(input:)
-          return false unless input[0] == COMMENT_PREFIX
+          return false unless input.match(/^#/)
           true
         end
 
@@ -14,10 +14,11 @@ module Gm
           self.to_interactive = true
           self.to_output = false
           self.expand_line = false
+          input.for_rendering(text: input.original_text, to_interactive: true, to_output: false)
         end
 
         def lines
-          [input]
+          input.lines_for_rendering
         end
       end
     end
