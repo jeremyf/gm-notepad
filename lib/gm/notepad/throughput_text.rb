@@ -51,6 +51,7 @@ module Gm
       option :to_interactive
       option :to_output
       option :to_filesystem, default: -> { false }
+      option :expand_line, default: -> { true }
 
       alias to_s text
       alias to_str text

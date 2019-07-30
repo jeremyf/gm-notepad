@@ -26,7 +26,7 @@ module Gm
             "\t[index] - Target a specific 'index'",
             "\t{table_name} - expand_line the given 'table_name'"
           ].each do |text|
-            input.for_rendering(text: text, to_interactive: to_interactive, to_output: to_output)
+            input.for_rendering(text: text, to_interactive: to_interactive, to_output: to_output, expand_line: false)
           end
         end
       end

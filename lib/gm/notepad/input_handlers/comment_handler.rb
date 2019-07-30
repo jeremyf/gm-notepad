@@ -11,14 +11,12 @@ module Gm
         end
 
         def after_initialize!
-          self.to_interactive = true
-          self.to_output = false
-          self.expand_line = false
-          input.for_rendering(text: input.original_text, to_interactive: true, to_output: false)
-        end
-
-        def lines
-          input.lines_for_rendering
+          input.for_rendering(
+            text: input.original_text,
+            to_interactive: true,
+            to_output: false,
+            expand_line: false
+          )
         end
       end
     end
