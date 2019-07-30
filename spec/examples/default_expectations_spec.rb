@@ -13,13 +13,13 @@ RSpec.describe "with default configuration" do
   let(:interactive_buffer) { SpecSupport::Buffer.new("output") }
   # TODO: Add test for filesystem and if the results were evaluated
   RSpec::Matchers.define "meet_processing_expectations" do |interactive:, output:|
-    match do |input|
+    match do |text|
       notepad = Gm::Notepad.new(
         output_buffer: output_buffer,
         interactive_buffer: interactive_buffer,
         paths: [PATH_TO_FIXTURES]
       )
-      notepad.process(input: input)
+      notepad.process(text: text)
       (output_buffer.lines.count > 0) == output &&
       (interactive_buffer.lines.count > 0) == interactive
     end

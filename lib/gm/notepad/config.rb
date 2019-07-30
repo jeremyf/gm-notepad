@@ -16,6 +16,7 @@ module Gm
       setting :paths, ['.'], reader: true
       setting :column_delimiter, "|", reader: true
       setting :skip_readlines, false, reader: true
+      setting :include_original_command_as_comment, true, reader: true
       setting :table_extension, '.txt', reader: true
       setting :with_timestamp, false, reader: true
 

@@ -5,7 +5,7 @@ module Gm
   module Notepad
     module InputHandlers
       RSpec.describe HelpHandler do
-        let(:handler) { described_class.new(input: nil) }
+        let(:handler) { described_class.new(input: "?") }
         subject { handler }
         its(:to_interactive) { is_expected.to be_truthy }
         its(:to_output) { is_expected.to be_falsey }

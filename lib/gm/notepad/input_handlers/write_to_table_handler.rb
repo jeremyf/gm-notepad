@@ -6,7 +6,7 @@ module Gm
       class WriteToTableHandler < DefaultHandler
         HANDLED_PREFIX = "<".freeze
         def self.handles?(input:)
-          return true if input[0] == HANDLED_PREFIX
+          return true if input.match(/^\</)
         end
 
         attr_accessor :index, :grep, :table_name, :line
@@ -18,8 +18,8 @@ module Gm
           self.to_filesystem = true
           self.to_interactive = true
 
-          if match = WITH_WRITE_TARGET_REGEXP.match(input)
-            line = match[:line].strip
+          if match = input.match(WITH_WRITE_TARGET_REGEXP)
+            input.text_to_evaluate = match[:line].strip
             table_name = match[:table_name]
             if index_match = WITH_INDEX_REGEXP.match(table_name)
               table_name = table_name.sub(index_match[:declaration], '')
@@ -32,13 +32,13 @@ module Gm
           else
             raise "I don't know what to do"
           end
-          if line[0] == NON_EXPANDING_CHARATER
+          if input.match(/^\!/)
             self.expand_line = false
-            self.line = line[1..-1]
+            input.sub!(/^\!/, '')
           else
             self.expand_line = true
           end
-          self.line = line.strip
+          input.render_current_text(to_interactive: true  , to_output: false, to_filesystem: true)
         end
 
         def lines
@@ -48,7 +48,7 @@ module Gm
           if expand_line
           else
           end
-          table_registry.append(table_name: table_name, line: line, write: true)
+          table_registry.append(table_name: table_name, line: input.text_to_evaluate, write: true)
           []
         end
       end

@@ -6,7 +6,7 @@ module Gm
         HELP_PREFIX = '?'.freeze
 
         def self.handles?(input:)
-          return false unless input[0] == HELP_PREFIX
+          return false unless input.match(/^\?/)
           true
         end
 
@@ -14,9 +14,6 @@ module Gm
           self.to_interactive = true
           self.to_output = false
           self.expand_line = false
-        end
-
-        def lines
           [
             "Prefixes:",
             "\t? - Help (this command)",
@@ -28,7 +25,9 @@ module Gm
             "\t/search/ - Grep for the given 'search' within the prefix",
             "\t[index] - Target a specific 'index'",
             "\t{table_name} - expand_line the given 'table_name'"
-          ]
+          ].each do |text|
+            input.for_rendering(text: text, to_interactive: to_interactive, to_output: to_output)
+          end
         end
       end
     end

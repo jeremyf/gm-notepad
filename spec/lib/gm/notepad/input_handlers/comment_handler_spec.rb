@@ -13,7 +13,7 @@ module Gm
         its(:to_filesystem) { is_expected.to be_falsey }
         its(:expand_line?) { is_expected.to be_falsey }
         context '#lines' do
-          subject { handler.lines }
+          subject { handler.lines.map(&:to_s) }
           it "logs an array of helpful messages" do
             is_expected.to eq([input])
           end

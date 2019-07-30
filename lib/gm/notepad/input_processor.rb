@@ -18,7 +18,6 @@ module Gm
       private
 
       def build_for(input:)
-        input = input.to_s.strip
         handler = input_handler_registry.handler_for(input: input)
         handler.table_registry = table_registry
         handler

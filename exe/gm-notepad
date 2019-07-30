@@ -75,7 +75,7 @@ end.parse!
 
 if config[:list_tables]
   notepad = Gm::Notepad.new(finalize: true, **config.merge(report_config: true))
-  notepad.process(input: "+")
+  notepad.process(text: "+")
   exit(1)
 end
 
@@ -89,9 +89,9 @@ begin
   end
   while input = input_getter.call
   # # Keep reading lines of input as long as they're coming.
-    input.each_line do |input|
+    input.each_line do |text|
       begin
-        @notepad.process(input: input)
+        @notepad.process(text: text)
       rescue Errno::EPIPE
         @notepad.close!
 
@@ -102,7 +102,6 @@ begin
     end
   end
 rescue => e
-  require 'byebug'; debugger; true
   $stderr.puts e
 ensure
   @notepad.close!

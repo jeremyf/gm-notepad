@@ -33,8 +33,8 @@ RSpec.describe "basic features" do
       %(Hello "{name}" nice to meet you and "{name}"),
       "{unregistered}",
       "[2d6]"
-    ].each do |input|
-      notepad.process(input: input)
+    ].each do |text|
+      notepad.process(text: text)
     end
     notepad.close!
     expect(output_buffer.lines.count).to eq(3)
@@ -44,8 +44,8 @@ RSpec.describe "basic features" do
       "+name[1]",
       "+first-name/ipp/",
       "+na"
-    ].each do |input|
-      notepad.process(input: input)
+    ].each do |text|
+      notepad.process(text: text)
     end
     notepad.close!
     expect(output_buffer.lines).to eq([])
@@ -61,8 +61,8 @@ RSpec.describe "basic features" do
   it "scenario 3: verifying help does not write to output" do
     [
       "?"
-    ].each do |input|
-      notepad.process(input: input)
+    ].each do |text|
+      notepad.process(text: text)
     end
     notepad.close!
     expect(output_buffer.lines.count).to eq(0)
@@ -70,8 +70,8 @@ RSpec.describe "basic features" do
   it "scenario 4: verifying expansion works" do
     [
       %(Hello "{name}" nice to meet you and "{name}")
-    ].each do |input|
-      notepad.process(input: input)
+    ].each do |text|
+      notepad.process(text: text)
     end
     notepad.close!
     expect(output_buffer.lines.count).to eq(1)
@@ -80,8 +80,8 @@ RSpec.describe "basic features" do
   it "scenario 5: demonstrating non-expansion" do
     [
       %(!{name})
-    ].each do |input|
-      notepad.process(input: input)
+    ].each do |text|
+      notepad.process(text: text)
     end
     notepad.close!
     expect(output_buffer.lines).to eq(["{name}"])

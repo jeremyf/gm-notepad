@@ -49,7 +49,7 @@ module Gm
               subject.call(
                 line: given,
                 expand_line: expand_line
-              )
+              ).to_s
             ).to eq(expected)
           end
         end
