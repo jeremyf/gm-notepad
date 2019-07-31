@@ -18,9 +18,8 @@ module Gm
       end
 
       def process(text:)
-        input = ThroughputText.new(original_text: text)
-        input_processor.process(input: input)
-        renderer.render(output: input)
+        output = input_processor.convert_to_output(input: text)
+        renderer.render(output: output)
       end
 
       def close!

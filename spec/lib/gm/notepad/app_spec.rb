@@ -21,7 +21,7 @@ module Gm
       describe '#process' do
         subject { notepad.process(text: first_line) }
         it 'will call the input processor' do
-          expect(input_processor).to receive(:process).with(input: kind_of(ThroughputText))
+          expect(input_processor).to receive(:convert_to_output).with(input: first_line)
           subject
         end
       end
