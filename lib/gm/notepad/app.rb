@@ -20,7 +20,7 @@ module Gm
       def process(text:)
         input = ThroughputText.new(original_text: text)
         input_processor.process(input: input)
-        renderer.render(input: input)
+        renderer.render(output: input)
       end
 
       def close!
