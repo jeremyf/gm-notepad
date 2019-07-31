@@ -9,7 +9,7 @@ module Gm
       option :input_handler_registry, default: -> { Container.resolve(:input_handler_registry) }
 
       def convert_to_output(input:)
-        input = ThroughputText.new(original_text: input)
+        input = ThroughputText.new(original_text: input, table_registry: table_registry)
         build_for(input: input)
         input
       end

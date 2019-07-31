@@ -10,7 +10,6 @@ module Gm
         let(:input) { ThroughputText.new(original_text: text, table_registry: registry) }
         let(:handler) { described_class.new(input: input, table_registry: registry) }
         let(:text) { "" }
-        let(:input) { text }
         subject { handler }
 
         describe ".handles?" do

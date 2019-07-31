@@ -1,4 +1,5 @@
 require 'gm/notepad/throughput_text'
+require 'dry-initializer'
 module Gm
   module Notepad
     module InputHandlers
@@ -12,19 +13,21 @@ module Gm
           true
         end
 
-        def initialize(input:, table_registry: Container.resolve(:table_registry))
-          # TODO Remove coercion
-          self.input = input.is_a?(ThroughputText) ? input : ThroughputText.new(original_text: input, table_registry: table_registry)
-          self.table_registry = table_registry
+        extend Dry::Initializer
+        option :input
+        option :table_registry, default: -> { Container.resolve(:table_registry) }
+        def initialize(*args)
+          super
           after_initialize!
-        end
-        attr_accessor :table_registry, :input
-
-        def after_initialize!
         end
 
         def lines
           input.lines
+        end
+
+        private
+
+        def after_initialize!
         end
       end
     end
