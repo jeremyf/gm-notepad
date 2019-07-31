@@ -36,10 +36,6 @@ module Gm
         end
       end
 
-      def defer(line)
-        self.lines << line
-      end
-
       def close!
         self.lines.each do |line|
           puts(line)

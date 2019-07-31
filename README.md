@@ -65,7 +65,6 @@ Options:
     -f, --filesystem_directory=DIR   Path to dump tables (Default: ".")
     -x, --table_extension=EXT        Extension to use for selecting tables (Default: ".txt")
     -t, --timestamp                  Append a timestamp to the note (Default: false)
-    -d, --defer_output               Defer output until system close (Default: false)
 
 Color options:
     -i, --skip-interactive-color     Disable color rendering for interactive buffer (Default: false)
@@ -83,7 +82,6 @@ Which writes the following to the `interactive` buffer (eg. `$stderr`)::
 ```console
 # Configuration Parameters:
 #   config[:report_config] = true
-#   config[:defer_output] = false
 #   config[:filesystem_directory] = "."
 #   config[:interactive_buffer] = #<IO:<STDERR>>
 #   config[:interactive_color] = true
@@ -240,7 +238,7 @@ columns. _I am still working on retrieving by column names as well as rendering 
 - [X] Ensure index names are lower-case
 - [ ] Hit 100% spec coverage
 - [ ] Create a "To Render Object"; When you parse the input, you push relevant lines to that "To Render Object". When you look at a table, you want to know what the column names are.
-- [ ] Remove "defer" printing concept
+- [X] Remove "defer" printing concept
 - [ ] Add ability to shell out; I would love to leverage the [swnt](https://github.com/nboughton/swnt) command line tool
 
 ### Stretch TODO

@@ -11,7 +11,6 @@ RSpec.describe "An aspirational feature" do
       report_config: false,
       output_buffer: output_buffer,
       interactive_buffer: interactive_buffer,
-      defer_output: false,
       paths: [path_to_fixtures]
     )
   end

@@ -5,7 +5,6 @@ module Gm
       extend Dry::Configurable
 
       setting :report_config, false, reader: true
-      setting :defer_output, false, reader: true
       setting :filesystem_directory, '.', reader: true
       setting :index_entry_prefix, "index", reader: true
       setting :interactive_buffer, $stderr, reader: true

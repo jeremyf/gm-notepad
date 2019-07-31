@@ -15,10 +15,6 @@ module Gm
 
       [
         [
-          { defer_output: true, with_timestamp: true },
-          ["my_line", { to_output: true, to_interactive: true, as_of: "NOW" }],
-          { output_buffer: [], interactive_buffer: ["=>\tmy_line"] }
-        ],[
           { defer_output: false, with_timestamp: true },
           ["my_line", { to_output: true, to_interactive: true, as_of: "NOW" }],
           { output_buffer: ["NOW\tmy_line"], interactive_buffer: ["=>\tmy_line"] }

@@ -9,7 +9,6 @@ module Gm
     class LineRenderer
       extend Dry::Initializer
       option :with_timestamp, default: -> { Container[:config].with_timestamp }
-      option :defer_output, default: -> { Container[:config].defer_output }
       option :interactive_buffer, type: -> (buffer, renderer) { BufferWrapper.for_interactive(buffer: buffer) }, default: -> { Container[:config].interactive_buffer }
       option :output_buffer, type: -> (buffer, renderer) { BufferWrapper.for_output(buffer: buffer) }, default: -> { Container[:config].output_buffer }
 
@@ -21,13 +20,13 @@ module Gm
         end
         output.lines_for_rendering.each do |line|
           next unless line.to_output
-          render_output(line, defer_output: defer_output, as_of: as_of)
+          render_output(line, as_of: as_of)
         end
       end
 
       def call(lines, to_output: false, to_interactive: true, as_of: Time.now)
         render_interactive(lines) if to_interactive
-        render_output(lines, defer_output: defer_output, as_of: as_of) if to_output
+        render_output(lines, as_of: as_of) if to_output
       end
 
       def close!
@@ -37,16 +36,12 @@ module Gm
 
       private
 
-      def render_output(lines, defer_output:, as_of:)
+      def render_output(lines, as_of:)
         each_expanded_line(lines: lines) do |line|
           if with_timestamp
             line = "#{as_of}\t#{line}"
           end
-          if defer_output
-            output_buffer.defer(line)
-          else
-            output_buffer.puts(line)
-          end
+          output_buffer.puts(line)
         end
       end
 

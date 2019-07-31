@@ -50,10 +50,6 @@ OptionParser.new do |options|
     config[:with_timestamp] = timestamp
   end
 
-  options.on("--defer_output", "Defer output until system close (Default: #{defaults.defer_output.inspect})") do |defer_output|
-    config[:defer_output] = defer_output
-  end
-
   options.separator("")
   options.separator("Color options:")
 
