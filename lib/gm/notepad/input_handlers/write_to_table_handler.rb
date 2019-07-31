@@ -15,9 +15,6 @@ module Gm
         WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
         WITH_WRITE_TARGET_REGEXP = %r{\A#{HANDLED_PREFIX}(?<table_name>[^:]+):(?<line>.*)}
         def after_initialize!
-          self.to_filesystem = true
-          self.to_interactive = true
-
           if match = input.match(WITH_WRITE_TARGET_REGEXP)
             input.text_to_evaluate = match[:line].strip
             table_name = match[:table_name]
@@ -33,12 +30,12 @@ module Gm
             raise "I don't know what to do"
           end
           if input.match(/^\!/)
-            self.expand_line = false
+            expand_line = false
             input.sub!(/^\!/, '')
           else
-            self.expand_line = true
+            expand_line = true
           end
-          input.render_current_text(to_interactive: true  , to_output: false, to_filesystem: true)
+          input.render_current_text(to_interactive: true  , to_output: false, to_filesystem: true, expand_line: expand_line)
         end
 
         def lines

@@ -13,6 +13,7 @@ module Gm
       end
 
       before do
+        allow(renderer).to receive(:render)
         allow(renderer).to receive(:call)
         allow(renderer).to receive(:process)
       end

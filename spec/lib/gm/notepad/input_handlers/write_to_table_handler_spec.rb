@@ -8,9 +8,8 @@ module Gm
         let(:input) { "#{described_class::HANDLED_PREFIX}table:" }
         let(:handler) { described_class.new(input: input) }
         subject { handler }
-        its(:to_interactive) { is_expected.to be_truthy }
-        its(:to_output) { is_expected.to be_falsey }
-        its(:to_filesystem) { is_expected.to be_truthy }
+
+        xit "will write to files"
       end
     end
   end

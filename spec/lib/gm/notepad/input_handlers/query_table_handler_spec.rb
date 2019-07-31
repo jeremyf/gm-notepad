@@ -9,13 +9,10 @@ module Gm
       RSpec.describe QueryTableHandler do
         let(:table_name) { 'programming' }
         let(:registry) { TableRegistry.new }
-        let(:input) { '' }
+        let(:text) { '' }
+        let(:input) { ThroughputText.new(original_text: text, table_registry: registry) }
         let(:handler) { described_class.new(input: input, table_registry: registry) }
         subject { handler }
-        its(:to_interactive) { is_expected.to be_truthy }
-        its(:to_filesystem) { is_expected.to be_falsey }
-        its(:to_output) { is_expected.to be_falsey }
-        its(:expand_line?) { is_expected.to be_falsey }
 
         describe ".handles?" do
           subject { described_class }
@@ -27,12 +24,12 @@ module Gm
 
         describe '#lines' do
           context "with a missing table_name" do
-            let(:input) { '+o' }
+            let(:text) { '+o' }
             before do
               registry.register_by_string(table_name: "other", string: "1|Other")
             end
             it "will return a message saying its missing and provide a list of matches" do
-              expect(handler.lines).to eq(
+              expect(handler.lines.map(&:to_s)).to eq(
                 ['Unknown table "o". Did you mean: "other"']
               )
             end
@@ -72,7 +69,7 @@ module Gm
               before do
                 registry.register_by_string(table_name: table_name, string: table.join("\n"))
               end
-              let(:input) { given }
+              let(:text) { given }
               subject { handler.lines.map(&:to_s) }
               it { is_expected.to eq(expected) }
             end

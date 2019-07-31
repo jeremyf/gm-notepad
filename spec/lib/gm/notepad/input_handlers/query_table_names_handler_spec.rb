@@ -7,13 +7,11 @@ module Gm
     module InputHandlers
       RSpec.describe QueryTableNamesHandler do
         let(:registry) { TableRegistry.new }
+        let(:input) { ThroughputText.new(original_text: text, table_registry: registry) }
         let(:handler) { described_class.new(input: input, table_registry: registry) }
-        let(:input) { "" }
+        let(:text) { "" }
+        let(:input) { text }
         subject { handler }
-        its(:to_interactive) { is_expected.to be_truthy }
-        its(:to_output) { is_expected.to be_falsey }
-        its(:to_filesystem) { is_expected.to be_falsey }
-        its(:expand_line?) { is_expected.to be_falsey }
 
         describe ".handles?" do
           subject { described_class }
@@ -35,8 +33,8 @@ module Gm
                   registry.register_by_string(table_name: table_name, string: "")
                 end
               end
-              let(:input) { "+/#{grep}/"}
-              subject { handler.lines }
+              let(:text) { "+/#{grep}/"}
+              subject { handler.lines.map(&:to_s) }
               it { is_expected.to eq(expected) }
             end
           end

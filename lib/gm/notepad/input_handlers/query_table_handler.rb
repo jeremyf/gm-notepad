@@ -18,37 +18,39 @@ module Gm
         end
 
         def after_initialize!
-          self.expand_line = false
-          self.to_output = false
-          self.to_interactive = true
-
           line = input[1..-1].to_s
-          self.expand_line = false
           @table_lookup_parameters = Parameters::TableLookup.new(text: line)
+          evaluate_lines!
         end
 
         extend Forwardable
         def_delegators :@table_lookup_parameters, :index, :grep, :table_name
 
-        def lines
+        def evaluate_lines!
           begin
             table = table_registry.fetch_table(name: table_name)
           rescue MissingTableError
             message = "Unknown table #{table_name.inspect}. Did you mean: "
             message += table_registry.table_names.grep(/\A#{table_name}/).map(&:inspect).join(", ")
-            return [message]
+            input.for_rendering(text: message, to_output: false, to_interactive: true, expand_line: false)
+            return
           end
           if index
             begin
-              [table.lookup(index: index)]
+              text = table.lookup(index: index)
+              input.for_rendering(text: text, to_output: false, to_interactive: true, expand_line: false)
             rescue MissingTableEntryError
-              [%(Entry with index "#{index}" not found in "#{table_name}" table)]
+              input.for_rendering(text: %(Entry with index "#{index}" not found in "#{table_name}" table), to_interactive: true, to_output: false)
             end
           elsif grep
             regexp = %r{#{grep}}i
-            table.grep(regexp)
+            table.grep(regexp).each do |text|
+              input.for_rendering(text: text, to_output: false, to_interactive: true, expand_line: false)
+            end
           else
-            table.all
+            table.all.each do |text|
+              input.for_rendering(text: text, to_output: false, to_interactive: true, expand_line: false)
+            end
           end
         end
       end
