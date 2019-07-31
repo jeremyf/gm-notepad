@@ -4,11 +4,16 @@ module Gm
     # Keep the original text close to the text that we are changing.
     # This way we can dump the original text as a comment.
     class ThroughputText
-      attr_reader :original_text, :text_to_evaluate
-      def initialize(original_text:)
-        @original_text = original_text.strip.freeze
-        @text_to_evaluate = original_text.strip
-        @lines_for_rendering = []
+      extend Dry::Initializer
+      option :original_text, proc(&:strip)
+      option :table_registry, default: -> { Container.resolve(:table_registry) }, reader: :private
+      option :lines_for_rendering, default: -> { [] }, reader: :private
+      attr_reader :text_to_evaluate
+
+      def initialize(*args)
+        super
+        self.text_to_evaluate = original_text.strip
+        original_text.freeze
       end
 
       def match(regexp)
