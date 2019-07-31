@@ -86,4 +86,14 @@ RSpec.describe "basic features" do
     notepad.close!
     expect(output_buffer.lines).to eq(["{name}"])
   end
+  it "scenario 6: listing tables" do
+    [
+      "+"
+    ].each do |text|
+      notepad.process(text: text)
+    end
+    notepad.close!
+    expect(output_buffer.lines).to eq([])
+    expect(interactive_buffer.lines[1..-1]).to eq(["=>\tcharacter", "=>\tfirst-name", "=>\tlast-name", "=>\tname"])
+  end
 end

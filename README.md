@@ -4,6 +4,10 @@ A command-line tool to help with your GM-ing.
 
 ## To install
 
+First, you will need a working copy of Ruby. I recommend following the [instructions over at rbenv's Github page](https://github.com/rbenv/rbenv#installation).
+
+Next, you'll want to install the `gm-notepad` gem.
+
 `$ gem install gm-notepad`
 
 ## Background
@@ -237,6 +241,7 @@ columns. _I am still working on retrieving by column names as well as rendering 
 - [ ] Hit 100% spec coverage
 - [ ] Create a "To Render Object"; When you parse the input, you push relevant lines to that "To Render Object". When you look at a table, you want to know what the column names are.
 - [ ] Remove "defer" printing concept
+- [ ] Add ability to shell out; I would love to leverage the [swnt](https://github.com/nboughton/swnt) command line tool
 
 ### Stretch TODO
 
