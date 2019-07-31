@@ -11,8 +11,7 @@ module Gm
         end
 
         def after_initialize!
-          input.for_rendering(
-            text: input.original_text,
+          input.render_current_text(
             to_interactive: true,
             to_output: false,
             expand_line: false

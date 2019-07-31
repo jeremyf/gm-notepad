@@ -19,7 +19,7 @@ module Gm
           else
             self.expand_line = true
           end
-          input.render_current_text(to_interactive: true, to_output: false)
+          input.render_current_text(to_interactive: true, to_output: false, expand_line: expand_line)
         end
       end
     end
