@@ -229,7 +229,7 @@ columns. _I am still working on retrieving by column names as well as rendering 
 - [ ] Gracefully handle loading a malformed data file (maybe?)
 - [X] Add concept of history
 - [X] When expanding tables account for line expansion (via \n and \t)
-- [ ] Separate the InputHandler into pre-amble (e.g. allow overrides to where we are writing, determine what command we are writing)
+- [X] Separate the InputHandler into pre-amble (e.g. allow overrides to where we are writing, determine what command we are writing)
 - [X] Create a configuration object that captures the initial input (reduce passing around parameters and persisting copies of the config)
 - [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
 - [X] Add column handling `{table[][]}`
