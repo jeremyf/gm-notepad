@@ -12,14 +12,6 @@ module Gm
       end
       let(:interactive_buffer) { SpecSupport::Buffer.new("Interactive Buffer") }
       let(:output_buffer) { SpecSupport::Buffer.new("Output Buffer") }
-      subject do
-        described_class.new(
-          interactive_buffer: interactive_buffer,
-          output_buffer: output_buffer,
-          defer_output: defer_output,
-          with_timestamp: with_timestamp
-        )
-      end
 
       [
         [

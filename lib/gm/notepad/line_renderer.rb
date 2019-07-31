@@ -13,6 +13,18 @@ module Gm
       option :interactive_buffer, type: -> (buffer, renderer) { BufferWrapper.for_interactive(buffer: buffer) }, default: -> { Container[:config].interactive_buffer }
       option :output_buffer, type: -> (buffer, renderer) { BufferWrapper.for_output(buffer: buffer) }, default: -> { Container[:config].output_buffer }
 
+      def render(input:, as_of: Time.now)
+        input.evaluate!
+        input.lines_for_rendering.each do |line|
+          next unless line.to_interactive
+          render_interactive(line)
+        end
+        input.lines_for_rendering.each do |line|
+          next unless line.to_output
+          render_output(line, defer_output: defer_output, as_of: as_of)
+        end
+      end
+
       def call(lines, to_output: false, to_interactive: true, as_of: Time.now)
         render_interactive(lines) if to_interactive
         render_output(lines, defer_output: defer_output, as_of: as_of) if to_output
@@ -47,7 +59,7 @@ module Gm
       # Gracefully expand the \t and \n for the output buffer
       def each_expanded_line(lines:)
         Array(lines).each do |unexpanded_line|
-          unexpanded_line.to_s.split('\\n').each do |line|
+          String(unexpanded_line).split('\\n').each do |line|
             line = line.gsub('\\t', "\t")
             yield(line)
           end

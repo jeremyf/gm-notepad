@@ -5,12 +5,11 @@ module Gm
   module Notepad
     module InputHandlers
       RSpec.describe HelpHandler do
-        let(:handler) { described_class.new(input: "?") }
+        let(:table_registry) { double("Table Registry") }
+        let(:input) { ThroughputText.new(original_text: "?", table_registry: table_registry) }
+        let(:handler) { described_class.new(input: input, table_registry: table_registry) }
         subject { handler }
-        its(:to_interactive) { is_expected.to be_truthy }
-        its(:to_output) { is_expected.to be_falsey }
-        its(:to_filesystem) { is_expected.to be_falsey }
-        its(:expand_line?) { is_expected.to be_falsey }
+
 
         describe ".handles?" do
           subject { described_class }
@@ -19,11 +18,10 @@ module Gm
           it { is_expected.to handle("?hello") }
         end
 
-        context '#lines' do
-          subject { handler.lines }
-          it "logs an array of helpful messages" do
-            is_expected.to be_a(Array)
-          end
+
+        it "updates the throughput text for rendering" do
+          expect(input).to receive(:for_rendering).with(text: kind_of(String), to_interactive: true, to_output: false, expand_line: false).at_least(7).times
+          subject
         end
       end
     end

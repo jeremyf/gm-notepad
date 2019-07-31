@@ -8,13 +8,13 @@ module Gm
       option :original_text, proc(&:strip)
       option :table_registry, default: -> { Container.resolve(:table_registry) }, reader: :private
       option :lines_for_rendering, default: -> { [] }, reader: :private
-      attr_reader :text_to_evaluate
-
       def initialize(*args)
         super
         self.text_to_evaluate = original_text.strip
         original_text.freeze
       end
+
+      attr_reader :text_to_evaluate
 
       def match(regexp)
         text_to_evaluate.match(regexp)
@@ -39,14 +39,23 @@ module Gm
       attr_writer :text_to_evaluate
 
       def for_rendering(text:, **kwargs)
-        @lines_for_rendering << LineForRendering.new(text: text, **kwargs)
+        @lines_for_rendering << LineForRendering.new(text: text, table_registry: table_registry, **kwargs)
       end
 
       def render_current_text(**kwargs)
         for_rendering(text: text_to_evaluate, **kwargs)
       end
 
-      attr_reader :lines_for_rendering
+      def evaluate!
+        lines_for_rendering.each do |line|
+          line.expand!
+        end
+      end
+
+      def lines_for_rendering
+        @lines_for_rendering
+      end
+
       alias lines lines_for_rendering
     end
 
@@ -57,9 +66,15 @@ module Gm
       option :to_output
       option :to_filesystem, default: -> { false }
       option :expand_line, default: -> { true }
+      option :table_registry, default: -> { Container.resolve(:table_registry) }, reader: :private
 
       alias to_s text
       alias to_str text
+
+      def expand!
+        return false unless expand_line
+        instance_variable_set("@text", table_registry.evaluate(line: text).to_s)
+      end
     end
   end
 end

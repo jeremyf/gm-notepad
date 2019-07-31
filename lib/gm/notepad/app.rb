@@ -1,5 +1,6 @@
 require 'dry-initializer'
 require 'gm/notepad/container'
+require 'gm/notepad/throughput_text'
 
 module Gm
   module Notepad
@@ -18,9 +19,8 @@ module Gm
 
       def process(text:)
         input = ThroughputText.new(original_text: text)
-        input_processor.process(input: input) do |*args|
-          renderer.call(*args)
-        end
+        input_processor.process(input: input)
+        renderer.render(input: input)
       end
 
       def close!

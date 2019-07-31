@@ -9,18 +9,13 @@ module Gm
       option :input_handler_registry, default: -> { Container.resolve(:input_handler_registry) }
 
       def process(input:)
-        processor = build_for(input: input)
-        processor.each_line_with_parameters do |*args|
-          yield(*args)
-        end
+        build_for(input: input)
       end
 
       private
 
       def build_for(input:)
-        handler = input_handler_registry.handler_for(input: input)
-        handler.table_registry = table_registry
-        handler
+        input_handler_registry.handler_for(input: input, table_registry: table_registry)
       end
     end
   end

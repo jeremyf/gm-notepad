@@ -17,23 +17,18 @@ module Gm
 
         WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
         def after_initialize!
-          self.expand_line = false
-          self.to_output = false
-          self.to_interactive = true
-
+          grep = nil
           input.sub!(/^./,'')
           if match = input.match(WITH_GREP_REGEXP)
             input.sub!(match[:declaration], '')
-            self.grep = match[:grep]
+            grep = match[:grep]
           end
-        end
 
-        attr_accessor :grep
-
-        def lines
           table_names = table_registry.table_names
-          return table_names unless grep
-          table_names.grep(%r{#{grep}})
+          table_names = table_names.grep(%r{#{grep}}) if grep
+          table_names.each do |table_name|
+            input.render_current_text(text: table_name, to_interactive: true, to_output: false, expand_line: false)
+          end
         end
       end
     end

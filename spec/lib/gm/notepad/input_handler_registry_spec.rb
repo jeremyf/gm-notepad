@@ -5,13 +5,14 @@ module Gm
   module Notepad
     RSpec.describe InputHandlerRegistry do
       let(:input_handler_registry) { described_class.new }
+      let(:table_registry) { double("Table Registry") }
 
       its(:default_handler_builder) { is_expected.to respond_to(:handles?) }
       its(:default_handler_builder) { is_expected.to respond_to(:build_if_handled) }
 
       describe '#handler_for' do
         let(:input) { "hello" }
-        subject { input_handler_registry.handler_for(input: input) }
+        subject { input_handler_registry.handler_for(input: input, table_registry: table_registry) }
         context 'without registered handlers' do
           it 'will be the default_handler_builder' do
             expect(subject).to be_a(input_handler_registry.default_handler_builder)
@@ -26,14 +27,14 @@ module Gm
 
           context 'but registered handler will not handle input' do
             it 'will be the default_handler_builder' do
-              expect(handler).to receive(:build_if_handled).with(input: input).and_return(nil)
+              expect(handler).to receive(:build_if_handled).with(input: input, table_registry: table_registry).and_return(nil)
               expect(subject).to be_a(input_handler_registry.default_handler_builder)
             end
           end
 
           context 'and registered handler will handle input' do
             it 'will be the registered_handler' do
-              expect(handler).to receive(:build_if_handled).with(input: input).and_return(handler)
+              expect(handler).to receive(:build_if_handled).with(input: input, table_registry: table_registry).and_return(handler)
               expect(subject).to eq(handler)
             end
           end

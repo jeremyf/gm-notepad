@@ -13,7 +13,7 @@ module Gm
 
       TABLE_NAME_REGEXP = %r{(?<table_name_container>\{(?<table_name>[^\{\}]+)\})}
       def call(line:, expand_line: true)
-        input = ThroughputText.new(original_text: line)
+        input = ThroughputText.new(original_text: line, table_registry: table_registry)
         return input unless expand_line
         parse_table(input: input)
         parse_dice(input: input)

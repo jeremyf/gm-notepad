@@ -10,16 +10,13 @@ module Gm
         end
 
         def after_initialize!
-          self.expand_line = false
-          self.to_output = true
-          self.to_interactive = true
           if input[0] == NON_EXPANDING_CHARATER
             input.sub!(/^\!/,'')
-            self.expand_line = false
+            expand_line = false
           else
-            self.expand_line = true
+            expand_line = true
           end
-          input.render_current_text(to_interactive: true, to_output: false, expand_line: expand_line)
+          input.render_current_text(to_interactive: true, to_output: true, expand_line: expand_line)
         end
       end
     end
