@@ -23,8 +23,8 @@ module Gm
       end
 
       def lookup(cell:)
-        # TODO: Need to deal with named columns
-        cells[cell.to_i]
+        index = table.column_index_for(cell: cell)
+        cells[index] || cells[0]
       end
 
       NUMBER_RANGE_REGEXP = %r{(?<left>\d+) *- *(?<right>\d+)}

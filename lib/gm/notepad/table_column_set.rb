@@ -10,6 +10,10 @@ module Gm
         def names
           []
         end
+
+        def column_index_for(cell:)
+          cell.to_i
+        end
       end
 
       extend Dry::Initializer
@@ -25,6 +29,11 @@ module Gm
       def names
         @column_registry.map(&:to_s)
       end
+
+      def column_index_for(cell:)
+        @column_registry.index(cell.downcase)
+      end
+
 
       private
       def process_line!

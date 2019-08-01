@@ -233,7 +233,7 @@ columns. _I am still working on retrieving by column names as well as rendering 
 - [X] Create a configuration object that captures the initial input (reduce passing around parameters and persisting copies of the config)
 - [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
 - [X] Add column handling `{table[][]}`
-- [ ] Gracefully handle cell lookup when named cell for entry is not found
+- [X] Gracefully handle cell lookup when named cell for entry is not found
 - [X] Support `\{\{table}-name}` You should be able to do `\{\{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
 - [X] Ensure index names are lower-case
 - [ ] Hit 100% spec coverage

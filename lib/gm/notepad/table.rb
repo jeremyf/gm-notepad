@@ -39,6 +39,10 @@ module Gm
         @table_column_set.names
       end
 
+      def column_index_for(cell:)
+        @table_column_set.column_index_for(cell: cell)
+      end
+
       def grep(expression)
         returning_value = []
         @table.each_value do |entry|
