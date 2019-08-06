@@ -208,8 +208,8 @@ numbers. And you can mix numbers and text. This example introduces the idea of
 columns. _I am still working on retrieving by column names as well as rendering column names_.
 
 ```console
-=>	[grell]	Grell	15	12D12
-=>	[jehat]	Jehat	19	14D6
+[grell]	Grell	15	12D12
+[jehat]	Jehat	19	14D6
 ```
 
 You can write a new table, without exiting `gm-notepad`, by doing the following:
