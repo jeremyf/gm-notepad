@@ -1,9 +1,11 @@
 require "gm/notepad/input_handlers/default_handler"
-require "shellwords"
 module Gm
   module Notepad
     module InputHandlers
+      # Responsible for handling shell out commands
       class ShellOutHandler < DefaultHandler
+        option :shell_handler, default: -> { Container.resolve(:shell_handler) }
+
         SHELL_OUT_HANDLER_REGEXP = /^`/.freeze
         TO_OUTPUT_REGEXP = /^\>/.freeze
 
@@ -20,8 +22,7 @@ module Gm
           else
             to_output = false
           end
-          command = input.to_s.split
-          response = `#{command.shelljoin}`.strip
+          response = shell_handler.call(input)
 
           input.for_rendering(
             text: response,

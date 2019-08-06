@@ -11,6 +11,22 @@ module Gm
         Config
       end
 
+      # Responsible for handling command line parsing. I wanted a separate function to unit test.
+      register "shell_handler" do
+        require "popen4"
+        ->(input) do
+          output = ""
+          POpen4.popen4(input.to_s) do |stdout, stderr, stdin, pid|
+            output = stdout.read.strip
+          end
+          if output.empty?
+            "# Command Not Found: #{input.to_s.inspect}"
+          else
+            output
+          end
+        end
+      end
+
       register "table_registry" do
         require 'gm/notepad/table_registry'
         TableRegistry.build_and_load

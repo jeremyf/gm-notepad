@@ -26,6 +26,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "dry-container"
   spec.add_dependency "dry-initializer"
   spec.add_dependency "term-ansicolor"
+  spec.add_dependency "popen4"
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
