@@ -241,6 +241,7 @@ You can then immediately access the `junk` table, by typing the following: `+jun
 
 ## Todo
 
+- [ ] When printing tables, also print column names/indices
 - [X] Colorize puts to `interactive` buffer
 - [X] Disable colors as a configuration option
 - [ ] Write expected interface document
