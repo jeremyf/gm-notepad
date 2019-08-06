@@ -39,7 +39,7 @@ OptionParser.new do |options|
     config[:table_extension] = table_extension
   end
 
-  options.on("-lTTL", "--time_to_live=TTL", Integer, "Per line of input, how many times to allow text expansion (Default: #{defaults.time_to_live.inspect})") do |time_to_live|
+  options.on("-tTTL", "--time_to_live=TTL", Integer, "Per line of input, how many times to allow text expansion (Default: #{defaults.time_to_live.inspect})") do |time_to_live|
     config[:time_to_live] = time_to_live
   end
 

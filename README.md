@@ -64,11 +64,15 @@ Options:
     -p, --path=PATH                  Path(s) for {table_name}.<config.table_extension> files (Default: ["."])
     -f, --filesystem_directory=DIR   Path to dump tables (Default: ".")
     -x, --table_extension=EXT        Extension to use for selecting tables (Default: ".txt")
+        --time_to_live=TTL           Per line of input, how many times to allow text expansion (Default: 20)
+    -d, --delimiter=DELIM            Default column delimiter for tables (Default: "|")
+
+Output options:
     -t, --timestamp                  Append a timestamp to the note (Default: false)
 
 Color options:
     -i, --skip-interactive-color     Disable color rendering for interactive buffer (Default: false)
-    -o, --with-output-color          Enable color rendering for output buffer (Default: false)
+    -o, --with-output-color          Enable color rendering for output buffer (Default: true)
 
     -h, --help                       You're looking at it!
 ```
@@ -81,15 +85,20 @@ Which writes the following to the `interactive` buffer (eg. `$stderr`)::
 
 ```console
 # Configuration Parameters:
-#   config[:report_config] = true
+#   config[:column_delimiter] = "|"
 #   config[:filesystem_directory] = "."
+#   config[:include_original_command_as_comment] = true
+#   config[:index_entry_prefix] = "index"
 #   config[:interactive_buffer] = #<IO:<STDERR>>
-#   config[:interactive_color] = true
-#   config[:output_color] = false
+#   config[:interactive_color] = :faint
 #   config[:list_tables] = false
 #   config[:output_buffer] = #<IO:<STDOUT>>
+#   config[:output_color] = false
 #   config[:paths] = ["."]
+#   config[:report_config] = true
+#   config[:skip_readlines] = false
 #   config[:table_extension] = ".txt"
+#   config[:time_to_live] = 20
 #   config[:with_timestamp] = false
 ```
 
@@ -116,10 +125,10 @@ Below are the table names when you run the `gm-notepad -l` against the
 repository (note when you run this command you'll get a preamble of the config):
 
 ```console
-=>	character
-=>	first-name
-=>	last-name
-=>	name
+character
+first-name
+last-name
+name
 ```
 
 Now let's load `gm-notepad` for interaction. In the terminal, type:
@@ -131,16 +140,20 @@ You now have an interactive shell for `gm-notepad`. Type `?` and hit
 `gm-notepad` will write the following to `interactive` buffer (eg. `$stderr`):
 
 ```console
-=>	Prefixes:
-=>		? - Help (this command)
-=>		+ - Query table names and contents
-=>		<table_name: - Write the results to the given table
-=>
-=>	Tokens:
-=>		! - Skip expansion
-=>		/search/ - Grep for the given 'search' within the prefix
-=>		[index] - Target a specific 'index'
-=>		{table_name} - expand_line the given 'table_name'
+Prefixes:
+	?  - Help (this command)
+	+  - Query table names and contents
+	<table_name: - Write the results to the given table
+	`  - Shell out command and write to interactive buffer
+	`> - Shell out command and write to interactive AND output buffer
+Tokens:
+	! - Skip expansion
+	/search/ - Grep for the given 'search' within the prefix
+	[index] - Target a specific 'index'
+	[][column] - Pick a random index
+	{table_name} - expand_line the given 'table_name'
+	{table_name[d6]} - roll a d6 and lookup that row on the given 'table_name'
+	{table_name[d6][name]} - pick a random row (between 1 and 6) and select the 'name' column from the given table_name
 ```
 
 Now, let's take look at a table. Again in an active `gm-notepad` session type
@@ -149,11 +162,11 @@ the following: `+first-name`
 `gm-notepad` will write the following to `interactive` buffer (eg. `$stderr`):
 
 ```console
-=>	[1]	Frodo
-=>	[2]	Merry
-=>	[3]	Pippin
-=>	[4]	Sam
-=>	[5-6]	{first-name}Wise
+[1]	Frodo
+[2]	Merry
+[3]	Pippin
+[4]	Sam
+[5-6]	{first-name}Wise
 ```
 
 These are the five table entries in the `first-name` table.
@@ -197,6 +210,26 @@ columns. _I am still working on retrieving by column names as well as rendering 
 ```console
 =>	[grell]	Grell	15	12D12
 =>	[jehat]	Jehat	19	14D6
+```
+
+You can write a new table, without exiting `gm-notepad`, by doing the following:
+
+```console
+<junk:1|2\n3|4
+```
+
+This will write to the `junk.txt` file the following:
+
+```console
+1|2
+3|4
+```
+
+You can then immediately access the `junk` table, by typing the following: `+junk`
+
+```console
+[1]	2
+[3]	4
 ```
 
 ## Testing Locally

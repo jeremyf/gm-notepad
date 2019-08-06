@@ -52,7 +52,7 @@ module Gm
 
       def render_interactive(lines)
         each_expanded_line(lines: lines) do |line|
-          interactive_buffer.puts("=>\t#{line}")
+          interactive_buffer.puts(line)
         end
       end
 

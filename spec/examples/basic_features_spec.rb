@@ -52,9 +52,9 @@ RSpec.describe "basic features" do
     # Becase the last three lines should be the above table's evaluated
     expect(interactive_buffer.lines[-3..-1]).to eq(
       [
-        "=>\t[1]\t{first-name} {last-name}",
-        "=>\t[3]\tPippin",
-        "=>\tUnknown table \"na\". Did you mean: \"name\""
+        "[1]\t{first-name} {last-name}",
+        "[3]\tPippin",
+        "Unknown table \"na\". Did you mean: \"name\""
       ]
     )
   end
@@ -94,6 +94,24 @@ RSpec.describe "basic features" do
     end
     notepad.close!
     expect(output_buffer.lines).to eq([])
-    expect(interactive_buffer.lines[1..-1]).to eq(["=>\tcharacter", "=>\tfirst-name", "=>\tlast-name", "=>\tname"])
+    expect(interactive_buffer.lines[1..-1]).to eq(["character", "first-name", "last-name", "name"])
+  end
+  it "scenario 7: shell out commands" do
+    [
+      "`echo 'Cat'",
+      "`this-will-fail-because-no-one-has-this-command",
+      "`>echo 'Mouse'",
+    ].each do |text|
+      notepad.process(text: text)
+    end
+    notepad.close!
+    expect(output_buffer.lines).to eq(["Mouse"])
+    expect(interactive_buffer.lines[1..-1]).to eq(
+      [
+        "Cat",
+        "# Command Not Found: \"this-will-fail-because-no-one-has-this-command\"",
+        "Mouse"
+      ]
+    )
   end
 end
