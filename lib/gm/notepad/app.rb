@@ -1,21 +1,25 @@
 require 'dry-initializer'
 require 'gm/notepad/container'
+require 'gm/notepad/line_renderer'
 require 'gm/notepad/throughput_text'
+require 'gm/notepad/input_processor'
 
 module Gm
   module Notepad
     # Responsible for recording entries and then dumping them accordingly.
     class App
       extend Dry::Initializer
-      option :renderer, default: -> { Container.resolve(:renderer) }
-      option :input_processor, default: -> { Container.resolve(:input_processor) }
+      option :table_registry, default: -> { Container.resolve(:table_registry) }, reader: :private
       option :report_config, default: -> { Container.resolve(:config).report_config }, reader: :private
       option :list_tables, default: -> { Container.resolve(:config).list_tables }, reader: :private
 
-      def initialize(*args)
+      def initialize(*args, input_processor: nil, renderer: nil)
         super
+        @renderer = renderer || LineRenderer.new(table_registry: table_registry)
+        @input_processor = input_processor || InputProcessor.new(table_registry: table_registry)
         open!
       end
+      attr_reader :renderer, :input_processor
 
       def process(text:)
         output = input_processor.convert_to_output(input: text)

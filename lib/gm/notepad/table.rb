@@ -15,6 +15,7 @@ module Gm
 
       def initialize(*args)
         super
+        @table = {}
         set_null_table_column_set!
         process(lines: lines)
       end
@@ -89,7 +90,6 @@ module Gm
 
       STARTS_WITH_COMMENT_REGEXP = %r{\A#}
       def process(lines:)
-        @table = {}
         lines.each do |line|
           line = line.strip
           # Handle Comment

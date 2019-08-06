@@ -5,7 +5,7 @@ module Gm
       # Responsible for teasing apart the table logic
       class TableLookup
         def initialize(text:, roll_dice: false)
-          @text = text
+          @text = text.strip
           @role_dice = false
           @parameters = {}
           extract_parameters!

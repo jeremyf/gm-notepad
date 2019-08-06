@@ -24,8 +24,6 @@ module Gm
         instance_exec(&block) if block_given?
       end
 
-      attr_reader :line_evaluator, :registry
-
       def table_names
         registry.keys.sort
       end

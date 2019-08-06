@@ -6,11 +6,6 @@ module Gm
     class Container
       extend Dry::Container::Mixin
 
-      register "input_processor" do
-        require 'gm/notepad/input_processor'
-        InputProcessor.new
-      end
-
       register "config" do
         require 'gm/notepad/config'
         Config
@@ -19,11 +14,6 @@ module Gm
       register "table_registry" do
         require 'gm/notepad/table_registry'
         TableRegistry.build_and_load
-      end
-
-      register "renderer" do
-        require 'gm/notepad/line_renderer'
-        LineRenderer.new
       end
 
       register "input_handler_registry" do

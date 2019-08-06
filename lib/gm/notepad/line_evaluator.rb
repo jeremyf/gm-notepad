@@ -10,30 +10,35 @@ module Gm
     class LineEvaluator
       extend Dry::Initializer
       option :table_registry, default: -> { Container.resolve(:table_registry) }, reader: :private
+      option :time_to_live, default: -> { Container.resolve(:config).time_to_live }, reader: :private
 
-      TABLE_NAME_REGEXP = %r{(?<table_name_container>\{(?<table_name>[^\{\}]+)\})}
       def call(line:, expand_line: true)
         input = ThroughputText.new(original_text: line, table_registry: table_registry)
         return input unless expand_line
-        parse_table(input: input)
-        parse_dice(input: input)
+        parse(input: input)
         input
       end
 
       private
 
-      def parse_table(input:)
-        while match = input.match(TABLE_NAME_REGEXP)
-          table_lookup = Parameters::TableLookup.new(text: match[:table_name].strip, roll_dice: true)
-          entry = table_registry.lookup(**table_lookup.parameters)
-          input.sub!(match[:table_name_container], entry)
-        end
-      end
-      DICE_REGEXP = %r{(?<dice_container>\[(?<dice>[^\]]+)\])}
-      def parse_dice(input:)
-        while match = input.match(DICE_REGEXP)
-          evaluated_dice = Evaluators::DiceEvaluator.call(text: match[:dice], fallback: "(#{match[:dice]})")
-          input.sub!(match[:dice_container], evaluated_dice)
+      TEXT_TO_EXPAND_REGEXP = %r{(?<text_container>\{(?<text>[^\{\}]+)\})}
+      def parse(input:)
+        lives = 0
+        while match = input.match(TEXT_TO_EXPAND_REGEXP)
+          lives += 1
+          if lives > time_to_live
+            raise ExceededTimeToLiveError.new(text: input.original_text, time_to_live: time_to_live, text_when_time_to_live_exceeded: input.to_s)
+          end
+          rolled_text = Evaluators::DiceEvaluator.call(text: match[:text])
+          # We sent the text through a dice roller. It came back unchanged, therefore
+          # the text is not a dice expression. Now expand the table.
+          if rolled_text == match[:text]
+            table_lookup = Parameters::TableLookup.new(text: match[:text], roll_dice: true)
+            entry = table_registry.lookup(**table_lookup.parameters)
+            input.sub!(match[:text_container], entry)
+          else
+            input.sub!(match[:text_container], rolled_text)
+          end
         end
       end
     end

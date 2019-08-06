@@ -65,6 +65,7 @@ module Gm
       option :to_interactive
       option :to_output
       option :to_filesystem, default: -> { false }
+      option :table_name, default: -> { nil }
       option :expand_line, default: -> { true }
       option :table_registry, default: -> { Container.resolve(:table_registry) }, reader: :private
 

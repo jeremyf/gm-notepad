@@ -11,6 +11,7 @@ module Gm
       option :with_timestamp, default: -> { Container[:config].with_timestamp }
       option :interactive_buffer, type: -> (buffer, renderer) { BufferWrapper.for_interactive(buffer: buffer) }, default: -> { Container[:config].interactive_buffer }
       option :output_buffer, type: -> (buffer, renderer) { BufferWrapper.for_output(buffer: buffer) }, default: -> { Container[:config].output_buffer }
+      option :table_registry, default: -> { Container.resolve(:table_registry) }
 
       def render(output:, as_of: Time.now)
         output.evaluate!
@@ -21,6 +22,10 @@ module Gm
         output.lines_for_rendering.each do |line|
           next unless line.to_output
           render_output(line, as_of: as_of)
+        end
+        output.lines_for_rendering.each do |line|
+          next unless line.to_filesystem
+          render_filesystem(line)
         end
       end
 
@@ -48,6 +53,14 @@ module Gm
       def render_interactive(lines)
         each_expanded_line(lines: lines) do |line|
           interactive_buffer.puts("=>\t#{line}")
+        end
+      end
+
+      def render_filesystem(lines)
+        return unless lines.table_name
+        table_name = lines.table_name
+        each_expanded_line(lines: lines) do |line|
+          table_registry.append(table_name: table_name, line: line, write: true)
         end
       end
 

@@ -20,5 +20,14 @@ module Gm
       end
       alias to_buffer_message to_s
     end
+
+    class ExceededTimeToLiveError < RuntimeError
+      attr_reader :text_when_time_to_live_exceeded
+      def initialize(text:, time_to_live:, text_when_time_to_live_exceeded:)
+        @text_when_time_to_live_exceeded = text_when_time_to_live_exceeded
+        super(%(Expanding the given text "#{text}" exceed the time to live of #{time_to_live}))
+      end
+      alias to_buffer_message to_s
+    end
   end
 end

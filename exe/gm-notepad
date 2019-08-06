@@ -39,6 +39,10 @@ OptionParser.new do |options|
     config[:table_extension] = table_extension
   end
 
+  options.on("-lTTL", "--time_to_live=TTL", Integer, "Per line of input, how many times to allow text expansion (Default: #{defaults.time_to_live.inspect})") do |time_to_live|
+    config[:time_to_live] = time_to_live
+  end
+
   options.on("-dDELIM", "--delimiter=DELIM", String, "Default column delimiter for tables (Default: #{defaults.column_delimiter.inspect})") do |column_delimiter|
     map = { "t" => "\t" }
     config[:column_delimiter] = map.fetch(column_delimiter) { column_delimiter }

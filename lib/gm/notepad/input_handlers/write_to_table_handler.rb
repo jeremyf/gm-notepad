@@ -35,18 +35,7 @@ module Gm
           else
             expand_line = true
           end
-          input.render_current_text(to_interactive: true  , to_output: false, to_filesystem: true, expand_line: expand_line)
-        end
-
-        def lines
-          if index
-          elsif grep
-          end
-          if expand_line
-          else
-          end
-          table_registry.append(table_name: table_name, line: input.text_to_evaluate, write: true)
-          []
+          input.for_rendering(table_name: table_name, text: input.text_to_evaluate, to_interactive: true  , to_output: false, to_filesystem: true, expand_line: expand_line)
         end
       end
     end

@@ -4,7 +4,7 @@ module Gm
     module Evaluators
       module DiceEvaluator
         def self.call(text:, fallback: text)
-          if parsed_text = Dice.parse(text)
+          if parsed_text = Dice.parse(text.strip)
             parsed_text.evaluate.to_s
           else
             fallback.to_s

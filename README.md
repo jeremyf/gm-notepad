@@ -184,7 +184,7 @@ You can also roll within a table. In the `gm-notepad` type the following:
 You won't get a "SamWise" or "FrodoWise" (or "FrodoWiseWise").
 
 To wrap up our first session, let's try one more thing. In your `gm-notepad`
-session type the following: `{first-name} owes [2d6]gp to {first-name}`:
+session type the following: `{first-name} owes {2d6}gp to {first-name}`:
 
 ```console
 Frodo owes 3gp to SamWise
@@ -213,6 +213,7 @@ columns. _I am still working on retrieving by column names as well as rendering 
 - [ ] Write expected interface document
 - [X] Handle `{critical[5]}`
 - [X] Allow `{critical[{2d6+1}]}` to roll the dice then lookup the value in the critical table
+- [X] Handle `{critical[{2d6}]} for {2d6} damage`
 - [ ] For `{critical[{2d6+1}]}`, how to handle out of bounds
 - [X] Skip table lines that begin with `#`
 - [X] Skip processing input lines that begin with `#`
@@ -223,7 +224,7 @@ columns. _I am still working on retrieving by column names as well as rendering 
 - [ ] Normalize `WriteToTableHandler` to deliver on `grep` and `index` behavior
 - [X] Gracefully handle requesting an entry from a table with an index that does not exist (e.g. with test data try `+name[23]`)
 - [X] Gracefully handle `+name[]`, where "name" is a registered table
-- [ ] Add time to live for line expansion (to prevent infinite loops); I suspect 100 to be reasonable
+- [X] Add time to live for line expansion (to prevent infinite loops); I suspect 100 to be reasonable
 - [X] Enable "up" and "down" to scroll through history
 - [X] Add index name when rendering table entries
 - [ ] Gracefully handle loading a malformed data file (maybe?)
