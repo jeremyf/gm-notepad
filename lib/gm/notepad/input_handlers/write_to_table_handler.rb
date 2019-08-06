@@ -9,7 +9,6 @@ module Gm
           return true if input.match(/^\</)
         end
 
-        attr_accessor :index, :grep, :table_name, :line
         NON_EXPANDING_CHARATER = '!'.freeze
         WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<index>[^\]]+)\])}
         WITH_GREP_REGEXP = %r{(?<declaration>\/(?<grep>[^\/]+)/)}
@@ -20,12 +19,12 @@ module Gm
             table_name = match[:table_name]
             if index_match = WITH_INDEX_REGEXP.match(table_name)
               table_name = table_name.sub(index_match[:declaration], '')
-              self.index = index_match[:index]
+              index = index_match[:index]
             elsif grep_match = WITH_GREP_REGEXP.match(table_name)
               table_name = table_name.sub(grep_match[:declaration], '')
-              self.grep = grep_match[:grep]
+              grep = grep_match[:grep]
             end
-            self.table_name = table_name.downcase
+            table_name = table_name.downcase
           else
             raise "I don't know what to do"
           end
