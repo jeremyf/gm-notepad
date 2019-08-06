@@ -220,8 +220,7 @@ columns. _I am still working on retrieving by column names as well as rendering 
 - [X] Allow configuration to specify table delimiter
 - [ ] Raise load error if table index is a "dice" expression
 - [X] Allow configuration for where to dump data
-- [ ] Normalize `WriteToTableHandler` to use a renderer
-- [ ] Normalize `WriteToTableHandler` to deliver on `grep` and `index` behavior
+- [X] Normalize `WriteToTableHandler` to use a renderer
 - [X] Gracefully handle requesting an entry from a table with an index that does not exist (e.g. with test data try `+name[23]`)
 - [X] Gracefully handle `+name[]`, where "name" is a registered table
 - [X] Add time to live for line expansion (to prevent infinite loops); I suspect 100 to be reasonable
@@ -238,9 +237,9 @@ columns. _I am still working on retrieving by column names as well as rendering 
 - [X] Support `\{\{table}-name}` You should be able to do `\{\{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
 - [X] Ensure index names are lower-case
 - [ ] Hit 100% spec coverage
-- [ ] Create a "To Render Object"; When you parse the input, you push relevant lines to that "To Render Object". When you look at a table, you want to know what the column names are.
+- [X] Create a "To Render Object"; When you parse the input, you push relevant lines to that "To Render Object". When you look at a table, you want to know what the column names are.
 - [X] Remove "defer" printing concept
-- [ ] Add ability to shell out; I would love to leverage the [swnt](https://github.com/nboughton/swnt) command line tool
+- [X] Add ability to shell out; I would love to leverage the [swnt](https://github.com/nboughton/swnt) command line tool
 
 ### Stretch TODO
 
@@ -255,3 +254,4 @@ columns. _I am still working on retrieving by column names as well as rendering 
 - [ ] Add force write results to `output`
 - [ ] Add option to dump all tables to the given directory
 - [ ] Add config that expands dice results while including the requested roll
+- [ ] Normalize `WriteToTableHandler` to deliver on `grep` and `index` behavior

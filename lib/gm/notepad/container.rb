@@ -26,9 +26,11 @@ module Gm
         require "gm/notepad/input_handlers/query_table_names_handler"
         require "gm/notepad/input_handlers/write_to_table_handler"
         require "gm/notepad/input_handlers/write_line_handler"
+        require "gm/notepad/input_handlers/shell_out_handler"
         InputHandlerRegistry.new do |registry|
           registry.register(handler: InputHandlers::HelpHandler)
           registry.register(handler: InputHandlers::CommentHandler)
+          registry.register(handler: InputHandlers::ShellOutHandler)
           registry.register(handler: InputHandlers::QueryTableHandler)
           registry.register(handler: InputHandlers::QueryTableNamesHandler)
           registry.register(handler: InputHandlers::WriteToTableHandler)
