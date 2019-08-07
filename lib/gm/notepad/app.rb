@@ -15,6 +15,9 @@ module Gm
 
       def initialize(*args, input_processor: nil, renderer: nil)
         super
+        # Note: I could note use Dry::Initializer.option with Container as I ended
+        # up with multiple table registry objects created. Which is why I'm using the
+        # keyword's with nil, so I can set two elements after the table_registry is "resolved"
         @renderer = renderer || LineRenderer.new(table_registry: table_registry)
         @input_processor = input_processor || InputProcessor.new(table_registry: table_registry)
         open!
