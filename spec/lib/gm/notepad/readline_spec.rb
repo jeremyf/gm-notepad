@@ -5,6 +5,10 @@ require 'gm/notepad/table_registry'
 module Gm
   module Notepad
     RSpec.describe Readline do
+      describe '#input_getter' do
+        subject { described_class.input_getter }
+        it { is_expected.to respond_to(:call) }
+      end
       describe '#completion_function' do
         let(:table_registry) { TableRegistry.new }
         let(:tables) do
