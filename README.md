@@ -248,7 +248,7 @@ You can then immediately access the `junk` table, by typing the following: `+jun
 - [X] Handle `{critical[5]}`
 - [X] Allow `{critical[{2d6+1}]}` to roll the dice then lookup the value in the critical table
 - [X] Handle `{critical[{2d6}]} for {2d6} damage`
-- [ ] For `{critical[{2d6+1}]}`, how to handle out of bounds
+- [X] For `{critical[{2d6+1}]}`, how to handle out of bounds
 - [X] Skip table lines that begin with `#`
 - [X] Skip processing input lines that begin with `#`
 - [X] Allow configuration to specify table delimiter

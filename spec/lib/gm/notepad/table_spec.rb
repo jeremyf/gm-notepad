@@ -41,6 +41,19 @@ module Gm
         end
       end
 
+      describe "#lookup" do
+        describe "when a line has 'or more'" do
+          let(:lines) { ["# Comment", "1 or less | Small", "2 | Medium", "3 or more | Large"] }
+          it "with an or more" do
+            expect(table.lookup(index: "1").to_s).to eq("[1 or less]\tSmall")
+            expect(table.lookup(index: "2").to_s).to eq("[2]\tMedium")
+            expect(table.lookup(index: "-1").to_s).to eq("[1 or less]\tSmall")
+            expect(table.lookup(index: "3").to_s).to eq("[3 or more]\tLarge")
+            expect(table.lookup(index: "4").to_s).to eq("[3 or more]\tLarge")
+          end
+        end
+      end
+
       context "when initialized with a table that has overlap" do
         subject { table }
         let(:lines) { ["1|a", "1|b"] }
@@ -88,7 +101,7 @@ module Gm
         end
 
         it "will use a random value (within range) for the index" do
-          expect(subject.lookup).to be_a(TableEntry)
+          expect(subject.lookup).to be_a(TableEntry::Base)
         end
 
         it 'will not register lines starting with "#"' do

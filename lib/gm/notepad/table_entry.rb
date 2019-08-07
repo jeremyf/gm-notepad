@@ -4,58 +4,95 @@ require 'gm/notepad/container'
 module Gm
   module Notepad
     TABLE_ENTRY_RANGE_MARKER = "-".freeze
-    class TableEntry
-      extend Dry::Initializer
-      option :line, proc(&:to_s)
-      option :table
-      option :column_delimiter, default: -> { Container.resolve(:config).column_delimiter }
-
-      def initialize(*args)
-        super
-        row = line.split(column_delimiter)
-        self.index = row.shift
-        self.cells = row
-      end
-
-      include Comparable
-      def <=>(other)
-        to_str <=> String(other)
-      end
-
-      def lookup(cell:)
-        index = table.column_index_for(cell: cell)
-        cells[index] || cells[0]
-      end
-
-      NUMBER_RANGE_REGEXP = %r{(?<left>\d+) *- *(?<right>\d+)}
-      def lookup_range
-        if match = NUMBER_RANGE_REGEXP.match(index)
-          (match[:left].to_i..match[:right].to_i).map(&:to_s)
+    module TableEntry
+      OR_LESS_REGEXP = %r{\A(?<floor>\d+) or less}i.freeze
+      OR_MORE_REGEXP = %r{\A(?<ceiling>\d+) or more}i.freeze
+      def self.new(line:, table:, **kwargs)
+        if match = line.match(OR_LESS_REGEXP)
+          OrLess.new(line: line, table: table, floor: match[:floor], **kwargs)
+        elsif match = line.match(OR_MORE_REGEXP)
+          OrMore.new(line: line, table: table, ceiling: match[:ceiling], **kwargs)
         else
-          [index]
+          Base.new(line: line, table: table, **kwargs)
         end
       end
+      class Base
+        extend Dry::Initializer
+        option :line, proc(&:to_s)
+        option :table
+        option :column_delimiter, default: -> { Container.resolve(:config).column_delimiter }
 
-      attr_reader :index, :cells
+        def initialize(*args)
+          super
+          row = line.split(column_delimiter)
+          self.index = row.shift
+          self.cells = row
+        end
 
-      def entry
-        cells.join("\t")
+        include Comparable
+        def <=>(other)
+          to_str <=> String(other)
+        end
+
+        def lookup(cell:)
+          index = table.column_index_for(cell: cell)
+          cells[index] || cells[0]
+        end
+
+        NUMBER_RANGE_REGEXP = %r{(?<left>\d+) *- *(?<right>\d+)}
+        def lookup_range
+          if match = NUMBER_RANGE_REGEXP.match(index)
+            (match[:left].to_i..match[:right].to_i).map(&:to_s)
+          else
+            [index]
+          end
+        end
+
+        attr_reader :index, :cells
+
+        def entry
+          cells.join("\t")
+        end
+        alias entry_column entry
+
+        def to_s
+          "[#{index}]\t#{entry}"
+        end
+        alias to_str entry
+
+        private
+
+        def index=(input)
+          @index = input.strip.downcase.freeze
+        end
+
+        def cells=(input)
+          @cells = Array(input).map { |i| i.strip.freeze }.freeze
+        end
       end
-      alias entry_column entry
+      class OrLess < Base
+        def initialize(floor:, **kwargs)
+          super
+          @floor = floor
+          table.set_or_less_entry(self)
+        end
+        attr_reader :floor
 
-      def to_s
-        "[#{index}]\t#{entry}"
+        def include?(index)
+          floor.to_i >= index.to_i
+        end
       end
-      alias to_str entry
+      class OrMore < Base
+        def initialize(ceiling:, **kwargs)
+          super
+          @ceiling = ceiling
+          table.set_or_more_entry(self)
+        end
+        attr_reader :ceiling
 
-      private
-
-      def index=(input)
-        @index = input.strip.downcase.freeze
-      end
-
-      def cells=(input)
-        @cells = Array(input).map { |i| i.strip.freeze }.freeze
+        def include?(index)
+          ceiling.to_i <= index.to_i
+        end
       end
     end
   end

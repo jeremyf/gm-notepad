@@ -16,6 +16,8 @@ module Gm
       def initialize(*args)
         super
         @table = {}
+        @or_less = []
+        @or_more = []
         set_null_table_column_set!
         process(lines: lines)
       end
@@ -63,13 +65,27 @@ module Gm
         end
       end
 
+      def set_or_less_entry(table_entry)
+        @or_less = table_entry
+      end
+
+      def set_or_more_entry(table_entry)
+        @or_more = table_entry
+      end
+
       private
 
       def lookup_entry_by(index:)
         begin
           @table.fetch(index.to_s)
         rescue KeyError
-          raise MissingTableEntryError.new(table_name: table_name, index: index.to_s)
+          if @or_less.include?(index.to_s)
+            @or_less
+          elsif @or_more.include?(index.to_s)
+            @or_more
+          else
+            raise MissingTableEntryError.new(table_name: table_name, index: index.to_s)
+          end
         end
       end
 

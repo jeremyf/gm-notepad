@@ -2,4 +2,4 @@
 2 | Merry
 3 | Pippin
 4 | Sam
-5-6 | {first-name}Wise
+5 or more | {first-name}Wise
