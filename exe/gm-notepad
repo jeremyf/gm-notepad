@@ -57,11 +57,15 @@ OptionParser.new do |options|
   options.separator("")
   options.separator("Color options:")
 
-  options.on("-i", "--skip-interactive-color", "Disable color rendering for interactive buffer (Default: #{(!defaults.interactive_color).inspect})") do |interactive_color|
-    config[:interactive_color] = !interactive_color
+  options.on("-iCOLOR", "--interactive-color=COLOR", "Disable color rendering for interactive buffer (Default: #{(defaults.interactive_color).inspect})") do |interactive_color|
+    if ["false", "f" ,"no", "n"].include?(interactive_color.downcase)
+      config[:interactive_color] = false
+    else
+      config[:interactive_color] = interactive_color
+    end
   end
 
-  options.on("-oCOLOR", "--with-output-color=COLOR", "Enable color rendering for output buffer (Default: #{(!defaults.output_color).inspect})") do |output_color|
+  options.on("-oCOLOR", "--with-output-color=COLOR", "Enable color rendering for output buffer (Default: #{(defaults.output_color).inspect})") do |output_color|
     config[:output_color] = output_color
   end
 
