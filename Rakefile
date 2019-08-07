@@ -17,7 +17,7 @@ namespace :commitment do
     lastrun_filename = File.expand_path('../coverage/.last_run.json', __FILE__)
     if File.exist?(lastrun_filename)
       coverage_percentage = JSON.parse(File.read(lastrun_filename)).fetch('result').fetch('covered_percent').to_i
-      EXPECTED_COVERAGE_GOAL = 99
+      EXPECTED_COVERAGE_GOAL = 100
       if coverage_percentage < EXPECTED_COVERAGE_GOAL
         abort("ERROR: Code Coverage Goal Not Met:\n\t#{coverage_percentage}%\tExpected\n\t#{EXPECTED_COVERAGE_GOAL}%\tActual")
       else

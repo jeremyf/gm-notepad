@@ -8,7 +8,7 @@ module Gm
   module Notepad
     class Table
       extend Dry::Initializer
-      option :table_name, proc(&:to_s)
+      option :table_name, -> (value) { value.to_s.downcase.strip }
       option :filename, optional: true
       option :lines, type: method(:Array)
       option :index_entry_prefix_regexp, default: -> { Container.resolve(:config).index_entry_prefix_regexp }
@@ -91,13 +91,6 @@ module Gm
 
       def lookup_random_entry
         @table.values[random_index]
-      end
-
-      attr_accessor :filename
-      attr_reader :table_name
-
-      def table_name=(input)
-        @table_name = input.downcase
       end
 
       def random_index

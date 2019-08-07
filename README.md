@@ -270,7 +270,7 @@ You can then immediately access the `junk` table, by typing the following: `+jun
 - [X] Gracefully handle cell lookup when named cell for entry is not found
 - [X] Support `\{\{table}-name}` You should be able to do `\{\{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
 - [X] Ensure index names are lower-case
-- [ ] Hit 100% spec coverage
+- [X] Hit 100% spec coverage
 - [X] Create a "To Render Object"; When you parse the input, you push relevant lines to that "To Render Object". When you look at a table, you want to know what the column names are.
 - [X] Remove "defer" printing concept
 - [X] Add ability to shell out; I would love to leverage the [swnt](https://github.com/nboughton/swnt) command line tool
