@@ -281,10 +281,10 @@ You can then immediately access the `junk` table, by typing the following: `+jun
 - [ ] Allow configuration to specify colors
 - [ ] Aspiration: Enable `\{\{monster}[ac]}` to pick a random monster and then fetch that monster's AC
 - [ ] Allow option to add a table to memory (instead of writing the table)
-- [ ] Add auto table expansion for "{}"
-- [ ] Add auto table expansion for "+"
+- [X] Add auto table expansion for "{}"
+- [X] Add auto table expansion for "+"
 - [ ] Add auto index expansion for "["
-- [ ] Determine feasibility of adding dice to the `{}` expansion syntax (instead of the `[]` syntax)
+- [X] Determine feasibility of adding dice to the `{}` expansion syntax (instead of the `[]` syntax)
 - [ ] Add force write results to `output`
 - [ ] Add option to dump all tables to the given directory
 - [ ] Add config that expands dice results while including the requested roll
