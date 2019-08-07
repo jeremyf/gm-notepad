@@ -17,6 +17,8 @@ module Gm
             ["name[{1d1}]//", { index: "{1d1}", table_name: "name//" }],
             ["name[{1d1}][1d1]", { cell: "1d1", index: "{1d1}", table_name: "name" }],
             ["name[{1d1}][1d1]", { cell: "1d1", index: "{1d1}", table_name: "name" }],
+            ["name[{1d1}][]", { index: "{1d1}", table_name: "name" }],
+            ["name[{1d1}][]", { index: "{1d1}", table_name: "name" }],
             ["name[][1d1]", { cell: "1d1", table_name: "name" }],
             ["name[][]", { table_name: "name" }],
           ].each_with_index do |(given, expected), index|

@@ -274,6 +274,7 @@ You can then immediately access the `junk` table, by typing the following: `+jun
 - [X] Create a "To Render Object"; When you parse the input, you push relevant lines to that "To Render Object". When you look at a table, you want to know what the column names are.
 - [X] Remove "defer" printing concept
 - [X] Add ability to shell out; I would love to leverage the [swnt](https://github.com/nboughton/swnt) command line tool
+- [ ] Refine row/column grep behavior, as it is pre-dates the idea of a table having columns
 
 ### Stretch TODO
 

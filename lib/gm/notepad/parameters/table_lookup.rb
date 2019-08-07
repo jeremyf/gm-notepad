@@ -35,6 +35,8 @@ module Gm
           end
         end
 
+        CELL_AND_INDEX_DECLARED_REGEXP = %r{(?<declaration>\[(?<index>[^\[\]]*)\]\[(?<cell>[^\[\]]*)\])}
+
         WITH_GREP_REGEXP = %r{(?<declaration>\/(?<found>[^\/]+)/)}
         WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<found>[^\]]+)\])}
         CELL_WITHOUT_INDEX_REGEXP = %r{(?<declaration>\[\]\[(?<found>[^\]]+)\])}
@@ -42,9 +44,14 @@ module Gm
         WITH_EMPTY_INDEX_REGEX = %r{(?<declaration>\[\])}
         WITH_EMPTY_GREP_REGEX = %r{(?<declaration>\/\/)}
 
+        # TODO: Revisit this method to see if I can remove some pre-amble
         def extract_parameters!
           text = @text
-          if match = EMPTY_INDEX_EMPTY_CELL_REGEXP.match(text)
+          if match = CELL_AND_INDEX_DECLARED_REGEXP.match(text)
+            self.index = match[:index] if match[:index].present?
+            self.cell = match[:cell] if match[:cell].present?
+            text = text.sub(match[:declaration], '')
+          elsif match = EMPTY_INDEX_EMPTY_CELL_REGEXP.match(text)
             text = text.sub(match[:declaration], '')
           elsif match = CELL_WITHOUT_INDEX_REGEXP.match(text)
             text = text.sub(match[:declaration], '')
@@ -54,13 +61,6 @@ module Gm
           elsif match = WITH_INDEX_REGEXP.match(text)
             text = text.sub(match[:declaration], '')
             self.index = match[:found]
-            # Moving on to the cell
-            if match = WITH_EMPTY_INDEX_REGEX.match(text)
-              text = text.sub(match[:declaration], '')
-            elsif match = WITH_INDEX_REGEXP.match(text)
-              text = text.sub(match[:declaration], '')
-              self.cell = match[:found]
-            end
           elsif match = WITH_EMPTY_GREP_REGEX.match(text)
             text = text.sub(match[:declaration], '')
           elsif match = WITH_GREP_REGEXP.match(text)
