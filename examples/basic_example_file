@@ -5,7 +5,7 @@
 ?
 
 # Should roll the dice
-[2d6] goblins attack
+{2d6} goblins attack
 
 # Should render to interactive the given tables
 +
