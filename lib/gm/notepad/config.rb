@@ -17,7 +17,7 @@ module Gm
       setting :report_config, false, reader: true
       setting :skip_readlines, false, reader: true
       setting :table_extension, '.txt', reader: true
-      setting :time_to_live, 20, reader: true
+      setting :time_to_live, 100, reader: true
       setting :with_timestamp, false, reader: true
 
       def self.index_entry_prefix_regexp

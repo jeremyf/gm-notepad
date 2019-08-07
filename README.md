@@ -64,7 +64,7 @@ Options:
     -p, --path=PATH                  Path(s) for {table_name}.<config.table_extension> files (Default: ["."])
     -f, --filesystem_directory=DIR   Path to dump tables (Default: ".")
     -x, --table_extension=EXT        Extension to use for selecting tables (Default: ".txt")
-        --time_to_live=TTL           Per line of input, how many times to allow text expansion (Default: 20)
+        --time_to_live=TTL           Per line of input, how many times to allow text expansion (Default: 100)
     -d, --delimiter=DELIM            Default column delimiter for tables (Default: "|")
 
 Output options:
@@ -98,7 +98,7 @@ Which writes the following to the `interactive` buffer (eg. `$stderr`)::
 #   config[:report_config] = true
 #   config[:skip_readlines] = false
 #   config[:table_extension] = ".txt"
-#   config[:time_to_live] = 20
+#   config[:time_to_live] = 100
 #   config[:with_timestamp] = false
 ```
 

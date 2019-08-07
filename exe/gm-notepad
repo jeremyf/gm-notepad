@@ -44,7 +44,7 @@ OptionParser.new do |options|
   end
 
   options.on("-dDELIM", "--delimiter=DELIM", String, "Default column delimiter for tables (Default: #{defaults.column_delimiter.inspect})") do |column_delimiter|
-    map = { "t" => "\t" }
+    map = { "t" => "\t", '\t' => "\t" }
     config[:column_delimiter] = map.fetch(column_delimiter) { column_delimiter }
   end
 
