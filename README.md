@@ -10,6 +10,10 @@ Next, you'll want to install the `gm-notepad` gem.
 
 `$ gem install gm-notepad`
 
+## Datasets
+
+* `[gm-notepad-swn-free](//github.com/jeremyf/gm-notepad-swn-free)` a subset of tables available in [Stars without Number: Revised Edition](https://www.drivethrurpg.com/product/226996/Stars-Without-Number-Revised-Edition?affiliate_id=318171)
+
 ## Background
 
 On a commute home from work, while listening to [Judd Karlman's "Daydreaming about Dragons" podcast](https://anchor.fm/daydreaming-about-dragons/)
