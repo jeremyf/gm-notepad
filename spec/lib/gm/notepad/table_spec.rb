@@ -90,10 +90,37 @@ module Gm
       end
 
       context "#lookup" do
+        let(:lines) do
+          ["1 | Tokyo | Japan","2 | Berlin | Germany","3-4 | Dhaka | Bangladesh","5-10 | Mumbai | India"]
+        end
         subject { table }
         it "allows for lookup by index" do
-          expect(subject.lookup(index: "1").to_s).to eq("[1]\tTokyo")
-          expect(subject.lookup(index: "7").to_s).to eq("[5-10]\tMumbai")
+          expect(subject.lookup(index: "1").to_s).to eq("[1]\tTokyo\tJapan")
+          expect(subject.lookup(index: "7").to_s).to eq("[5-10]\tMumbai\tIndia")
+        end
+
+        describe 'by index and by cell' do
+          describe 'with un-named columns' do
+            it "treats for lookup by index and cell" do
+              expect(subject.lookup(index: "1", cell: "1").to_s).to eq("Tokyo")
+              expect(subject.lookup(index: "7", cell: "2").to_s).to eq("India")
+            end
+          end
+          describe 'with named columns' do
+            let(:lines) do
+              ["INDEX | City | Country", "1 | Tokyo | Japan","2 | Berlin | Germany","3-4 | Dhaka | Bangladesh","5-10 | Mumbai | India"]
+            end
+
+            it "treats uses the named cell" do
+              expect(subject.lookup(index: "1", cell: "city").to_s).to eq("Tokyo")
+              expect(subject.lookup(index: "7", cell: "country").to_s).to eq("India")
+            end
+
+            it "treats can fall back to the ordinal" do
+              expect(subject.lookup(index: "1", cell: "1").to_s).to eq("Tokyo")
+              expect(subject.lookup(index: "7", cell: "country").to_s).to eq("India")
+            end
+          end
         end
 
         it "raises MissingTableEntryError for missing index" do

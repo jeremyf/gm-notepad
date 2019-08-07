@@ -12,7 +12,9 @@ module Gm
         end
 
         def column_index_for(cell:)
-          cell.to_i
+          # In the file, we have cell 0 is the index. This is hidden from the cell lookup, so I
+          # want to internally treat the given cell as one less.
+          cell.to_i - 1
         end
       end
 

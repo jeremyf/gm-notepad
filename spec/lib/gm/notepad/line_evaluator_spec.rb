@@ -36,7 +36,7 @@ module Gm
           [
             ["{critical[1d1]}", "rolled on table", true],
             ["{critical[{3d1}]}", "Missing index \"3\" for table \"critical\"", true],
-            ["{multi-column[][1]}", "Cell 1", true],
+            ["{multi-column[][1]}", "Cell 0", true],
             ["{multi-column}", "Cell 0\tCell 1", true],
             ["{1d1}", "1", true],
             ["{hello} {world}", "{hello} {world}", false],

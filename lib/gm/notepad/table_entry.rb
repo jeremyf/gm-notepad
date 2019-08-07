@@ -36,7 +36,13 @@ module Gm
 
         def lookup(cell:)
           index = table.column_index_for(cell: cell)
-          cells[index] || cells[0]
+          if index.nil?
+            # In the file, we have cell 0 is the index. This is hidden from the cell lookup, so I
+            # want to internally treat the given cell as one less.
+            cells[cell.to_i - 1]
+          else
+            cells[index] || cells[0]
+          end
         end
 
         NUMBER_RANGE_REGEXP = %r{(?<left>\d+) *- *(?<right>\d+)}
