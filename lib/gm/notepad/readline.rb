@@ -4,10 +4,28 @@ module Gm
     # A configuration module for the Readline module
     module Readline
 
-      # Check history for existing matches
-      completion_function = proc do |string|
+      QUERY_TABLE_NAMES_PREFIX = /^\+(?<table_name>.*)/.freeze
+      TABLE_EXPANSION_REGEXP = %r{(?<table_container>\{(?<table_name>.*))}.freeze
+      def self.completion_function(string, table_registry: Container.resolve(:table_registry))
+        entries = []
+        if match = string.match(QUERY_TABLE_NAMES_PREFIX)
+          entries += table_registry.table_names.grep(/^#{Regexp.escape(match[:table_name])}/).map { |name| "+#{name}" }
+        end
+        if match = string.match(TABLE_EXPANSION_REGEXP)
+          test_string = string.sub(match[:table_container], "{")
+          entries += table_registry.table_names.grep(/^#{Regexp.escape(match[:table_name])}/).map { |name| "#{test_string}#{name}}"}
+        end
+        entries += history_for(string)
+        entries.uniq.sort
+      end
+
+      def self.history_for(string)
         ::Readline::HISTORY.grep(/^#{Regexp.escape(string)}/)
       end
+
+      # Check history for existing matches
+      completion_function = method(:completion_function)
+
       if ::Readline.respond_to?("basic_word_break_characters=")
         ::Readline.basic_word_break_characters= " \t\n`><=;|&{("
       end
