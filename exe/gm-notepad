@@ -61,7 +61,7 @@ OptionParser.new do |options|
     config[:interactive_color] = !interactive_color
   end
 
-  options.on("-o", "--with-output-color", "Enable color rendering for output buffer (Default: #{(!defaults.output_color).inspect})") do |output_color|
+  options.on("-oCOLOR", "--with-output-color=COLOR", "Enable color rendering for output buffer (Default: #{(!defaults.output_color).inspect})") do |output_color|
     config[:output_color] = output_color
   end
 
