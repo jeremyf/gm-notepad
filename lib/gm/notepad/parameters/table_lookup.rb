@@ -39,8 +39,6 @@ module Gm
 
         WITH_GREP_REGEXP = %r{(?<declaration>\/(?<found>[^\/]+)/)}
         WITH_INDEX_REGEXP = %r{(?<declaration>\[(?<found>[^\]]+)\])}
-        CELL_WITHOUT_INDEX_REGEXP = %r{(?<declaration>\[\]\[(?<found>[^\]]+)\])}
-        EMPTY_INDEX_EMPTY_CELL_REGEXP = %r{(?<declaration>\[\]\[\])}
         WITH_EMPTY_INDEX_REGEX = %r{(?<declaration>\[\])}
         WITH_EMPTY_GREP_REGEX = %r{(?<declaration>\/\/)}
 
@@ -51,11 +49,6 @@ module Gm
             self.index = match[:index] if match[:index].present?
             self.cell = match[:cell] if match[:cell].present?
             text = text.sub(match[:declaration], '')
-          elsif match = EMPTY_INDEX_EMPTY_CELL_REGEXP.match(text)
-            text = text.sub(match[:declaration], '')
-          elsif match = CELL_WITHOUT_INDEX_REGEXP.match(text)
-            text = text.sub(match[:declaration], '')
-            self.cell = match[:found]
           elsif match = WITH_EMPTY_INDEX_REGEX.match(text)
             text = text.sub(match[:declaration], '')
           elsif match = WITH_INDEX_REGEXP.match(text)
