@@ -114,4 +114,24 @@ RSpec.describe "basic features" do
       ]
     )
   end
+  describe "scenario 8: writes table" do
+    after do
+      require 'fileutils'
+      FileUtils.rm(filename)
+    end
+    let(:table_name) { "silly" }
+    let(:filename) { File.expand_path(File.join(Gm::Notepad::Config.filesystem_directory, "#{table_name}#{Gm::Notepad::Config.table_extension}")) }
+    it "writes to the table" do
+      expect do
+        [
+          "<#{table_name}:1|string\\n2|putty"
+        ].each do |text|
+          notepad.process(text: text)
+        end
+        notepad.close!
+        expect(output_buffer.lines).to eq([])
+        expect(interactive_buffer.lines[1..-1]).to eq(["1|string", "2|putty"])
+      end.to change { File.exist?(filename) }.from(false).to(true)
+    end
+  end
 end
