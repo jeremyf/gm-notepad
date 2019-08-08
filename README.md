@@ -12,7 +12,7 @@ Next, you'll want to install the `gm-notepad` gem.
 
 ## Datasets
 
-* `[gm-notepad-swn-free](//github.com/jeremyf/gm-notepad-swn-free)` a subset of tables available in [Stars without Number: Revised Edition](https://www.drivethrurpg.com/product/226996/Stars-Without-Number-Revised-Edition?affiliate_id=318171)
+* [`gm-notepad-swn-free`](//github.com/jeremyf/gm-notepad-swn-free) a subset of tables available in [Stars without Number: Revised Edition](https://www.drivethrurpg.com/product/226996/Stars-Without-Number-Revised-Edition?affiliate_id=318171)
 
 ## Background
 
