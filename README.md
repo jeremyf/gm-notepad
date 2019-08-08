@@ -246,9 +246,12 @@ You can then immediately access the `junk` table, by typing the following: `+jun
 ## Todo
 
 - [ ] When printing tables, also print column names/indices
+- [ ] Write expected interface document
+- [ ] Raise load error if table index is a "dice" expression
+- [ ] Gracefully handle loading a malformed data file (maybe?)
+- [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
 - [X] Colorize puts to `interactive` buffer
 - [X] Disable colors as a configuration option
-- [ ] Write expected interface document
 - [X] Handle `{critical[5]}`
 - [X] Allow `{critical[{2d6+1}]}` to roll the dice then lookup the value in the critical table
 - [X] Handle `{critical[{2d6}]} for {2d6} damage`
@@ -256,7 +259,6 @@ You can then immediately access the `junk` table, by typing the following: `+jun
 - [X] Skip table lines that begin with `#`
 - [X] Skip processing input lines that begin with `#`
 - [X] Allow configuration to specify table delimiter
-- [ ] Raise load error if table index is a "dice" expression
 - [X] Allow configuration for where to dump data
 - [X] Normalize `WriteToTableHandler` to use a renderer
 - [X] Gracefully handle requesting an entry from a table with an index that does not exist (e.g. with test data try `+name[23]`)
@@ -264,12 +266,10 @@ You can then immediately access the `junk` table, by typing the following: `+jun
 - [X] Add time to live for line expansion (to prevent infinite loops); I suspect 100 to be reasonable
 - [X] Enable "up" and "down" to scroll through history
 - [X] Add index name when rendering table entries
-- [ ] Gracefully handle loading a malformed data file (maybe?)
 - [X] Add concept of history
 - [X] When expanding tables account for line expansion (via \n and \t)
 - [X] Separate the InputHandler into pre-amble (e.g. allow overrides to where we are writing, determine what command we are writing)
 - [X] Create a configuration object that captures the initial input (reduce passing around parameters and persisting copies of the config)
-- [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
 - [X] Add column handling `{table[][]}`
 - [X] Gracefully handle cell lookup when named cell for entry is not found
 - [X] Support `\{\{table}-name}` You should be able to do `\{\{culture}-name}` and first evaluate to `{arabic-name}` and then get a value from the `arabic-name` table
