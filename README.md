@@ -250,6 +250,7 @@ You can then immediately access the `junk` table, by typing the following: `+jun
 - [ ] Raise load error if table index is a "dice" expression
 - [ ] Gracefully handle loading a malformed data file (maybe?)
 - [ ] Add concept of "journal entry"; its not a table (perhaps) but something that you could capture notes.
+- [X] Add ability to pass a configuration file that includes parameters
 - [X] Colorize puts to `interactive` buffer
 - [X] Disable colors as a configuration option
 - [X] Handle `{critical[5]}`
@@ -283,6 +284,7 @@ You can then immediately access the `junk` table, by typing the following: `+jun
 ### Stretch TODO
 
 - [ ] Handle a `.gm-notepadrc` to inject default configurations
+- [ ] Extract `exe/gm-notepad` logic into a Runner, to provide better file configuration
 - [ ] Allow configuration to specify colors
 - [ ] Aspiration: Enable `\{\{monster}[ac]}` to pick a random monster and then fetch that monster's AC
 - [ ] Allow option to add a table to memory (instead of writing the table)

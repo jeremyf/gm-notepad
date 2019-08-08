@@ -25,7 +25,7 @@ OptionParser.new do |options|
     config[:report_config] = report_config
   end
 
-  options.on("-pPATH", "--path=PATH", String, "Path(s) for {table_name}.<config.table_extension> files (Default: #{defaults.paths.inspect})") do |path|
+  options.on("-pPATH", "--paths=PATH", String, "Path(s) for {table_name}.<config.table_extension> files (Default: #{defaults.paths.inspect})") do |path|
     config[:paths] ||= []
     config[:paths] << path
   end
@@ -43,14 +43,17 @@ OptionParser.new do |options|
     config[:time_to_live] = time_to_live
   end
 
-  options.on("-dDELIM", "--delimiter=DELIM", String, "Default column delimiter for tables (Default: #{defaults.column_delimiter.inspect})") do |column_delimiter|
-    map = { "t" => "\t", '\t' => "\t" }
-    config[:column_delimiter] = map.fetch(column_delimiter) { column_delimiter }
+  options.on("-dDELIM", "--column_delimiter=DELIM", String, "Default column delimiter for tables (Default: #{defaults.column_delimiter.inspect})") do |column_delimiter|
+    config[:column_delimiter] = column_delimiter
+  end
+
+  options.on("-cFILE", "--config_file=FILE", String, "Specify a custom config_file to load options (Default: #{defaults.config_file.inspect})") do |config_file|
+    config[:config_file] = config_file
   end
 
   options.separator("")
   options.separator("Output options:")
-  options.on("-t", "--timestamp", "Append a timestamp to the note (Default: #{defaults.with_timestamp.inspect})") do |timestamp|
+  options.on("-t", "--with_timestamp", "Append a timestamp to the note (Default: #{defaults.with_timestamp.inspect})") do |timestamp|
     config[:with_timestamp] = timestamp
   end
 
@@ -65,7 +68,7 @@ OptionParser.new do |options|
     end
   end
 
-  options.on("-oCOLOR", "--with-output-color=COLOR", "Enable color rendering for output buffer (Default: #{(defaults.output_color).inspect})") do |output_color|
+  options.on("-oCOLOR", "--output-color=COLOR", "Enable color rendering for output buffer (Default: #{(defaults.output_color).inspect})") do |output_color|
     config[:output_color] = output_color
   end
 
@@ -76,6 +79,10 @@ OptionParser.new do |options|
     exit 1
   end
 end.parse!
+
+if config[:config_file]
+  config = Gm::Notepad::Config.merge_with_config_file(config: config)
+end
 
 if config[:list_tables]
   notepad = Gm::Notepad.new(finalize: true, **config.merge(report_config: true))
