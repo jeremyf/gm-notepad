@@ -1,5 +1,6 @@
 require 'time'
 require 'dry-initializer'
+require 'dry-types'
 require 'gm/notepad/container'
 require 'gm/notepad/buffer_wrapper'
 
